@@ -123,7 +123,7 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    GameObject obj = Instantiate(Resources.Load("Fabs/Line") as GameObject, lines);
+                    GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Line") as GameObject, lines);
                     obj.transform.position = new Vector3(randomX * 2, 0.0f, depth * 2);
                     LineRenderer line = obj.GetComponent<LineRenderer>();
                     Vector3[] lineList = { new Vector3(parent.x * 2, 0.0f, parent.y * 2), new Vector3(randomX * 2, 0.0f, depth * 2) };
@@ -146,7 +146,7 @@ namespace CheonJiWoon
 
         void CreatCube(int x, int z)
         {
-            GameObject obj = Instantiate(Resources.Load("Fabs/Sphere") as GameObject);
+            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Sphere") as GameObject);
             obj.transform.position = new Vector3(x, 0.0f, z);
         }
     }
