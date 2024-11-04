@@ -18,7 +18,6 @@ interface IDeathAlarm
     }
 
 
-    [System.Serializable]
     public struct BattleStat
     {
         public float maxHP;
@@ -29,12 +28,13 @@ interface IDeathAlarm
     }
 
     public class BattleSystem : AnimProperty
-    {
+{
         public BattleStat battleStat;
         protected float playTime = 0.0f;
         public GameObject Target;
         public UnityAction deathAlarm { get; set; }
         public UnityEvent<float> hpObserbs;
+
         public bool IsLive
         {
             get => battleStat.curHP > 0.0f;
