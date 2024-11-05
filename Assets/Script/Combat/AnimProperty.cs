@@ -17,7 +17,6 @@ public struct AnimParameterData
         IsAttack = Animator.StringToHash("IsAttack");
         OnDamage = Animator.StringToHash("OnDamage");
         OnDead = Animator.StringToHash("OnDead");
-        OnJump = Animator.StringToHash("OnJump");
     }
 }
 
