@@ -26,7 +26,7 @@ namespace CheonJiWoon
         Node[,] mapInfo;
         int xSize = 7;
         int ySize = 12;
-        Vector3 dist = new Vector2(4.0f, 4.0f);
+        Vector2 dist = new Vector2(4.0f, 4.0f);
         Vector3 orgPos;
 
         int startPointCount = 4;
