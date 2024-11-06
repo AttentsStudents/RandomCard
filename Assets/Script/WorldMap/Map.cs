@@ -32,33 +32,29 @@ namespace CheonJiWoon
         }
     }
 
+
     public class Map : MonoBehaviour
     {
         Node[,] mapInfo;
         int xSize = 7;
         int ySize = 12;
+        Vector3 dist = new Vector2(4.0f, 4.0f);
+        Vector3 orgPos;
+
         int startPointCount = 4;
         public Transform lines;
+        public Transform Islands;
 
         void Awake()
         {
+            orgPos = -new Vector3(xSize * dist.x * 0.5f, 0.0f, ySize * dist.y * 0.5f);
             Generate();
-        }
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         void Generate()
         {
             mapInfo = new Node[ySize, xSize];
+            lines.position = Islands.position = orgPos;
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -68,12 +64,13 @@ namespace CheonJiWoon
                 {
                     startPointCheck.Add(random);
 
-                    CreatCube(random * 2, 0);
+                    CreateIsland(random, 0);
                     Node newNode = new Node(random, 0);
                     mapInfo[0, random] = newNode;
-                    CreatePaths(newNode, 3, 1);
+                    CreatePaths(newNode, 2, 2);
                 }
             }
+
         }
 
         void CreatePaths(Node parent, int pathNumbs, int range)
@@ -123,18 +120,16 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Line") as GameObject, lines);
-                    obj.transform.position = new Vector3(randomX * 2, 0.0f, depth * 2);
-                    LineRenderer line = obj.GetComponent<LineRenderer>();
-                    Vector3[] lineList = { new Vector3(parent.x * 2, 0.0f, parent.y * 2), new Vector3(randomX * 2, 0.0f, depth * 2) };
-                    line.positionCount = lineList.Length;
-                    line.SetPositions(lineList);
+                    Vector3 start = new Vector3(parent.x, 0.0f, parent.y);
+                    Vector3 end = new Vector3(randomX, 0.0f, depth);
+
+                    CreateLine(ref start, ref end);
 
                     if (mapInfo[depth, randomX] == null)
                     {
                         Node newNode = new Node(randomX, depth);
                         mapInfo[depth, randomX] = newNode;
-                        CreatCube(newNode.x * 2, newNode.y * 2);
+                        CreateIsland(newNode.x, newNode.y);
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
                     }
 
@@ -144,10 +139,21 @@ namespace CheonJiWoon
             }
         }
 
-        void CreatCube(int x, int z)
+        void CreateIsland(int x, int z)
         {
-            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Sphere") as GameObject);
-            obj.transform.position = new Vector3(x, 0.0f, z);
+            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Tile Mat 0") as GameObject, Islands);
+            obj.transform.localPosition = new Vector3(x * dist.x, -0.05f, z * dist.y);
+        }
+
+        void CreateLine(ref Vector3 start, ref Vector3 end)
+        {
+            start.x *= dist.x; start.z *= dist.y;
+            end.x *= dist.x; end.z *= dist.y;
+            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Line") as GameObject, lines);
+            LineRenderer line = obj.GetComponent<LineRenderer>();
+            Vector3[] lineList = { start + orgPos, end + orgPos };
+            line.positionCount = lineList.Length;
+            line.SetPositions(lineList);
         }
     }
 }
