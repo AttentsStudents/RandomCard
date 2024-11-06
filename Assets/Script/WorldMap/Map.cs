@@ -6,22 +6,10 @@ namespace CheonJiWoon
 {
     public class Node
     {
-        public int x
-        {
-            get; private set;
-        }
-        public int y
-        {
-            get; private set;
-        }
-        public int min
-        {
-            get; set;
-        }
-        public int max
-        {
-            get; set;
-        }
+        public int x { get; private set; }
+        public int y { get; private set; }
+        public int min { get; set; }
+        public int max { get; set; }
 
         public List<Node> nodes = new List<Node>();
 
