@@ -35,7 +35,7 @@ namespace CheonJiWoon
 
         void Awake()
         {
-            orgPos = -new Vector3(xSize * dist.x * 0.5f, 0.0f, ySize * dist.y * 0.5f);
+            orgPos = -new Vector3(xSize * dist.x, 0.0f, ySize * dist.y) * 0.5f;
             Generate();
         }
 
@@ -108,8 +108,8 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    Vector3 start = new Vector3(parent.x, 0.0f, parent.y);
-                    Vector3 end = new Vector3(randomX, 0.0f, depth);
+                    Vector3 start = new Vector3(parent.x, 0.5f, parent.y);
+                    Vector3 end = new Vector3(randomX, 0.5f, depth);
 
                     CreateLine(ref start, ref end);
 
