@@ -108,8 +108,8 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    Vector3 start = new Vector3(parent.x, 0.5f, parent.y);
-                    Vector3 end = new Vector3(randomX, 0.5f, depth);
+                    Vector3 start = new Vector3(parent.x, 0.2f, parent.y);
+                    Vector3 end = new Vector3(randomX, 0.2f, depth);
 
                     CreateLine(ref start, ref end);
 
@@ -129,8 +129,8 @@ namespace CheonJiWoon
 
         void CreateIsland(int x, int z)
         {
-            GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Island3") as GameObject, Islands);
-            obj.transform.localPosition = new Vector3(x * dist.x, -0.05f, z * dist.y);
+            GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Island5") as GameObject, Islands);
+            obj.transform.localPosition = new Vector3(x * dist.x, 0.0f, z * dist.y);
         }
 
         void CreateLine(ref Vector3 start, ref Vector3 end)
