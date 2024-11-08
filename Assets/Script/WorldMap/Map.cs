@@ -24,9 +24,9 @@ namespace CheonJiWoon
     public class Map : MonoBehaviour
     {
         Node[,] mapInfo;
-        int xSize = 7;
+        int xSize = 9;
         int ySize = 12;
-        Vector2 dist = new Vector2(4.0f, 4.0f);
+        Vector2 dist = new Vector2(4.0f, 6.0f);
         Vector3 orgPos;
 
         int startPointCount = 4;
@@ -129,7 +129,7 @@ namespace CheonJiWoon
 
         void CreateIsland(int x, int z)
         {
-            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Tile Mat 0") as GameObject, Islands);
+            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Island3") as GameObject, Islands);
             obj.transform.localPosition = new Vector3(x * dist.x, -0.05f, z * dist.y);
         }
 
