@@ -129,7 +129,7 @@ namespace CheonJiWoon
 
         void CreateIsland(int x, int z)
         {
-            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Island3") as GameObject, Islands);
+            GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Island3") as GameObject, Islands);
             obj.transform.localPosition = new Vector3(x * dist.x, -0.05f, z * dist.y);
         }
 
@@ -137,7 +137,7 @@ namespace CheonJiWoon
         {
             start.x *= dist.x; start.z *= dist.y;
             end.x *= dist.x; end.z *= dist.y;
-            GameObject obj = Instantiate(Resources.Load("Fabs/WorldMap/Line") as GameObject, lines);
+            GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Line") as GameObject, lines);
             LineRenderer line = obj.GetComponent<LineRenderer>();
             Vector3[] lineList = { start + orgPos, end + orgPos };
             line.positionCount = lineList.Length;
