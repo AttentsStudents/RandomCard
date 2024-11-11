@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7647613064234484849}
   - component: {fileID: 7779477309792720089}
   - component: {fileID: 2066172953499142970}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Island5
   m_TagString: Untagged
   m_Icon: {fileID: 0}

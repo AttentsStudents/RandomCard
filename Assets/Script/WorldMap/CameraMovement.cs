@@ -6,7 +6,7 @@ namespace CheonJiWoon
 {
     public class CameraMovement : MonoBehaviour
     {
-        float moveSpeed = 20.0f;
+        float moveSpeed = 30.0f;
         Vector2 limitHorizontal = new Vector2(-5.0f, 5.0f);
         Vector2 limitVertical = new Vector2(-45.0f, 35.0f);
         Vector2 limitZoom = new Vector2(12.0f, 30.0f);

@@ -10,15 +10,8 @@ namespace CheonJiWoon
     {
         UnityAction ClickAction { get; set; }
     }
-    public class Island : MonoBehaviour, IPointerDownHandler, IClickAction
+    public class Island : MonoBehaviour, IClickAction
     {
         public UnityAction ClickAction { get; set; }
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (eventData.clickCount > 1)
-            {
-                ClickAction?.Invoke();
-            }
-        }
     }
 }

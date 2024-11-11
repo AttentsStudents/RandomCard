@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
@@ -27,7 +28,8 @@ namespace CheonJiWoon
         public GameObject gameobject { get; private set; }
         public Node node { get; private set; }
 
-        public Line(GameObject obj, Node nd) {
+        public Line(GameObject obj, Node nd)
+        {
             gameobject = obj;
             node = nd;
         }
@@ -45,6 +47,7 @@ namespace CheonJiWoon
         int startPointCount = 4;
         public Transform lines;
         public Transform Islands;
+        public UnityEvent<Node> OnClickNode;
 
         void Awake()
         {
@@ -65,8 +68,9 @@ namespace CheonJiWoon
                 {
                     startPointCheck.Add(random);
 
-                    CreateIsland(random, 0);
                     Node newNode = new Node(random, 0);
+                    CreateIsland(newNode);
+
                     mapInfo[0, random] = newNode;
                     CreatePaths(newNode, 2, 2);
                 }
@@ -121,45 +125,44 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    Vector3 start = new Vector3(parent.x, 0.2f, parent.y);
-                    Vector3 end = new Vector3(randomX, 0.2f, depth);
 
 
                     if (mapInfo[depth, randomX] == null)
                     {
                         Node newNode = new Node(randomX, depth);
                         mapInfo[depth, randomX] = newNode;
-                        newNode.gameobject = CreateIsland(newNode.x, newNode.y);
+                        CreateIsland(newNode);
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
                     }
 
-                    Line line = new Line(CreateLine(ref start, ref end), mapInfo[depth, randomX]);
-                    parent.paths.Add(line);
-
+                    CreateLine(parent, mapInfo[depth, randomX]);
                 }
             }
         }
 
-        GameObject CreateIsland(int x, int z)
+        void CreateIsland(Node node)
         {
             GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Island5") as GameObject, Islands);
-            obj.transform.localPosition = new Vector3(x * dist.x, 0.0f, z * dist.y);
+            obj.transform.localPosition = new Vector3(node.x * dist.x, 0.0f, node.y * dist.y);
 
-            return obj;
+            node.gameobject = obj;
+            node.gameobject.GetComponent<IClickAction>().ClickAction += () => OnClickNode.Invoke(node);
         }
 
-        GameObject CreateLine(ref Vector3 start, ref Vector3 end)
+        void CreateLine(Node startNode, Node endNode)
         {
-            start.x *= dist.x; start.z *= dist.y;
-            end.x *= dist.x; end.z *= dist.y;
+            Vector3 start = new Vector3(startNode.x * dist.x, 0.2f, startNode.y * dist.y);
+            Vector3 end = new Vector3(endNode.x * dist.x, 0.2f, endNode.y * dist.y);
+
             GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Line") as GameObject, lines);
             LineRenderer renderer = obj.GetComponent<LineRenderer>();
             Vector3[] lineList = { start + orgPos, end + orgPos };
             renderer.positionCount = lineList.Length;
             renderer.SetPositions(lineList);
 
-            return obj;
+            startNode.paths.Add(new Line(obj, endNode));
         }
+
     }
 }
 

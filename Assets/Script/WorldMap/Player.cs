@@ -7,8 +7,9 @@ namespace CheonJiWoon
 {
     public class Player : MonoBehaviour
     {
+        public LayerMask moveLayer;
         Node nowNode;
-        float moveSpeed = 5.0f;
+        float moveSpeed = 15.0f;
         bool isMoving = false;
 
         // Start is called before the first frame update
@@ -19,6 +20,11 @@ namespace CheonJiWoon
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, moveLayer))
+                    hit.transform.GetComponent<IClickAction>().ClickAction.Invoke();
+            }
         }
 
         public void OnMove(Node targetNode)
@@ -28,23 +34,20 @@ namespace CheonJiWoon
 
             foreach (Line line in nowNode.paths)
             {
-                if (line.node == nowNode)
+                if (line.node == targetNode)
                 {
                     connect = true;
                     break;
                 }
             }
 
-            if (connect)
-            {
-                StartCoroutine(Moving(targetNode));
-            }
+            if (connect) StartCoroutine(Moving(targetNode));
         }
 
         IEnumerator Moving(Node targetNode)
         {
             isMoving = true;
-            Vector3 dir = nowNode.gameobject.transform.position - targetNode.gameobject.transform.position;
+            Vector3 dir = targetNode.gameobject.transform.position - transform.position;
             float dist = dir.magnitude;
             dir.Normalize();
 
@@ -56,7 +59,7 @@ namespace CheonJiWoon
             {
                 float delta = Time.deltaTime * moveSpeed;
                 if (delta > dist) delta = dist;
-                transform.Translate(transform.forward * delta);
+                transform.Translate(transform.forward * delta, Space.World);
                 dist -= delta;
 
                 yield return null;
