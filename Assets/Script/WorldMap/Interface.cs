@@ -5,8 +5,8 @@ using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
-    public class Island : MonoBehaviour, IClickAction
+    public interface IClickAction
     {
-        public UnityAction ClickAction { get; set; }
+        UnityAction ClickAction { get; set; }
     }
 }

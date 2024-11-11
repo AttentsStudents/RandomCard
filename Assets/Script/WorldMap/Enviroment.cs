@@ -33,7 +33,7 @@ namespace CheonJiWoon
         {
             while (true)
             {
-                yield return new WaitForSeconds(Random.Range(1.5f, 4.5f));
+                yield return new WaitForSeconds(Random.Range(0.3f, 1.5f));
 
                 Vector3 targetPos = RandomPosition(tr);
                 Vector3 dir = targetPos - tr.position;
@@ -50,6 +50,7 @@ namespace CheonJiWoon
                     dist -= delta;
                     yield return null;
                 }
+                yield return new WaitForSeconds(Random.Range(0.7f, 3.0f));
             }
         }
 

@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using CheonJiWoon;
 
 namespace CheonJiWoon
 {
     public class Player : MonoBehaviour
     {
         public LayerMask moveLayer;
+        public Transform model;
         Node nowNode;
         float moveSpeed = 15.0f;
         bool isMoving = false;
@@ -15,6 +16,8 @@ namespace CheonJiWoon
         // Start is called before the first frame update
         void Start()
         {
+            if (nowNode == null) nowNode = Map.instance.firstNode;
+            transform.position = nowNode.gameobject.transform.position;
         }
 
         // Update is called once per frame
@@ -23,7 +26,9 @@ namespace CheonJiWoon
             if (Input.GetMouseButtonDown(0))
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, moveLayer))
+                {
                     hit.transform.GetComponent<IClickAction>().ClickAction.Invoke();
+                }
             }
         }
 
@@ -51,15 +56,25 @@ namespace CheonJiWoon
             float dist = dir.magnitude;
             dir.Normalize();
 
-            float angle = Vector3.Angle(transform.forward, dir);
-            if (Vector3.Dot(transform.right, dir) < 0.0f) angle *= -1.0f;
-            transform.Rotate(Vector3.up * angle);
+            float angle = Vector3.Angle(model.forward, dir);
+            float rot = 1.0f;
+            if (Vector3.Dot(model.right, dir) < 0.0f) rot = -1.0f;
+
+            while (angle > 0.0f)
+            {
+                float delta = Time.deltaTime * 360.0f;
+                if (delta > angle) delta = angle;
+                model.Rotate(Vector3.up * delta * rot);
+                angle -= delta;
+
+                yield return null;
+            }
 
             while (dist > 0.0f)
             {
                 float delta = Time.deltaTime * moveSpeed;
                 if (delta > dist) delta = dist;
-                transform.Translate(transform.forward * delta, Space.World);
+                transform.Translate(dir * delta);
                 dist -= delta;
 
                 yield return null;

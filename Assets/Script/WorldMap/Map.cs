@@ -6,39 +6,13 @@ using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
-    public class Node
-    {
-        public GameObject gameobject { get; set; }
-        public int x { get; private set; }
-        public int y { get; private set; }
-        public int min { get; set; }
-        public int max { get; set; }
-
-        public List<Line> paths = new List<Line>();
-
-        public Node(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public class Line
-    {
-        public GameObject gameobject { get; private set; }
-        public Node node { get; private set; }
-
-        public Line(GameObject obj, Node nd)
-        {
-            gameobject = obj;
-            node = nd;
-        }
-    }
-
-
     public class Map : MonoBehaviour
     {
-        public static Node[,] mapInfo;
+        public static Map instance { get; private set; }
+        public Node[,] mapInfo { get; private set; }
+        public Node firstNode { get; private set; }
+        public Node lastNode { get; private set; }
+
         int xSize = 9;
         int ySize = 12;
         Vector2 dist = new Vector2(4.0f, 6.0f);
@@ -51,6 +25,7 @@ namespace CheonJiWoon
 
         void Awake()
         {
+            instance = this;
             orgPos = -new Vector3(xSize * dist.x, 0.0f, ySize * dist.y) * 0.5f;
             Generate();
         }
@@ -59,6 +34,9 @@ namespace CheonJiWoon
         {
             mapInfo = new Node[ySize, xSize];
             lines.position = Islands.position = orgPos;
+
+            firstNode = new Node(xSize/2, -2);
+            CreateIsland(firstNode);
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -73,6 +51,8 @@ namespace CheonJiWoon
 
                     mapInfo[0, random] = newNode;
                     CreatePaths(newNode, 2, 2);
+
+                    CreateLine(firstNode, newNode);
                 }
             }
 
@@ -154,13 +134,18 @@ namespace CheonJiWoon
             Vector3 start = new Vector3(startNode.x * dist.x, 0.2f, startNode.y * dist.y);
             Vector3 end = new Vector3(endNode.x * dist.x, 0.2f, endNode.y * dist.y);
 
+            startNode.paths.Add(new Line(CreateLine(start + orgPos, end + orgPos), endNode));
+        }
+
+        GameObject CreateLine(Vector3 start, Vector3 end)
+        {
             GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Line") as GameObject, lines);
             LineRenderer renderer = obj.GetComponent<LineRenderer>();
-            Vector3[] lineList = { start + orgPos, end + orgPos };
+            Vector3[] lineList = { start, end };
             renderer.positionCount = lineList.Length;
             renderer.SetPositions(lineList);
 
-            startNode.paths.Add(new Line(obj, endNode));
+            return obj;
         }
 
     }
