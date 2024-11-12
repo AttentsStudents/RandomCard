@@ -15,7 +15,7 @@ namespace CheonJiWoon
 
         int xSize = 9;
         int ySize = 12;
-        Vector2 dist = new Vector2(4.0f, 6.0f);
+        Vector2 dist = new Vector2(5.0f, 12.0f);
         Vector3 orgPos;
 
         int startPointCount = 4;
@@ -54,6 +54,14 @@ namespace CheonJiWoon
 
                     CreateLine(firstNode, newNode);
                 }
+            }
+
+            lastNode = new Node(xSize / 2, ySize + 1);
+            CreateIsland(lastNode);
+            int endLine = ySize - 1;
+            for (int i = 0; i < xSize; i++)
+            {
+                if (mapInfo[endLine, i] != null) CreateLine(mapInfo[endLine, i], lastNode);
             }
 
         }
