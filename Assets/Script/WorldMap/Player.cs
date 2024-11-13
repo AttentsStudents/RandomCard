@@ -16,7 +16,7 @@ namespace CheonJiWoon
         // Start is called before the first frame update
         void Start()
         {
-            if (nowNode == null) nowNode = Map.instance.firstNode;
+            if (nowNode == null) nowNode = World.instance.firstNode;
             transform.position = nowNode.gameobject.transform.position;
         }
 
