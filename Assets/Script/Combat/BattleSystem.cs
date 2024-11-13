@@ -25,7 +25,16 @@ interface IDeathAlarm
         public float Armor;
         public float Attak;
         public float curHP;
+
+    public BattleStat(float maxHP, float armor, float attack) : this() // 몬스터 배틀 스텟
+    {
+        this.maxHP = maxHP;
+        Armor = armor;
+        Attack = attack;
     }
+
+    public float Attack { get; }
+}
 
     public class BattleSystem : AnimProperty
 {
