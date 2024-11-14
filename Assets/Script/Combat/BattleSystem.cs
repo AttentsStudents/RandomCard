@@ -102,7 +102,7 @@ interface IDeathAlarm
             }
         }
 
-        public void OnAttack()
+        public virtual void OnAttack()
         {
 
             Target.GetComponent<IDamage>().OnDamage(battleStat.Attak);
