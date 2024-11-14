@@ -52,20 +52,25 @@ namespace CheonJiWoon
                     activeObject = null;
                     activeIcon = null;
                     break;
-                case State.INVENTORY: activeObject = inventory;
+                case State.INVENTORY:
+                    activeObject = inventory;
                     activeIcon = inventoryIcon;
                     break;
-                case State.MAP: activeObject = map;
+                case State.MAP:
+                    activeObject = map;
                     activeIcon = mapIcon;
                     break;
             }
 
-            if(myState != State.NORMAL)
+            if (myState != State.NORMAL)
             {
                 activeObject.SetActive(true);
                 Color iconColor = activeIcon.color;
                 iconColor.a = 1.0f;
                 activeIcon.color = iconColor;
+
+                ICloseAction close = activeObject.GetComponentInChildren<ICloseAction>();
+                if (close != null) close.CloseAction = () => ChangeState(State.NORMAL);
             }
         }
     }

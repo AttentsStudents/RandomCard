@@ -9,4 +9,8 @@ namespace CheonJiWoon
     {
         UnityAction ClickAction { get; set; }
     }
+    public interface ICloseAction
+    {
+        public UnityAction CloseAction { get; set; }
+    }
 }
