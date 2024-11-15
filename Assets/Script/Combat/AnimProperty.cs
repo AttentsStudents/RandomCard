@@ -10,6 +10,8 @@ public struct AnimParameterData
     public int OnDamage;
     public int OnDead;
     public int OnJump;
+    public int MyTurn;
+
     public void Initialize()
     {
         IsMove = Animator.StringToHash("IsMoving");
@@ -17,6 +19,7 @@ public struct AnimParameterData
         IsAttack = Animator.StringToHash("IsAttack");
         OnDamage = Animator.StringToHash("OnDamage");
         OnDead = Animator.StringToHash("OnDead");
+        MyTurn = Animator.StringToHash("MyTurn");
     }
 }
 

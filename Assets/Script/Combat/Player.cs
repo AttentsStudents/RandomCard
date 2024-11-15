@@ -24,6 +24,10 @@ public class Player : BattleSystem
     {
         if (isTriggered && targetMonster != null)
         {
+            float x = Input.GetAxis("Horizontal");
+            float y = Input.GetAxis("Vertical");
+            myAnim.SetFloat("x", x);
+            myAnim.SetFloat("y", y);
             MoveToTargetAndAttack();
         }
     }
@@ -33,7 +37,7 @@ public class Player : BattleSystem
         isTriggered = true;
     }
 
-    private void MoveToTargetAndAttack()
+    private void MoveToTargetAndAttack() //공격하러 갈때
     {
         navMeshAgent.SetDestination(targetMonster.position);
 
@@ -50,7 +54,7 @@ public class Player : BattleSystem
         }
     }
 
-    public override void OnAttack()
+    public override void OnAttack() //공격할때
     {
         base.OnAttack();
         myAnim.SetTrigger(animData.OnAttack);
@@ -61,7 +65,7 @@ public class Player : BattleSystem
         }
     }
 
-    public void OnDamage(float dmg)
+    public new void OnDamage(float dmg) // 데미지 입을때
     {
         float effectiveDmg = dmg;
 
@@ -82,5 +86,20 @@ public class Player : BattleSystem
         {
             myAnim.SetTrigger(animData.OnDamage);
         }
+    }
+
+    public void MyTurn()
+    {
+        myAnim.SetBool(animData.MyTurn, true);
+        myAnim.SetTrigger(animData.OnAttack);
+
+        // 애니메이션 종료 후 상태를 비활성화
+        StartCoroutine(ResetMyTurnAfterAnimation());
+    }
+
+    private IEnumerator ResetMyTurnAfterAnimation()
+    {
+        yield return new WaitForSeconds(myAnim.GetCurrentAnimatorStateInfo(0).length); // 현재 상태의 애니메이션 길이만큼 대기
+        myAnim.SetBool(animData.MyTurn, false);
     }
 }

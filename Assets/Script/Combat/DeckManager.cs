@@ -26,12 +26,27 @@ public class Card
 
 public class DeckManager : MonoBehaviour
 {
+
+    public void Show_deck()
+    {
+        for(int i = 0; i < deck.Count;i++)
+        {
+            if (deck.Count == 0)
+            {
+                Debug.Log("덱이 비어 있습니다.");
+                return;
+            }
+            Card card = deck[i];
+            Debug.Log($"[{i + 1}] 카드 이름: {card.cardName}, 유형: {card.cardType}," +
+                $" 에너지 비용: {card.energyCost}, 설명: {card.description}");
+        }
+    }
+
     public List<Card> deck = new List<Card>();
     public List<Card> hand = new List<Card>();
-    public int drawCount = 5; // 턴마다 뽑을 카드 수
-    public int rerollPoints = 3; // 리롤 포인트 초기 설정
+    public int drawCount = 5;
+    public int rerollPoints = 3;
 
-    // 핸드에 카드 뽑기
     public void DrawCards()
     {
         for (int i = 0; i < drawCount; i++)
@@ -45,15 +60,12 @@ public class DeckManager : MonoBehaviour
         }
     }
 
-    // 리롤 기능
     public void RerollHand()
     {
         if (rerollPoints > 0)
         {
-            // 리롤 포인트 소모
             rerollPoints--;
 
-            // 기존 핸드의 카드를 덱으로 되돌림
             foreach (Card card in hand)
             {
                 deck.Add(card);
@@ -61,7 +73,6 @@ public class DeckManager : MonoBehaviour
 
             hand.Clear();
 
-            // 새롭게 DrawCards를 호출하여 새로운 핸드 구성
             DrawCards();
         }
         else
