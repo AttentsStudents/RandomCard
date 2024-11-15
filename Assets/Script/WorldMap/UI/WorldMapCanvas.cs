@@ -5,26 +5,17 @@ using UnityEngine.UI;
 
 namespace CheonJiWoon
 {
-    public class Canvas : MonoBehaviour
+
+    public partial class WorldMapCanvas : MonoBehaviour
     {
         State myState = State.NORMAL;
-        enum State { NORMAL, INVENTORY, MAP }
+        public enum State { NORMAL, INVENTORY, MAP }
 
-        public GameObject inventory;
-        public Image inventoryIcon;
-        public GameObject map;
-        public Image mapIcon;
+
 
         GameObject activeObject;
         Image activeIcon;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.M)) ChangeState(State.MAP);
@@ -33,13 +24,13 @@ namespace CheonJiWoon
         }
 
 
-        void ChangeState(State s)
+        public void ChangeState(State s)
         {
             if (myState != State.NORMAL)
             {
                 activeObject.SetActive(false);
                 Color iconColor = activeIcon.color;
-                iconColor.a = 0.8f;
+                iconColor.a = SceneData.iconOffAlpha;
                 activeIcon.color = iconColor;
             }
 
@@ -66,12 +57,24 @@ namespace CheonJiWoon
             {
                 activeObject.SetActive(true);
                 Color iconColor = activeIcon.color;
-                iconColor.a = 1.0f;
+                iconColor.a = SceneData.iconOnAlpha;
                 activeIcon.color = iconColor;
-
-                ICloseAction close = activeObject.GetComponentInChildren<ICloseAction>();
-                if (close != null) close.CloseAction = () => ChangeState(State.NORMAL);
             }
         }
+    }
+
+
+
+    public partial class WorldMapCanvas
+    {
+        public GameObject inventory;
+        public Image inventoryIcon;
+
+        public GameObject map;
+        public Image mapIcon;
+
+        public void OnOpenInventory() => ChangeState(State.INVENTORY);
+        public void OnOpenMap() => ChangeState(State.MAP);
+        public void OnClose() => ChangeState(State.NORMAL);
     }
 }

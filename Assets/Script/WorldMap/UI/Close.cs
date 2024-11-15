@@ -7,12 +7,12 @@ using UnityEngine.EventSystems;
 namespace CheonJiWoon
 {
     
-    public class Close : MonoBehaviour, IPointerDownHandler, ICloseAction
+    public class Close : MonoBehaviour, IPointerClickHandler
     {
-        public UnityAction CloseAction { get; set; }
-        public void OnPointerDown(PointerEventData eventData)
+        public UnityEvent ClickEvent;
+        public void OnPointerClick(PointerEventData eventData)
         {
-            CloseAction?.Invoke();
+            ClickEvent?.Invoke();
         }
     }
 }
