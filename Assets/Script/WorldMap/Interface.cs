@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace CheonJiWoon
 {
@@ -11,6 +12,6 @@ namespace CheonJiWoon
     }
     public interface ICloseAction
     {
-        public UnityAction CloseAction { get; set; }
+        UnityAction CloseAction { get; set; }
     }
 }
