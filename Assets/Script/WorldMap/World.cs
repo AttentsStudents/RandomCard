@@ -36,7 +36,7 @@ namespace CheonJiWoon
             lines.position = Islands.position = orgPos;
 
             firstNode = new Node(xSize/2, -2);
-            CreateIsland(firstNode);
+            CreateHome(firstNode);
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -57,7 +57,7 @@ namespace CheonJiWoon
             }
 
             lastNode = new Node(xSize / 2, ySize + 1);
-            CreateIsland(lastNode);
+            CreateBossIsland(lastNode);
             int endLine = ySize - 1;
             for (int i = 0; i < xSize; i++)
             {
@@ -128,13 +128,33 @@ namespace CheonJiWoon
             }
         }
 
-        void CreateIsland(Node node)
+        void InitNode(Node node, GameObject obj)
         {
-            GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Island5") as GameObject, Islands);
             obj.transform.localPosition = new Vector3(node.x * dist.x, 0.0f, node.y * dist.y);
-
             node.gameobject = obj;
             node.gameobject.GetComponent<IClickAction>().ClickAction += () => OnClickNode.Invoke(node);
+        }
+        GameObject CreateNodeObject(string fileName)
+        {
+            return Instantiate(Resources.Load($"{SceneData.prefabPath}/{fileName}") as GameObject, Islands);
+        }
+
+        void CreateIsland(Node node)
+        {
+            GameObject obj = CreateNodeObject("Island5");
+            InitNode(node, obj);
+        }
+
+        void CreateHome(Node node)
+        {
+            GameObject obj = CreateNodeObject("Home");
+            InitNode(node, obj);
+        }
+
+        void CreateBossIsland(Node node)
+        {
+            GameObject obj = CreateNodeObject("BossIsland");
+            InitNode(node, obj);
         }
 
         void CreateLine(Node startNode, Node endNode)

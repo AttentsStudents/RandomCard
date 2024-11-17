@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace CheonJiWoon
 {
-    public class Player : MonoBehaviour
+    public class Player : VisibleOnTheMap
     {
         public LayerMask moveLayer;
+        public LayerMask crashMask;
         public Transform model;
         Node nowNode;
         float moveSpeed = 15.0f;
@@ -18,6 +19,7 @@ namespace CheonJiWoon
         {
             if (nowNode == null) nowNode = World.instance.firstNode;
             transform.position = nowNode.gameobject.transform.position;
+            ViewOnTheMap();
         }
 
         // Update is called once per frame
@@ -82,6 +84,18 @@ namespace CheonJiWoon
 
             nowNode = targetNode;
             isMoving = false;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if ((crashMask.value >> other.gameObject.layer & 1) != 0)
+            {
+                ICrashAction action  = other.GetComponent<ICrashAction>();
+                if (action != null)
+                {
+                    action.CrashAction?.Invoke();
+                }
+            }
         }
     }
 }

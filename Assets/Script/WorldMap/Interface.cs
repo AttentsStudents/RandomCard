@@ -14,4 +14,8 @@ namespace CheonJiWoon
     {
         UnityAction CloseAction { get; set; }
     }
+    public interface ICrashAction
+    {
+        UnityAction CrashAction { get; set; }
+    }
 }

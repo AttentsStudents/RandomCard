@@ -6,17 +6,12 @@ using UnityEngine.UI;
 namespace CheonJiWoon {
     public class Map : MonoBehaviour
     {
+        public static Map instance { get; private set; }
         public Camera mapCamera;
-        public Transform view;
-        // Start is called before the first frame update
-        void Start()
+        public Transform content;
+        void Awake()
         {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            
+            instance = this;
         }
     }
 }
