@@ -8,9 +8,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
+  - Node
+  - Player
+  - Monster
   - 
   - 
   - 
@@ -32,11 +35,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Line
+  - Misc
   m_SortingLayers:
   - name: Default
     uniqueID: 0
