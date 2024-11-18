@@ -7,7 +7,9 @@ namespace CheonJiWoon
     public static class SceneData
     {
         public static float iconOnAlpha = 1.0f;
-        public static float iconOffAlpha = 0.8f;
+        public static float iconOffAlpha = 0.7f;
+        public static string prefabPath = "Prefabs/WorldMap";
+        public static string texturePath = "Assets/Data/WorldMap";
     }
 }
 
