@@ -28,13 +28,14 @@ namespace CheonJiWoon
 
         void Start()
         {
+            RandomMyType();
             Generate();
             ViewOnTheMap();
             CrashAction = DestroyObjects;
         }
         void Generate()
         {
-            myType = (Type)Random.Range(0, 3);
+            
             switch (myType)
             {
                 case Type.MONSTER:
@@ -51,13 +52,17 @@ namespace CheonJiWoon
                     break;
                 case Type.REST:
                     sprite = SpriteManager.instance.icon.rest;
+                    objectQueue.Enqueue(Instantiate<GameObject>(ObjectManager.instance.rest, center));
                     break;
             }
         }
 
-        GameObject RandomMonster()
+        void RandomMyType()
         {
-            return MonsterGen.instance.list[Random.Range(0, MonsterGen.instance.list.Length)];
+            int random = Random.Range(1,7);
+            if (random < 5) myType = Type.MONSTER;
+            else if (random < 6) myType = Type.TREASURE;
+            else myType = Type.REST;
         }
 
         public void DestroyObjects()
