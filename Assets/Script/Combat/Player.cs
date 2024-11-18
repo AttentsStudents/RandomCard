@@ -92,8 +92,6 @@ public class Player : BattleSystem
     {
         myAnim.SetBool(animData.MyTurn, true);
         myAnim.SetTrigger(animData.OnAttack);
-
-        // 애니메이션 종료 후 상태를 비활성화
         StartCoroutine(ResetMyTurnAfterAnimation());
     }
 

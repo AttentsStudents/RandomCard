@@ -1,0 +1,20 @@
+[
+  {
+    "cardName": "Slash",
+    "cardType": "Attack",
+    "energyCost": 1,
+    "description": "적에게 10의 피해를 줍니다."
+  },
+  {
+    "cardName": "Shield up",
+    "cardType": "Defense",
+    "energyCost": 1,
+    "description": "5의 방어를 생성합니다."
+  },
+  {
+    "cardName": "Healing Light",
+    "cardType": "Skill",
+    "energyCost": 2,
+    "description": "체력을 10 회복합니다."
+  }
+]
