@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -35,8 +36,8 @@ namespace CheonJiWoon
             mapInfo = new Node[ySize, xSize];
             lines.position = Islands.position = orgPos;
 
-            firstNode = new Node(xSize/2, -2);
-            CreateHome(firstNode);
+            firstNode = new Node(xSize / 2, -2);
+            InitNode(firstNode, CreateNodeObject("Home"));
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -47,7 +48,8 @@ namespace CheonJiWoon
                     startPointCheck.Add(random);
 
                     Node newNode = new Node(random, 0);
-                    CreateIsland(newNode);
+                    InitNode(newNode, CreateNodeObject("Island5"));
+                    SetClickNode(newNode);
 
                     mapInfo[0, random] = newNode;
                     CreatePaths(newNode, 2, 2);
@@ -57,7 +59,8 @@ namespace CheonJiWoon
             }
 
             lastNode = new Node(xSize / 2, ySize + 1);
-            CreateBossIsland(lastNode);
+            InitNode(lastNode, CreateNodeObject("BossIsland"));
+            SetClickNode(lastNode);
             int endLine = ySize - 1;
             for (int i = 0; i < xSize; i++)
             {
@@ -119,7 +122,8 @@ namespace CheonJiWoon
                     {
                         Node newNode = new Node(randomX, depth);
                         mapInfo[depth, randomX] = newNode;
-                        CreateIsland(newNode);
+                        InitNode(newNode, CreateNodeObject("Island5"));
+                        SetClickNode(newNode);
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
                     }
 
@@ -132,30 +136,15 @@ namespace CheonJiWoon
         {
             obj.transform.localPosition = new Vector3(node.x * dist.x, 0.0f, node.y * dist.y);
             node.gameobject = obj;
-            node.gameobject.GetComponent<IClickAction>().ClickAction += () => OnClickNode.Invoke(node);
         }
-        GameObject CreateNodeObject(string fileName)
+        void SetClickNode(Node node)
         {
-            return Instantiate(Resources.Load($"{SceneData.prefabPath}/{fileName}") as GameObject, Islands);
+            IClickAction clickComponent = node.gameobject.GetComponent<IClickAction>();
+            clickComponent.ClickAction += () => OnClickNode.Invoke(node);
         }
 
-        void CreateIsland(Node node)
-        {
-            GameObject obj = CreateNodeObject("Island5");
-            InitNode(node, obj);
-        }
-
-        void CreateHome(Node node)
-        {
-            GameObject obj = CreateNodeObject("Home");
-            InitNode(node, obj);
-        }
-
-        void CreateBossIsland(Node node)
-        {
-            GameObject obj = CreateNodeObject("BossIsland");
-            InitNode(node, obj);
-        }
+        GameObject CreateNodeObject(string fileName) 
+            => Instantiate(Resources.Load($"{SceneData.prefabPath}/{fileName}") as GameObject, Islands);
 
         void CreateLine(Node startNode, Node endNode)
         {

@@ -6,7 +6,7 @@ using static CheonJiWoon.ObjectManager;
 
 namespace CheonJiWoon
 {
-    public class Island : VisibleOnTheMap, IClickAction, ICrashAction
+    public class Island : Home, IClickAction, ICrashAction
     {
 
         public enum Type
@@ -31,11 +31,11 @@ namespace CheonJiWoon
             RandomMyType();
             Generate();
             ViewOnTheMap();
-            CrashAction = DestroyObjects;
+            CrashAction = CrashActionMyType;
         }
-        void Generate()
+        protected virtual void Generate()
         {
-            
+
             switch (myType)
             {
                 case Type.MONSTER:
@@ -59,13 +59,27 @@ namespace CheonJiWoon
 
         void RandomMyType()
         {
-            int random = Random.Range(1,7);
+            int random = Random.Range(1, 7);
             if (random < 5) myType = Type.MONSTER;
             else if (random < 6) myType = Type.TREASURE;
             else myType = Type.REST;
         }
 
-        public void DestroyObjects()
+        void CrashActionMyType()
+        {
+            switch (myType)
+            {
+                case Type.MONSTER:
+                    break;
+                case Type.TREASURE:
+                    break;
+                case Type.REST:
+                    break;
+            }
+            DestroyObjects();
+        }
+
+        void DestroyObjects()
         {
             while (objectQueue.Count > 0)
             {

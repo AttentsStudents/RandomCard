@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CheonJiWoon
 {
-    public class Home : Island
+    public class Home : VisibleOnTheMap
     {
         void Start()
         {
