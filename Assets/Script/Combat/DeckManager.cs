@@ -27,6 +27,7 @@ public class Card
     public CardType cardType;
     public int energyCost;
     public string description;
+    public string imagename;
     public System.Action<BattleSystem, BattleSystem> effect;
 
     public Card(string name, CardType type, int cost, string desc, System.Action<BattleSystem, BattleSystem> cardEffect)
@@ -39,30 +40,6 @@ public class Card
     }
 }
 
-public class CardEffects : MonoBehaviour
-{
-    public void AttackEffect(BattleSystem attacker, BattleSystem target)
-    {
-        float damage = attacker.battleStat.Attak;
-        target.OnDamage(damage);
-        Debug.Log($"[효과 발동] {attacker.gameObject.name}이(가) {target.gameObject.name}에게 {damage}의 피해를 입혔습니다!");
-    }
-
-    public void DefenseEffect(BattleSystem defender, BattleSystem _)
-    {
-        float defenseValue = 5;
-        defender.Armor += defenseValue;
-        Debug.Log($"[효과 발동] {defender.gameObject.name}이(가) 방어를 {defenseValue} 증가시켰습니다!");
-    }
-
-    public void HealEffect(BattleSystem healer, BattleSystem _)
-    {
-        float healValue = 10;
-        healer.curHp += healValue;
-        Debug.Log($"[효과 발동] {healer.gameObject.name}이(가) 체력을 {healValue} 회복했습니다!");
-    }
-}
-
 
 public class DeckManager : MonoBehaviour
 {
@@ -70,10 +47,54 @@ public class DeckManager : MonoBehaviour
     public List<Card> deck = new List<Card>(); // 현재 덱
     public List<Card> hand = new List<Card>(); // 현재 손패 리스트
     public int drawCount = 5; // 한 번에 뽑는 카드 수
+
     private void Start()
     {
         LoadCardsFromJson("cards.json");
-        ShowDeck();
+        if (deck == null || deck.Count == 0)
+        {
+            Debug.LogError("덱이 비어 있습니다. 카드 데이터를 확인하세요.");
+        }
+        else
+        {
+            Debug.Log($"덱에 총 {deck.Count}장의 카드가 있습니다.");
+        }
+        ShuffleDeck();
+        DrawCards(drawCount);
+    }
+
+    public void RerollCards()
+    {
+        foreach (var card in hand)
+        {
+            deck.Add(card);
+        }
+        hand.Clear();
+        ShuffleDeck();
+        DrawCards(drawCount);
+        Debug.Log("카드를 리롤했습니다.");
+    }
+
+    private void ShuffleDeck()
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            int randomIndex = Random.Range(0, deck.Count);
+            Card temp = deck[i];
+            deck[i] = deck[randomIndex];
+            deck[randomIndex] = temp;
+        }
+        Debug.Log("덱을 섞었습니다.");
+    }
+
+    private void DrawCards(int count)
+    {
+        for (int i = 0; i < count && deck.Count > 0; i++)
+        {
+            hand.Add(deck[0]);
+            deck.RemoveAt(0);
+        }
+        Debug.Log("카드를 뽑았습니다.");
     }
 
     private void LoadCardsFromJson(string fileName)
@@ -83,54 +104,68 @@ public class DeckManager : MonoBehaviour
         if (File.Exists(filePath))
         {
             string jsonContent = File.ReadAllText(filePath);
-            List<CardData> cardDataList = JsonUtility.FromJson<CardDataList>($"{{\"cards\":{jsonContent}}}").cards;
 
-            foreach (var cardData in cardDataList)
+            // JSON 파싱
+            try
             {
-                CardType cardType = (CardType)System.Enum.Parse(typeof(CardType), cardData.cardType);
-                Card newCard = new Card(cardData.cardName, cardType, cardData.energyCost, cardData.description, null);
-                deck.Add(newCard);
+                CardDataList cardDataList = JsonUtility.FromJson<CardDataList>(jsonContent);
+                if (cardDataList == null || cardDataList.cards == null || cardDataList.cards.Count == 0)
+                {
+                    return;
+                }
+
+                foreach (var cardData in cardDataList.cards)
+                {
+                    Debug.Log($"카드 데이터: 이름={cardData.cardName}, 타입={cardData.cardType}, 비용={cardData.energyCost}");
+                    CardType cardType;
+                    if (!System.Enum.TryParse(cardData.cardType, out cardType))
+                    {
+                        Debug.LogError($"알 수 없는 카드 타입: {cardData.cardType}");
+                        continue;
+                    }
+
+                    System.Action<BattleSystem, BattleSystem> effect = GetEffectByType(cardType, cardEffects);
+
+                    if (effect == null)
+                    {
+                        Debug.LogError($"효과가 없는 카드: {cardData.cardName}");
+                        continue;
+                    }
+
+                    Card newCard = new Card(cardData.cardName, cardType, cardData.energyCost, cardData.description, effect);
+                    deck.Add(newCard);
+                    Debug.Log($"덱에 추가된 카드: {newCard.cardName}");
+                }
+
+                Debug.Log($"총 {deck.Count}장의 카드가 덱에 추가되었습니다.");
             }
-
-            Debug.Log("JSON 파일에서 카드 데이터를 로드했습니다.");
+            catch (System.Exception e)
+            {
+                Debug.LogError($"JSON 파싱 중 오류 발생: {e.Message}");
+            }
         }
         else
         {
-            Debug.LogError($"파일을 찾을 수 없습니다: {filePath}");
+            Debug.LogError($"JSON 파일을 찾을 수 없습니다: {filePath}");
         }
     }
 
-    private void ShowDeck()
-    {
-        foreach (var card in deck)
-        {
-            Debug.Log($"카드 이름: {card.cardName}, 유형: {card.cardType}, 에너지 비용: {card.energyCost}, 설명: {card.description}");
-        }
-    }
-    public void RerollCards() //리롤 하는거 구현해야댐
-    {
 
-    }
-    public void DiscardCard(Card card)
-    {
-        if (deck.Contains(card))
-        {
-            deck.Remove(card); // 덱에서 제거
-            Debug.Log($"덱에서 카드 {card.cardName}를 지웠습니다.");
-        }
-        else
-        {
-            Debug.Log("덱에 없는 카드입니다.");
-        }
-    }
 
-    public void ShowHand()
+
+    public System.Action<BattleSystem, BattleSystem> GetEffectByType(CardType type, CardEffects cardEffects)
     {
-        Debug.Log("현재 손패:");
-        foreach (var card in hand)
+        switch (type)
         {
-            Debug.Log($"카드 이름: {card.cardName}, 유형: {card.cardType}, 에너지 비용: {card.energyCost}, 설명: {card.description}");
+            case CardType.Attack:
+                return cardEffects.AttackEffect;
+            case CardType.Defense:
+                return cardEffects.DefenseEffect;
+            case CardType.Skill:
+                return cardEffects.HealEffect;
+            default:
+                Debug.LogError("알 수 없는 카드 타입입니다!");
+                return null;
         }
     }
-
 }
