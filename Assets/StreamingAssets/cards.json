@@ -4,19 +4,22 @@
       "cardName": "Slash",
       "cardType": "Attack",
       "energyCost": 1,
-      "description": "적에게 7의 피해를 줍니다."
+      "description": "적에게 7의 피해를 줍니다.",
+      "imagename": "Slash"
     },
     {
       "cardName": "Shield",
       "cardType": "Defense",
       "energyCost": 1,
-      "description": "5의 방어를 생성합니다."
+      "description": "5의 방어를 생성합니다.",
+      "imagename": "Shield"
     },
     {
       "cardName": "Healing Light",
       "cardType": "Skill",
       "energyCost": 2,
-      "description": "체력을 10 회복합니다."
+      "description": "체력을 10 회복합니다.",
+      "imagename": "Heal"
     }
   ]
 }

@@ -3,6 +3,10 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.Events;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [System.Serializable]
 public class CardData
 {
@@ -17,6 +21,7 @@ public class CardDataList
 {
     public List<CardData> cards;
 }
+
 
 public enum CardType { Attack, Defense, Skill }
 
@@ -46,7 +51,7 @@ public class DeckManager : MonoBehaviour
     public CardEffects cardEffects;
     public List<Card> deck = new List<Card>(); // 현재 덱
     public List<Card> hand = new List<Card>(); // 현재 손패 리스트
-    public int drawCount = 5; // 한 번에 뽑는 카드 수
+    public int drawCount = 5; // 한 번에 뽑는 카드 수 추후 수정 요망
 
     private void Start()
     {
@@ -99,56 +104,70 @@ public class DeckManager : MonoBehaviour
 
     private void LoadCardsFromJson(string fileName)
     {
+        // 파일 경로 설정
         string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
 
-        if (File.Exists(filePath))
+        if (!File.Exists(filePath))
         {
+            Debug.LogError($"JSON 파일을 찾을 수 없습니다: {filePath}");
+            return;
+        }
+
+        try
+        {
+            // JSON 파일 읽기
             string jsonContent = File.ReadAllText(filePath);
 
             // JSON 파싱
-            try
+            CardDataList cardDataList = JsonUtility.FromJson<CardDataList>(jsonContent);
+
+            if (cardDataList == null || cardDataList.cards == null || cardDataList.cards.Count == 0)
             {
-                CardDataList cardDataList = JsonUtility.FromJson<CardDataList>(jsonContent);
-                if (cardDataList == null || cardDataList.cards == null || cardDataList.cards.Count == 0)
+                Debug.LogWarning("JSON 데이터가 비어 있거나 유효하지 않습니다.");
+                return;
+            }
+
+            foreach (var cardData in cardDataList.cards)
+            {
+                Debug.Log($"카드 데이터 로드: 이름={cardData.cardName}, 타입={cardData.cardType}, 비용={cardData.energyCost}");
+
+                // 카드 타입 파싱
+                if (!System.Enum.TryParse(cardData.cardType, out CardType cardType))
                 {
-                    return;
+                    Debug.LogError($"알 수 없는 카드 타입: {cardData.cardType}");
+                    continue;
                 }
 
-                foreach (var cardData in cardDataList.cards)
+                // 카드 효과 매핑
+                System.Action<BattleSystem, BattleSystem> effect = GetEffectByType(cardType, cardEffects);
+
+                if (effect == null)
                 {
-                    Debug.Log($"카드 데이터: 이름={cardData.cardName}, 타입={cardData.cardType}, 비용={cardData.energyCost}");
-                    CardType cardType;
-                    if (!System.Enum.TryParse(cardData.cardType, out cardType))
-                    {
-                        Debug.LogError($"알 수 없는 카드 타입: {cardData.cardType}");
-                        continue;
-                    }
-
-                    System.Action<BattleSystem, BattleSystem> effect = GetEffectByType(cardType, cardEffects);
-
-                    if (effect == null)
-                    {
-                        Debug.LogError($"효과가 없는 카드: {cardData.cardName}");
-                        continue;
-                    }
-
-                    Card newCard = new Card(cardData.cardName, cardType, cardData.energyCost, cardData.description, effect);
-                    deck.Add(newCard);
-                    Debug.Log($"덱에 추가된 카드: {newCard.cardName}");
+                    Debug.LogError($"효과가 없는 카드: {cardData.cardName}");
+                    continue;
                 }
 
-                Debug.Log($"총 {deck.Count}장의 카드가 덱에 추가되었습니다.");
+                // 카드 생성 및 추가
+                Card newCard = new Card(cardData.cardName, cardType, cardData.energyCost, cardData.description, effect)
+                {
+                    imagename = cardData.cardName // 카드 이름을 이미지 이름으로 설정 (필요에 따라 조정 가능)
+                };
+
+                deck.Add(newCard);
+                Debug.Log($"덱에 추가된 카드: {newCard.cardName}");
             }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"JSON 파싱 중 오류 발생: {e.Message}");
-            }
+
+            Debug.Log($"총 {deck.Count}장의 카드가 덱에 추가되었습니다.");
         }
-        else
+        catch (System.Exception e)
         {
-            Debug.LogError($"JSON 파일을 찾을 수 없습니다: {filePath}");
+            Debug.LogError($"JSON 파싱 중 오류 발생: {e.Message}");
         }
+
+        // Inspector 갱신 (필요시 호출)
+        UpdateInspector();
     }
+
 
 
 
@@ -167,5 +186,11 @@ public class DeckManager : MonoBehaviour
                 Debug.LogError("알 수 없는 카드 타입입니다!");
                 return null;
         }
+    }
+    private void UpdateInspector()
+    {
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(this);
+#endif
     }
 }

@@ -21,13 +21,14 @@ public class DeckUIManager : MonoBehaviour
                 Debug.LogError("DeckManager를 찾을 수 없습니다.");
             }
         }
-
+        handPanel.gameObject.SetActive(true);
         ShowDeck();
     }
 
 
     public void ShowDeck()
     {
+        deckPanel.gameObject.SetActive(true);
         if (deckManager == null || deckManager.deck == null || deckManager.deck.Count == 0)
         {
             Debug.LogError("덱이 비어 있거나 초기화되지 않았습니다.");
