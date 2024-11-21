@@ -22,7 +22,7 @@ public class DeckUIManager : MonoBehaviour
             }
         }
         handPanel.gameObject.SetActive(true);
-        ShowDeck();
+        //ShowDeck();
     }
 
 
@@ -44,11 +44,7 @@ public class DeckUIManager : MonoBehaviour
             GameObject cardObject = Instantiate(cardPrefab, deckPanel);
             Text cardText = cardObject.GetComponentInChildren<Text>();
             Image cardImage = cardObject.transform.Find("CardImage").GetComponent<Image>();
-
-            // 카드 텍스트 설정
             cardText.text = $"{card.cardName}\n{card.cardType}\nCost: {card.energyCost}\n{card.description}";
-
-            // 카드 이미지 설정
             Sprite cardSprite = LoadCardImage(card.cardName);
             if (cardSprite != null)
             {
@@ -62,23 +58,22 @@ public class DeckUIManager : MonoBehaviour
 
     private Sprite LoadCardImage(string imageName)
     {
-        if (cardImageCache.ContainsKey(imageName))
+        //Sprite sprite = Resources.Load<Sprite>($"CardImage/{imageName}");
+        string path = $"CardImage/{imageName}";
+        Debug.Log($"로드 시도 경로: {path}");
+        Sprite sprite = Resources.Load<Sprite>(path);
+        if (sprite == null)
         {
-            return cardImageCache[imageName];
-        }
-
-        Sprite sprite = Resources.Load<Sprite>($"CardImage/{imageName}");
-        if (sprite != null)
-        {
-            cardImageCache[imageName] = sprite;
+            Debug.LogWarning($"이미지를 찾을 수 없습니다: {imageName}");
         }
         else
         {
-            Debug.LogWarning($"이미지를 찾을 수 없습니다: {imageName}");
+            Debug.Log($"이미지 로드 성공: {imageName}");
         }
 
         return sprite;
     }
+
 
     public void ShowHand()
     {
@@ -93,21 +88,17 @@ public class DeckUIManager : MonoBehaviour
 
     private void UpdateUI(List<Card> cards, Transform parentPanel)
     {
-        // 기존 UI 제거
         foreach (Transform child in parentPanel)
         {
             Destroy(child.gameObject);
         }
-
-        // 카드 UI 생성
         foreach (var card in cards)
         {
             GameObject cardObject = Instantiate(cardPrefab, parentPanel);
             Text cardText = cardObject.GetComponentInChildren<Text>();
-            Image cardImage = cardObject.transform.Find("CardImage").GetComponent<Image>();
-
             cardText.text = $"{card.cardName}\n{card.cardType}\nCost: {card.energyCost}\n{card.description}";
 
+            Image cardImage = cardObject.transform.Find("CardImage").GetComponent<Image>();
             Sprite cardSprite = LoadCardImage(card.cardName);
             if (cardSprite != null)
             {
