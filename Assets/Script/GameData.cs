@@ -5,5 +5,6 @@ using UnityEngine;
 public static class GameData
 {
     public static int[] cards = new int[50];
-    public static (int, int)[] enemies = new (int, int)[3];
+    public static List<(int, int)> enemies;
+    public static BattleStat playerStat = new BattleStat();
 }

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
-    public class Player : VisibleOnTheMap
+    public class Player : VisibleOnTheMap, IHpObserve
     {
         public LayerMask moveLayer;
         public LayerMask crashMask;
@@ -13,6 +13,9 @@ namespace CheonJiWoon
         Node nowNode;
         float moveSpeed = 15.0f;
         bool isMoving = false;
+
+        public UnityAction<float> HpObserve { get; set; }
+
 
         // Start is called before the first frame update
         void Start()
@@ -93,6 +96,7 @@ namespace CheonJiWoon
                 ICrashAction action  = other.GetComponent<ICrashAction>();
                 if (action != null)
                 {
+                    action.crashTarget = gameObject;
                     action.CrashAction?.Invoke();
                 }
             }

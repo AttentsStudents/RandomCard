@@ -17,5 +17,10 @@ namespace CheonJiWoon
     public interface ICrashAction
     {
         UnityAction CrashAction { get; set; }
+        GameObject crashTarget { get; set; }
+    }
+    public interface IHpObserve
+    {
+        UnityAction<float> HpObserve { get; set; }
     }
 }

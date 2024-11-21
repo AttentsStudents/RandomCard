@@ -19,10 +19,12 @@ namespace CheonJiWoon
 
         public UnityAction ClickAction { get; set; }
         public UnityAction CrashAction { get; set; }
+        public GameObject crashTarget { get; set; }
 
         public Transform center;
         public Transform left;
         public Transform right;
+        List<(int, int)> monsterInfo = new List<(int, int)>();
         Queue<GameObject> objectQueue = new Queue<GameObject>();
 
 
@@ -42,19 +44,9 @@ namespace CheonJiWoon
                     sprite = SpriteManager.instance.icon.monster;
                     int count = Random.Range(1, 4);
 
-                    GameObject monster;
-                    objectQueue.Enqueue(monster = Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), center));
-                    monster.GetComponentInChildren<Animator>().enabled = false;
-                    if (count >= 2)
-                    {
-                        objectQueue.Enqueue(monster = Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), left));
-                        monster.GetComponentInChildren<Animator>().enabled = false;
-                    }
-                    if (count >= 3)
-                    {
-                        objectQueue.Enqueue(monster = Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), right)); 
-                        monster.GetComponentInChildren<Animator>().enabled = false;
-                    }
+                    RandomMonsterGen(center);
+                    if (count >= 2) RandomMonsterGen(left);
+                    if (count >= 3) RandomMonsterGen(right);
                     break;
                 case Type.TREASURE:
                     sprite = SpriteManager.instance.icon.treasure;
@@ -65,6 +57,18 @@ namespace CheonJiWoon
                     objectQueue.Enqueue(Instantiate<GameObject>(ObjectManager.instance.rest, center));
                     break;
             }
+        }
+
+        void RandomMonsterGen(Transform tr)
+        {
+            int idx = Random.Range(0, MonsterGen.instance.list.Length);
+            int level = Random.Range(1, 15);
+
+            GameObject monster = Instantiate<GameObject>(MonsterGen.instance.list[idx], tr);
+            monster.GetComponentInChildren<Animator>().enabled = false;
+
+            objectQueue.Enqueue(monster);
+            monsterInfo.Add((idx, level));
         }
 
         void RandomMyType()
@@ -80,10 +84,13 @@ namespace CheonJiWoon
             switch (myType)
             {
                 case Type.MONSTER:
+                    GameData.enemies = monsterInfo;
                     break;
                 case Type.TREASURE:
                     break;
                 case Type.REST:
+                    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
+                    if (targetHp != null) targetHp.HpObserve?.Invoke(5);
                     break;
             }
             DestroyObjects();
