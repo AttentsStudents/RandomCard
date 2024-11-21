@@ -25,6 +25,12 @@ namespace CheonJiWoon
             public GameObject normal;
             public GameObject boss;
         }
+
+        [Serializable]
+        public struct Effect
+        {
+            public GameObject Boom;
+        }
     }
 
 
@@ -36,6 +42,7 @@ namespace CheonJiWoon
         public Island island;
         public GameObject tresure;
         public GameObject rest;
+        public Effect effect;
 
         void Awake() => instance = this;
     }

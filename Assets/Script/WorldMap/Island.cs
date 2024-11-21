@@ -42,9 +42,19 @@ namespace CheonJiWoon
                     sprite = SpriteManager.instance.icon.monster;
                     int count = Random.Range(1, 4);
 
-                    objectQueue.Enqueue(Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), center));
-                    if (count >= 2) objectQueue.Enqueue(Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), left));
-                    if (count >= 3) objectQueue.Enqueue(Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), right));
+                    GameObject monster;
+                    objectQueue.Enqueue(monster = Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), center));
+                    monster.GetComponentInChildren<Animator>().enabled = false;
+                    if (count >= 2)
+                    {
+                        objectQueue.Enqueue(monster = Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), left));
+                        monster.GetComponentInChildren<Animator>().enabled = false;
+                    }
+                    if (count >= 3)
+                    {
+                        objectQueue.Enqueue(monster = Instantiate<GameObject>(MonsterGen.instance.RandomMonster(), right)); 
+                        monster.GetComponentInChildren<Animator>().enabled = false;
+                    }
                     break;
                 case Type.TREASURE:
                     sprite = SpriteManager.instance.icon.treasure;
@@ -81,6 +91,7 @@ namespace CheonJiWoon
 
         void DestroyObjects()
         {
+            Instantiate(ObjectManager.instance.effect.Boom, center);
             while (objectQueue.Count > 0)
             {
                 Destroy(objectQueue.Dequeue());
