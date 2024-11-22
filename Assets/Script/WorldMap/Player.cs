@@ -40,18 +40,7 @@ namespace CheonJiWoon
         public void OnMove(Node targetNode)
         {
             if (nowNode == null || isMoving) return;
-            bool connect = false;
-
-            foreach (Line line in nowNode.paths)
-            {
-                if (line.node == targetNode)
-                {
-                    connect = true;
-                    break;
-                }
-            }
-
-            if (connect) StartCoroutine(Moving(targetNode));
+            if (nowNode.children.Contains(targetNode)) StartCoroutine(Moving(targetNode));
         }
 
         IEnumerator Moving(Node targetNode)
@@ -93,7 +82,7 @@ namespace CheonJiWoon
         {
             if ((crashMask.value >> other.gameObject.layer & 1) != 0)
             {
-                ICrashAction action  = other.GetComponent<ICrashAction>();
+                ICrashAction action = other.GetComponent<ICrashAction>();
                 if (action != null)
                 {
                     action.crashTarget = gameObject;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using static CheonJiWoon.ObjectManager;
 
 namespace CheonJiWoon
@@ -85,6 +86,7 @@ namespace CheonJiWoon
             {
                 case Type.MONSTER:
                     GameData.enemies = monsterInfo;
+                    SceneManager.LoadSceneAsync(0);
                     break;
                 case Type.TREASURE:
                     break;

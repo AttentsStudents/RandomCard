@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,16 +26,17 @@ namespace CheonJiWoon
         {
             instance = this;
             orgPos = -new Vector3(xSize * dist.x, 0.0f, ySize * dist.y) * 0.5f;
-            Generate();
+            if (GameData.mapInfo == null) MapGenerate();
+            CreateAllObject(firstNode);
         }
 
-        void Generate()
+        void MapGenerate()
         {
             mapInfo = new Node[ySize, xSize];
             lines.position = Islands.position = orgPos;
 
-            firstNode = new Node(xSize / 2, -2);
-            InitNode(firstNode, CreateNodeObject("Home"));
+            firstNode = new Node(xSize / 2, -2, "Home");
+            lastNode = new Node(xSize / 2, ySize + 1, "BossIsland");
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -48,25 +47,13 @@ namespace CheonJiWoon
                     startPointCheck.Add(random);
 
                     Node newNode = new Node(random, 0);
-                    InitNode(newNode, CreateNodeObject("Island5"));
-                    SetClickNode(newNode);
 
                     mapInfo[0, random] = newNode;
+                    firstNode.children.Add(newNode);
                     CreatePaths(newNode, 2, 2);
-
-                    CreateLine(firstNode, newNode);
                 }
             }
-
-            lastNode = new Node(xSize / 2, ySize + 1);
-            InitNode(lastNode, CreateNodeObject("BossIsland"));
-            SetClickNode(lastNode);
-            int endLine = ySize - 1;
-            for (int i = 0; i < xSize; i++)
-            {
-                if (mapInfo[endLine, i] != null) CreateLine(mapInfo[endLine, i], lastNode);
-            }
-
+            GameData.mapInfo = mapInfo;
         }
 
         void CreatePaths(Node parent, int pathNumbs, int range)
@@ -82,12 +69,12 @@ namespace CheonJiWoon
 
             for (int i = parent.x - 1; i >= SearchRangeMin; i--)
             {
-                if (mapInfo[parent.y, i] != null && mapInfo[parent.y, i].paths.Count > 0) min = Mathf.Max(min, mapInfo[parent.y, i].max);
+                if (mapInfo[parent.y, i] != null && mapInfo[parent.y, i].children.Count > 0) min = Mathf.Max(min, mapInfo[parent.y, i].max);
             }
 
             for (int i = parent.x + 1; i <= SearchRangeMax; i++)
             {
-                if (mapInfo[parent.y, i] != null && mapInfo[parent.y, i].paths.Count > 0) max = Mathf.Min(max, mapInfo[parent.y, i].min);
+                if (mapInfo[parent.y, i] != null && mapInfo[parent.y, i].children.Count > 0) max = Mathf.Min(max, mapInfo[parent.y, i].min);
             }
 
             max++;
@@ -105,7 +92,7 @@ namespace CheonJiWoon
                 {
                     check.Add(randomX);
 
-                    if (parent.paths.Count > 0)
+                    if (parent.children.Count > 0)
                     {
                         parent.max = Mathf.Max(randomX, parent.max);
                         parent.min = Mathf.Min(randomX, parent.min);
@@ -116,55 +103,50 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-
-
                     if (mapInfo[depth, randomX] == null)
                     {
                         Node newNode = new Node(randomX, depth);
                         mapInfo[depth, randomX] = newNode;
-                        InitNode(newNode, CreateNodeObject("Island5"));
-                        SetClickNode(newNode);
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
+                        else newNode.children.Add(lastNode);
                     }
-
-                    CreateLine(parent, mapInfo[depth, randomX]);
+                    parent.children.Add(mapInfo[depth, randomX]);
                 }
             }
         }
 
-        void InitNode(Node node, GameObject obj)
+        void InitNode(Node node)
         {
+            GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/{node.filePath}") as GameObject, Islands);
             obj.transform.localPosition = new Vector3(node.x * dist.x, 0.0f, node.y * dist.y);
             node.gameobject = obj;
-        }
-        void SetClickNode(Node node)
-        {
+
             IClickAction clickComponent = node.gameobject.GetComponent<IClickAction>();
-            clickComponent.ClickAction += () => OnClickNode.Invoke(node);
+            if (clickComponent != null) clickComponent.ClickAction += () => OnClickNode.Invoke(node);
         }
 
-        GameObject CreateNodeObject(string fileName) 
-            => Instantiate(Resources.Load($"{SceneData.prefabPath}/{fileName}") as GameObject, Islands);
 
         void CreateLine(Node startNode, Node endNode)
         {
-            Vector3 start = new Vector3(startNode.x * dist.x, 0.2f, startNode.y * dist.y);
-            Vector3 end = new Vector3(endNode.x * dist.x, 0.2f, endNode.y * dist.y);
+            Vector3 start = new Vector3(startNode.x * dist.x, 0.2f, startNode.y * dist.y) + orgPos;
+            Vector3 end = new Vector3(endNode.x * dist.x, 0.2f, endNode.y * dist.y) + orgPos;
 
-            startNode.paths.Add(new Line(CreateLine(start + orgPos, end + orgPos), endNode));
-        }
-
-        GameObject CreateLine(Vector3 start, Vector3 end)
-        {
-            GameObject obj = Instantiate(Resources.Load("Prefabs/WorldMap/Line") as GameObject, lines);
+            GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/Line") as GameObject, lines);
             LineRenderer renderer = obj.GetComponent<LineRenderer>();
             Vector3[] lineList = { start, end };
             renderer.positionCount = lineList.Length;
             renderer.SetPositions(lineList);
-
-            return obj;
         }
 
+        void CreateAllObject(Node parent)
+        {
+            InitNode(parent);
+            foreach (Node child in parent.children)
+            {
+                CreateLine(parent, child);
+                CreateAllObject(child);
+            }
+        }
     }
 }
 
