@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CheonJiWoon
 {
-    public class BossIsland : Island
+    public class BossIsland : MiddleIsland
     {
         void Start()
         {

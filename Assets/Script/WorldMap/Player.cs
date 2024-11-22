@@ -10,43 +10,45 @@ namespace CheonJiWoon
         public LayerMask moveLayer;
         public LayerMask crashMask;
         public Transform model;
-        Node nowNode;
         float moveSpeed = 15.0f;
         bool isMoving = false;
 
         public UnityAction<float> HpObserve { get; set; }
 
+        void Awake()
+        {
+            if (GameData.playerNode == null) GameData.playerNode = GameData.wolrdMapInfo.firstNode;
+            GameData.playerStat = new BattleStat(60,0,10);
+        }
 
-        // Start is called before the first frame update
         void Start()
         {
-            if (nowNode == null) nowNode = World.instance.firstNode;
-            transform.position = nowNode.gameobject.transform.position;
+            
+            transform.position = GameData.playerNode.pos;
             ViewOnTheMap();
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, moveLayer))
                 {
-                    hit.transform.GetComponent<IClickAction>().ClickAction.Invoke();
+                    hit.transform.GetComponent<IClickAction>()?.ClickAction?.Invoke();
                 }
             }
         }
 
         public void OnMove(Node targetNode)
         {
-            if (nowNode == null || isMoving) return;
-            if (nowNode.children.Contains(targetNode)) StartCoroutine(Moving(targetNode));
+            if (GameData.playerNode == null || isMoving) return;
+            if (GameData.playerNode.children.Contains(targetNode)) StartCoroutine(Moving(targetNode));
         }
 
         IEnumerator Moving(Node targetNode)
         {
             isMoving = true;
-            Vector3 dir = targetNode.gameobject.transform.position - transform.position;
+            Vector3 dir = targetNode.pos - transform.position;
             float dist = dir.magnitude;
             dir.Normalize();
 
@@ -73,8 +75,6 @@ namespace CheonJiWoon
 
                 yield return null;
             }
-
-            nowNode = targetNode;
             isMoving = false;
         }
 
@@ -82,6 +82,8 @@ namespace CheonJiWoon
         {
             if ((crashMask.value >> other.gameObject.layer & 1) != 0)
             {
+                Island home = other.GetComponent<Island>();
+                if (home != null) { GameData.playerNode = home.myNode; }
                 ICrashAction action = other.GetComponent<ICrashAction>();
                 if (action != null)
                 {

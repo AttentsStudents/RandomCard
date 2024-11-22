@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
+
+
     public class World : MonoBehaviour
     {
         public static World instance { get; private set; }
-        public Node[,] mapInfo { get; private set; }
-        public Node firstNode { get; private set; }
-        public Node lastNode { get; private set; }
 
         int xSize = 9;
         int ySize = 12;
+        int startPointCount = 4;
         Vector2 dist = new Vector2(5.0f, 12.0f);
         Vector3 orgPos;
+        HashSet<Node> completeNode;
 
-        int startPointCount = 4;
         public Transform lines;
         public Transform Islands;
         public UnityEvent<Node> OnClickNode;
@@ -26,17 +27,19 @@ namespace CheonJiWoon
         {
             instance = this;
             orgPos = -new Vector3(xSize * dist.x, 0.0f, ySize * dist.y) * 0.5f;
-            if (GameData.mapInfo == null) MapGenerate();
-            CreateAllObject(firstNode);
+            lines.position = Islands.position = orgPos;
+            if (GameData.wolrdMapInfo == null) MapGenerate();
+            completeNode = new HashSet<Node>();
+            CreateAllObject(GameData.wolrdMapInfo.firstNode);
         }
 
         void MapGenerate()
         {
-            mapInfo = new Node[ySize, xSize];
-            lines.position = Islands.position = orgPos;
+            GameData.wolrdMapInfo = new WorldMapInfo();
+            GameData.wolrdMapInfo.mapInfo = new Node[ySize, xSize];
 
-            firstNode = new Node(xSize / 2, -2, "Home");
-            lastNode = new Node(xSize / 2, ySize + 1, "BossIsland");
+            GameData.wolrdMapInfo.firstNode = new Node(xSize / 2, -2, "Home");
+            GameData.wolrdMapInfo.lastNode = new Node(xSize / 2, ySize + 1, "BossIsland");
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -48,12 +51,11 @@ namespace CheonJiWoon
 
                     Node newNode = new Node(random, 0);
 
-                    mapInfo[0, random] = newNode;
-                    firstNode.children.Add(newNode);
+                    GameData.wolrdMapInfo.mapInfo[0, random] = newNode;
+                    GameData.wolrdMapInfo.firstNode.children.Add(newNode);
                     CreatePaths(newNode, 2, 2);
                 }
             }
-            GameData.mapInfo = mapInfo;
         }
 
         void CreatePaths(Node parent, int pathNumbs, int range)
@@ -69,12 +71,14 @@ namespace CheonJiWoon
 
             for (int i = parent.x - 1; i >= SearchRangeMin; i--)
             {
-                if (mapInfo[parent.y, i] != null && mapInfo[parent.y, i].children.Count > 0) min = Mathf.Max(min, mapInfo[parent.y, i].max);
+                if (GameData.wolrdMapInfo.mapInfo[parent.y, i] != null && GameData.wolrdMapInfo.mapInfo[parent.y, i].children.Count > 0)
+                    min = Mathf.Max(min, GameData.wolrdMapInfo.mapInfo[parent.y, i].max);
             }
 
             for (int i = parent.x + 1; i <= SearchRangeMax; i++)
             {
-                if (mapInfo[parent.y, i] != null && mapInfo[parent.y, i].children.Count > 0) max = Mathf.Min(max, mapInfo[parent.y, i].min);
+                if (GameData.wolrdMapInfo.mapInfo[parent.y, i] != null && GameData.wolrdMapInfo.mapInfo[parent.y, i].children.Count > 0)
+                    max = Mathf.Min(max, GameData.wolrdMapInfo.mapInfo[parent.y, i].min);
             }
 
             max++;
@@ -103,14 +107,14 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    if (mapInfo[depth, randomX] == null)
+                    if (GameData.wolrdMapInfo.mapInfo[depth, randomX] == null)
                     {
                         Node newNode = new Node(randomX, depth);
-                        mapInfo[depth, randomX] = newNode;
+                        GameData.wolrdMapInfo.mapInfo[depth, randomX] = newNode;
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
-                        else newNode.children.Add(lastNode);
+                        else newNode.children.Add(GameData.wolrdMapInfo.lastNode);
                     }
-                    parent.children.Add(mapInfo[depth, randomX]);
+                    parent.children.Add(GameData.wolrdMapInfo.mapInfo[depth, randomX]);
                 }
             }
         }
@@ -119,32 +123,32 @@ namespace CheonJiWoon
         {
             GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/{node.filePath}") as GameObject, Islands);
             obj.transform.localPosition = new Vector3(node.x * dist.x, 0.0f, node.y * dist.y);
-            node.gameobject = obj;
+            node.pos = obj.transform.position;
+            obj.GetComponent<Island>().myNode = node;
 
-            IClickAction clickComponent = node.gameobject.GetComponent<IClickAction>();
+            IClickAction clickComponent = obj.GetComponent<IClickAction>();
             if (clickComponent != null) clickComponent.ClickAction += () => OnClickNode.Invoke(node);
         }
 
 
         void CreateLine(Node startNode, Node endNode)
         {
-            Vector3 start = new Vector3(startNode.x * dist.x, 0.2f, startNode.y * dist.y) + orgPos;
-            Vector3 end = new Vector3(endNode.x * dist.x, 0.2f, endNode.y * dist.y) + orgPos;
-
             GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/Line") as GameObject, lines);
             LineRenderer renderer = obj.GetComponent<LineRenderer>();
-            Vector3[] lineList = { start, end };
+            Vector3[] lineList = { startNode.pos, endNode.pos };
             renderer.positionCount = lineList.Length;
             renderer.SetPositions(lineList);
         }
 
         void CreateAllObject(Node parent)
         {
+            if (completeNode.Contains(parent)) return;
+            completeNode.Add(parent);
             InitNode(parent);
             foreach (Node child in parent.children)
             {
-                CreateLine(parent, child);
                 CreateAllObject(child);
+                CreateLine(parent, child);
             }
         }
     }

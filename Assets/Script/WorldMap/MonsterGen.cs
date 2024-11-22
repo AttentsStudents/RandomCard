@@ -7,7 +7,15 @@ public class MonsterGen : MonoBehaviour
     public static MonsterGen instance;
 
     public GameObject[] list;
-    void Awake() => instance = this;
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        if (instance != this) DestroyImmediate(this);
+    }
 
     public GameObject RandomMonster()
     {

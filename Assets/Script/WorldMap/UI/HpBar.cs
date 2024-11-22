@@ -30,8 +30,6 @@ public class HpBar : MonoBehaviour
 
     void Init()
     {
-        GameData.playerStat.maxHP = GameData.playerStat.curHP = 60;
-        GameData.playerStat.curHP = 30;
         slider.value = GameData.playerStat.curHP / GameData.playerStat.maxHP;
         text.text = $"{GameData.playerStat.curHP} / {GameData.playerStat.maxHP}";
 

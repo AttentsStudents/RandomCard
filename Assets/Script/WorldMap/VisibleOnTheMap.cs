@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
@@ -10,6 +11,7 @@ namespace CheonJiWoon
         public bool dynamic;
         [Range(0.0f, 1.0f)]
         public float colorAlpha = 1.0f;
+        protected UnityAction UpdateMapIcon { get; private set; }
         protected void ViewOnTheMap()
         {
             string type = dynamic ? "DynamicMapIcon" : "MapIcon";
@@ -19,6 +21,14 @@ namespace CheonJiWoon
             Color color = mapIcon.image.color;
             color.a = colorAlpha;
             mapIcon.image.color = color;
+
+            UpdateMapIcon = () =>
+            {
+                mapIcon.image.sprite = sprite;
+                Color color = mapIcon.image.color;
+                color.a = colorAlpha;
+                mapIcon.image.color = color;
+            };
         }
     }
 }

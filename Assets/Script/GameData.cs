@@ -5,8 +5,9 @@ using UnityEngine;
 
 public static class GameData
 {
-    public static Node[,] mapInfo;
+    public static WorldMapInfo wolrdMapInfo {  get; set; }
     public static int[] cards = new int[50];
-    public static List<(int, int)> enemies;
-    public static BattleStat playerStat = new BattleStat();
+    public static List<(int, int)> enemies { get; set; }
+    public static BattleStat playerStat;
+    public static Node playerNode { get; set; }
 }
