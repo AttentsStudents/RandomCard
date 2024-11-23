@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -16,6 +15,11 @@ class SaveDataField
     float Cost;
     float Armor;
     float Attak;
+    (int, int) playerPlace;
+    List<(int, int)> mapKey;
+    List<Node> mapNode;
+    (int, int) firstNode;
+    (int, int) lastNode;
 
     public SaveDataField()
     {
@@ -25,6 +29,18 @@ class SaveDataField
         Cost = GameData.playerStat.Cost;
         Armor = GameData.playerStat.Armor;
         Attak = GameData.playerStat.Attack;
+        playerPlace = GameData.playerNode.GetKey();
+        mapKey = new List<(int, int)>();
+        mapNode = new List<Node>();
+
+        foreach(var item in Node.map)
+        {
+            mapKey.Add(item.Key);
+            mapNode.Add(item.Value);
+        }
+
+        firstNode = Node.firstNode.GetKey();
+        lastNode = Node.lastNode.GetKey();
     }
 
     public void Load()
@@ -35,12 +51,21 @@ class SaveDataField
         GameData.playerStat.Cost = Cost;
         GameData.playerStat.Armor = Armor;
         GameData.playerStat.Attak = Attak;
+
+        Node.map = new Dictionary<(int, int), Node>();
+        for (int i = 0; i < Mathf.Min(mapKey.Count, mapNode.Count); i++)
+        {
+            Node.map.Add(mapKey[i], mapNode[i]);
+        }
+        GameData.playerNode = Node.GetNode(playerPlace.Item1, playerPlace.Item2);
+
+        Node.firstNode = Node.GetNode(firstNode.Item1, firstNode.Item2);
+        Node.lastNode = Node.GetNode(lastNode.Item1, lastNode.Item2);
     }
 }
 
 public static class GameData
 {
-    public static WorldMapInfo world { get; set; }
     public static int[] cards = new int[50];
     public static List<(int, int)> enemies { get; set; }
     public static BattleStat playerStat;

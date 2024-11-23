@@ -25,18 +25,17 @@ namespace CheonJiWoon
             instance = this;
             orgPos = -new Vector3(xSize * dist.x, 0.0f, ySize * dist.y) * 0.5f;
             lines.position = Islands.position = orgPos;
-            if (GameData.world == null) MapGenerate();
+            if (Node.map == null) MapGenerate();
             completeNode = new HashSet<Node>();
-            CreateAllObject(GameData.world.firstNode);
+            Node.pos = new Dictionary<Node, Vector3>();
+            CreateAllObject(Node.firstNode);
         }
 
         void MapGenerate()
         {
-            GameData.world = new WorldMapInfo();
-            GameData.world.mapInfo = new Node[ySize, xSize];
-
-            GameData.world.firstNode = new Node(xSize / 2, -2, "Home");
-            GameData.world.lastNode = new Node(xSize / 2, ySize + 1, "BossIsland");
+            Node.map = new Dictionary<(int, int), Node>();
+            Node.firstNode = new Node(xSize / 2, -2, Node.Type.START);
+            Node.lastNode = new Node(xSize / 2, ySize + 1, Node.Type.END);
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -48,8 +47,7 @@ namespace CheonJiWoon
 
                     Node newNode = new Node(random, 0);
 
-                    GameData.world.mapInfo[0, random] = newNode;
-                    GameData.world.firstNode.children.Add(newNode);
+                    Node.firstNode.children.Add(newNode.GetKey());
                     CreatePaths(newNode, 2, 2);
                 }
             }
@@ -68,14 +66,14 @@ namespace CheonJiWoon
 
             for (int i = parent.x - 1; i >= SearchRangeMin; i--)
             {
-                if (GameData.world.mapInfo[parent.y, i] != null && GameData.world.mapInfo[parent.y, i].children.Count > 0)
-                    min = Mathf.Max(min, GameData.world.mapInfo[parent.y, i].max);
+                if (Node.map.ContainsKey((parent.y, i)) && Node.GetNode(parent.y, i).children.Count > 0)
+                    min = Mathf.Max(min, Node.GetNode(parent.y, i).max);
             }
 
             for (int i = parent.x + 1; i <= SearchRangeMax; i++)
             {
-                if (GameData.world.mapInfo[parent.y, i] != null && GameData.world.mapInfo[parent.y, i].children.Count > 0)
-                    max = Mathf.Min(max, GameData.world.mapInfo[parent.y, i].min);
+                if (Node.map.ContainsKey((parent.y, i)) && Node.GetNode(parent.y, i).children.Count > 0)
+                    max = Mathf.Min(max, Node.GetNode(parent.y, i).min);
             }
 
             max++;
@@ -104,23 +102,22 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    if (GameData.world.mapInfo[depth, randomX] == null)
+                    if (!Node.map.ContainsKey((depth, randomX)))
                     {
                         Node newNode = new Node(randomX, depth);
-                        GameData.world.mapInfo[depth, randomX] = newNode;
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
-                        else newNode.children.Add(GameData.world.lastNode);
+                        else newNode.children.Add(Node.lastNode.GetKey());
                     }
-                    parent.children.Add(GameData.world.mapInfo[depth, randomX]);
+                    parent.children.Add(Node.GetNode(depth, randomX).GetKey());
                 }
             }
         }
 
         void InitNode(Node node)
         {
-            GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/{node.filePath}") as GameObject, Islands);
+            GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/{node.GetFilePath()}") as GameObject, Islands);
             obj.transform.localPosition = new Vector3(node.x * dist.x, 0.0f, node.y * dist.y);
-            node.pos = obj.transform.position;
+            Node.pos.Add(node, obj.transform.position);
             obj.GetComponent<Island>().myNode = node;
 
             IClickAction clickComponent = obj.GetComponent<IClickAction>();
@@ -132,7 +129,7 @@ namespace CheonJiWoon
         {
             GameObject obj = Instantiate(Resources.Load($"{SceneData.prefabPath}/Line") as GameObject, lines);
             LineRenderer renderer = obj.GetComponent<LineRenderer>();
-            Vector3[] lineList = { startNode.pos, endNode.pos };
+            Vector3[] lineList = { startNode.GetPos(), endNode.GetPos() };
             renderer.positionCount = lineList.Length;
             renderer.SetPositions(lineList);
         }
@@ -142,10 +139,10 @@ namespace CheonJiWoon
             if (completeNode.Contains(parent)) return;
             completeNode.Add(parent);
             InitNode(parent);
-            foreach (Node child in parent.children)
+            foreach ((int,int) key in parent.children)
             {
-                CreateAllObject(child);
-                CreateLine(parent, child);
+                CreateAllObject(Node.GetNode(key.Item1, key.Item2));
+                CreateLine(parent, Node.GetNode(key.Item1, key.Item2));
             }
         }
     }

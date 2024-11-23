@@ -17,13 +17,13 @@ namespace CheonJiWoon
 
         void Awake()
         {
-            if (GameData.playerNode == null) GameData.playerNode = GameData.world.firstNode;
+            if (GameData.playerNode == null) GameData.playerNode = Node.firstNode;
         }
 
         void Start()
         {
             
-            transform.position = GameData.playerNode.pos;
+            transform.position = GameData.playerNode.GetPos();
             ViewOnTheMap();
         }
 
@@ -41,13 +41,13 @@ namespace CheonJiWoon
         public void OnMove(Node targetNode)
         {
             if (GameData.playerNode == null || isMoving) return;
-            if (GameData.playerNode.children.Contains(targetNode)) StartCoroutine(Moving(targetNode));
+            if (GameData.playerNode.children.Contains(targetNode.GetKey())) StartCoroutine(Moving(targetNode));
         }
 
         IEnumerator Moving(Node targetNode)
         {
             isMoving = true;
-            Vector3 dir = targetNode.pos - transform.position;
+            Vector3 dir = targetNode.GetPos() - transform.position;
             float dist = dir.magnitude;
             dir.Normalize();
 

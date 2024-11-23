@@ -5,48 +5,66 @@ using UnityEngine;
 
 namespace CheonJiWoon
 {
-    [Serializable]
     public class WorldMapInfo
     {
-        public Node[,] mapInfo { get; set; }
         public Node firstNode { get; set; }
         public Node lastNode { get; set; }
     }
 
+    [Serializable]
     public class Node
     {
+        public static Dictionary<Node, Vector3> pos { get; set; }
+        public static Dictionary<(int, int), Node> map { get; set; } 
+        public static Node firstNode { get; set; }
+        public static Node lastNode { get; set; }
+        public static Node GetNode(int y, int x) => map.GetValueOrDefault((y, x));
         public enum Type
         {
-            NONE,
+            RANDOM,
             MONSTER,
             TREASURE,
-            REST
+            REST,
+            START,
+            END
         }
         public Type type { get; set; }
         public bool clear { get; set; }
         public List<(int, int)> monsterInfo { get; set; }
-        public string filePath { get; private set; }
         public int x { get; private set; }
         public int y { get; private set; }
-
-        public Vector3 pos { get; set; }
         public int min { get; set; }
         public int max { get; set; }
-        List<Node> _children = new List<Node>();
-        public List<Node> children
+        List<(int, int)> _children = new List<(int, int)>();
+        public List<(int, int)> children
         {
             get => _children;
             set => _children = value;
         }
 
 
-        public Node(int x, int y, string filePath = "Island")
+        public Node(int x, int y, Type type = Type.RANDOM)
         {
             this.x = x;
             this.y = y;
-            this.filePath = filePath;
             this.clear = false;
-            RandomMyType();
+            if (type == Type.RANDOM) RandomMyType();
+            else this.type = type;
+
+            map.Add((y, x), this);
+        }
+
+        public string GetFilePath()
+        {
+            switch (type)
+            {
+                case Type.START:
+                    return "StartPoint";
+                case Type.END:
+                    return "EndPoint";
+                default:
+                    return "MiddlePoint";
+            }
         }
 
         void RandomMyType()
@@ -57,6 +75,8 @@ namespace CheonJiWoon
             else type = Type.REST;
         }
 
+        public Vector3 GetPos() => Node.pos.GetValueOrDefault(this);
+        public (int, int) GetKey() => (this.y, this.x);
     }
 
 }
