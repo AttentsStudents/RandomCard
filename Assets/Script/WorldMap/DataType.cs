@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CheonJiWoon
 {
+    [Serializable]
     public class WorldMapInfo
     {
         public Node[,] mapInfo { get; set; }
@@ -20,19 +22,23 @@ namespace CheonJiWoon
             TREASURE,
             REST
         }
-
+        public Type type { get; set; }
+        public bool clear { get; set; }
+        public List<(int, int)> monsterInfo { get; set; }
         public string filePath { get; private set; }
         public int x { get; private set; }
         public int y { get; private set; }
-        public Type type { get; private set; }
 
         public Vector3 pos { get; set; }
         public int min { get; set; }
         public int max { get; set; }
-        public bool clear { get; set; }
+        List<Node> _children = new List<Node>();
+        public List<Node> children
+        {
+            get => _children;
+            set => _children = value;
+        }
 
-        public List<(int, int)> monsterInfo;
-        public HashSet<Node> children = new HashSet<Node>();
 
         public Node(int x, int y, string filePath = "Island")
         {
@@ -45,10 +51,12 @@ namespace CheonJiWoon
 
         void RandomMyType()
         {
-            int random = Random.Range(1, 8);
+            int random = UnityEngine.Random.Range(1, 8);
             if (random < 6) type = Type.MONSTER;
             else if (random < 7) type = Type.TREASURE;
             else type = Type.REST;
         }
+
     }
+
 }

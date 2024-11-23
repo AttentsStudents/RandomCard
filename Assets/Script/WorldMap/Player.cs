@@ -17,8 +17,7 @@ namespace CheonJiWoon
 
         void Awake()
         {
-            if (GameData.playerNode == null) GameData.playerNode = GameData.wolrdMapInfo.firstNode;
-            GameData.playerStat = new BattleStat(60,0,10);
+            if (GameData.playerNode == null) GameData.playerNode = GameData.world.firstNode;
         }
 
         void Start()

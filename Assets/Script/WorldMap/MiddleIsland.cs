@@ -102,8 +102,6 @@ namespace CheonJiWoon
             objectQueue.Enqueue(monster);
         }
 
-
-
         void CrashActionMyType()
         {
             myNode.clear = true;
@@ -111,17 +109,24 @@ namespace CheonJiWoon
             {
                 case Node.Type.MONSTER:
                     GameData.enemies = myNode.monsterInfo;
-                    SceneManager.LoadSceneAsync(0);
+                    //SceneManager.LoadSceneAsync(0);
+                    {
+                        IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
+                        if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
+                    }
                     break;
                 case Node.Type.TREASURE:
                     break;
                 case Node.Type.REST:
-                    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
-                    if (targetHp != null) targetHp.HpObserve?.Invoke(5);
+                    {
+                        IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
+                        if (targetHp != null) targetHp.HpObserve?.Invoke(5);
+                    }
                     break;
             }
             colorAlpha = 0.4f;
             UpdateMapIcon.Invoke();
+            GameData.SaveData();
             DestroyObjects();
         }
 

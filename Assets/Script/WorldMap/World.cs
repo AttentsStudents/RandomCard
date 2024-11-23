@@ -1,13 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace CheonJiWoon
 {
-
-
     public class World : MonoBehaviour
     {
         public static World instance { get; private set; }
@@ -28,18 +25,18 @@ namespace CheonJiWoon
             instance = this;
             orgPos = -new Vector3(xSize * dist.x, 0.0f, ySize * dist.y) * 0.5f;
             lines.position = Islands.position = orgPos;
-            if (GameData.wolrdMapInfo == null) MapGenerate();
+            if (GameData.world == null) MapGenerate();
             completeNode = new HashSet<Node>();
-            CreateAllObject(GameData.wolrdMapInfo.firstNode);
+            CreateAllObject(GameData.world.firstNode);
         }
 
         void MapGenerate()
         {
-            GameData.wolrdMapInfo = new WorldMapInfo();
-            GameData.wolrdMapInfo.mapInfo = new Node[ySize, xSize];
+            GameData.world = new WorldMapInfo();
+            GameData.world.mapInfo = new Node[ySize, xSize];
 
-            GameData.wolrdMapInfo.firstNode = new Node(xSize / 2, -2, "Home");
-            GameData.wolrdMapInfo.lastNode = new Node(xSize / 2, ySize + 1, "BossIsland");
+            GameData.world.firstNode = new Node(xSize / 2, -2, "Home");
+            GameData.world.lastNode = new Node(xSize / 2, ySize + 1, "BossIsland");
 
             HashSet<int> startPointCheck = new HashSet<int>();
             while (startPointCheck.Count < startPointCount)
@@ -51,8 +48,8 @@ namespace CheonJiWoon
 
                     Node newNode = new Node(random, 0);
 
-                    GameData.wolrdMapInfo.mapInfo[0, random] = newNode;
-                    GameData.wolrdMapInfo.firstNode.children.Add(newNode);
+                    GameData.world.mapInfo[0, random] = newNode;
+                    GameData.world.firstNode.children.Add(newNode);
                     CreatePaths(newNode, 2, 2);
                 }
             }
@@ -71,14 +68,14 @@ namespace CheonJiWoon
 
             for (int i = parent.x - 1; i >= SearchRangeMin; i--)
             {
-                if (GameData.wolrdMapInfo.mapInfo[parent.y, i] != null && GameData.wolrdMapInfo.mapInfo[parent.y, i].children.Count > 0)
-                    min = Mathf.Max(min, GameData.wolrdMapInfo.mapInfo[parent.y, i].max);
+                if (GameData.world.mapInfo[parent.y, i] != null && GameData.world.mapInfo[parent.y, i].children.Count > 0)
+                    min = Mathf.Max(min, GameData.world.mapInfo[parent.y, i].max);
             }
 
             for (int i = parent.x + 1; i <= SearchRangeMax; i++)
             {
-                if (GameData.wolrdMapInfo.mapInfo[parent.y, i] != null && GameData.wolrdMapInfo.mapInfo[parent.y, i].children.Count > 0)
-                    max = Mathf.Min(max, GameData.wolrdMapInfo.mapInfo[parent.y, i].min);
+                if (GameData.world.mapInfo[parent.y, i] != null && GameData.world.mapInfo[parent.y, i].children.Count > 0)
+                    max = Mathf.Min(max, GameData.world.mapInfo[parent.y, i].min);
             }
 
             max++;
@@ -107,14 +104,14 @@ namespace CheonJiWoon
                         parent.min = randomX;
                     }
 
-                    if (GameData.wolrdMapInfo.mapInfo[depth, randomX] == null)
+                    if (GameData.world.mapInfo[depth, randomX] == null)
                     {
                         Node newNode = new Node(randomX, depth);
-                        GameData.wolrdMapInfo.mapInfo[depth, randomX] = newNode;
+                        GameData.world.mapInfo[depth, randomX] = newNode;
                         if (ySize > next) CreatePaths(newNode, pathNumbs, range);
-                        else newNode.children.Add(GameData.wolrdMapInfo.lastNode);
+                        else newNode.children.Add(GameData.world.lastNode);
                     }
-                    parent.children.Add(GameData.wolrdMapInfo.mapInfo[depth, randomX]);
+                    parent.children.Add(GameData.world.mapInfo[depth, randomX]);
                 }
             }
         }
