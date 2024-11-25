@@ -13,6 +13,13 @@ namespace CheonJiWoon
         public static Node firstNode { get; set; }
         public static Node lastNode { get; set; }
         public static Node GetNode(int y, int x) => map.GetValueOrDefault((y, x));
+        public static void InitNode()
+        {
+            pos = null;
+            map = null;
+            firstNode = null;
+            lastNode = null;
+        }
         public enum Type
         {
             RANDOM,

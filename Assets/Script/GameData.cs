@@ -55,9 +55,9 @@ class SaveDataField
 
 public static class GameData
 {
-    public static int[] cards = new int[50];
+    public static int[] cards { get; set; }
     public static List<(int, int)> enemies { get; set; }
-    public static BattleStat playerStat;
+    public static BattleStat playerStat { get; set; }
     public static Node playerNode { get; set; }
 
     static BinaryFormatter bf = new BinaryFormatter();
@@ -76,5 +76,13 @@ public static class GameData
         {
             (bf.Deserialize(fs) as SaveDataField)?.Load();
         }
+    }
+
+    public static void InitData()
+    {
+        cards = new int[50];
+        enemies = null;
+        playerStat = null;
+        playerNode = null;
     }
 }
