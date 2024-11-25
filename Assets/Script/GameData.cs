@@ -10,11 +10,7 @@ using UnityEngine;
 class SaveDataField
 {
     int[] cards;
-    float maxHP;
-    float curHP;
-    float Cost;
-    float Armor;
-    float Attak;
+    BattleStat playerStat;
     (int, int) playerPlace;
     List<(int, int)> mapKey;
     List<Node> mapNode;
@@ -24,12 +20,9 @@ class SaveDataField
     public SaveDataField()
     {
         cards = GameData.cards;
-        maxHP = GameData.playerStat.maxHP;
-        curHP = GameData.playerStat.curHP;
-        Cost = GameData.playerStat.Cost;
-        Armor = GameData.playerStat.Armor;
-        Attak = GameData.playerStat.Attack;
+        playerStat = GameData.playerStat;
         playerPlace = GameData.playerNode.GetKey();
+
         mapKey = new List<(int, int)>();
         mapNode = new List<Node>();
 
@@ -46,19 +39,15 @@ class SaveDataField
     public void Load()
     {
         GameData.cards = cards;
-        GameData.playerStat.maxHP = maxHP;
-        GameData.playerStat.curHP = curHP;
-        GameData.playerStat.Cost = Cost;
-        GameData.playerStat.Armor = Armor;
-        GameData.playerStat.Attak = Attak;
+        GameData.playerStat = playerStat;
 
         Node.map = new Dictionary<(int, int), Node>();
         for (int i = 0; i < Mathf.Min(mapKey.Count, mapNode.Count); i++)
         {
             Node.map.Add(mapKey[i], mapNode[i]);
         }
-        GameData.playerNode = Node.GetNode(playerPlace.Item1, playerPlace.Item2);
 
+        GameData.playerNode = Node.GetNode(playerPlace.Item1, playerPlace.Item2);
         Node.firstNode = Node.GetNode(firstNode.Item1, firstNode.Item2);
         Node.lastNode = Node.GetNode(lastNode.Item1, lastNode.Item2);
     }

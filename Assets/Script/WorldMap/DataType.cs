@@ -5,12 +5,6 @@ using UnityEngine;
 
 namespace CheonJiWoon
 {
-    public class WorldMapInfo
-    {
-        public Node firstNode { get; set; }
-        public Node lastNode { get; set; }
-    }
-
     [Serializable]
     public class Node
     {
