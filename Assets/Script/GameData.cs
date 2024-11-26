@@ -9,7 +9,7 @@ using UnityEngine;
 [Serializable]
 class SaveDataField
 {
-    int[] cards;
+    List<int> cards;
     BattleStat playerStat;
     (int, int) playerPlace;
     List<(int, int)> mapKey;
@@ -55,7 +55,7 @@ class SaveDataField
 
 public static class GameData
 {
-    public static int[] cards { get; set; }
+    public static List<int> cards { get; set; }
     public static List<(int, int)> enemies { get; set; }
     public static BattleStat playerStat { get; set; }
     public static Node playerNode { get; set; }
@@ -80,7 +80,7 @@ public static class GameData
 
     public static void InitData()
     {
-        cards = new int[50];
+        cards = new List<int>();
         enemies = null;
         playerStat = null;
         playerNode = null;

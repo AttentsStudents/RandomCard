@@ -1,28 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class Tresure : MonoBehaviour
+namespace CheonJiWoon
 {
-    void Start()
+    public class Tresure : MonoBehaviour
     {
-        GenerateCards();
-    }
-
-    void GenerateCards()
-    {
-        HashSet<int> check = new HashSet<int>();
-        while (check.Count < 3)
+        public Transform content;
+        void Start()
         {
-            int randomCardId = Random.Range(0, 10);
-            if (!check.Contains(randomCardId))
-            {
-                check.Add(randomCardId);
-            }
+            GenerateCards();
         }
-        foreach (int cardId in check)
+
+        void GenerateCards()
         {
+            HashSet<int> randomCards = new HashSet<int>();
+            while (randomCards.Count < 3)
+            {
+                int randomCardId = Random.Range(0, CardManager.instance.cards.Length);
+                if (!randomCards.Contains(randomCardId))
+                {
+                    randomCards.Add(randomCardId);
+                }
+            }
+            foreach (int cardIdx in randomCards)
+            {
+                GameObject obj = Instantiate(Resources.Load<GameObject>($"{SceneData.prefabPath}/TresureCard"), content);
+                TresureCard card = obj.GetComponent<TresureCard>();
+                if(card != null )
+                {
+                    card.data = CardManager.instance.cards[cardIdx];
+                    card.ClickAction = () => Destroy(gameObject);
+                }
+            }
         }
     }
 }
+

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Def
   m_EditorClassIdentifier: 
   card: 
-  type: 0
+  type: 1
   description: 
   sprite: {fileID: 21300000, guid: 3e7b24445e203384b86bfcbeb1561a01, type: 3}

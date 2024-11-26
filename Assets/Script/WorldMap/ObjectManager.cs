@@ -35,15 +35,13 @@ namespace CheonJiWoon
 
 
 
-    public partial class ObjectManager : MonoBehaviour
+    public partial class ObjectManager : SingleTon<ObjectManager>
     {
-        public static ObjectManager instance;
         public Monster monster;
         public Island island;
         public GameObject tresure;
         public GameObject rest;
         public Effect effect;
-
-        void Awake() => instance = this;
+        void Awake() => Init();
     }
 }

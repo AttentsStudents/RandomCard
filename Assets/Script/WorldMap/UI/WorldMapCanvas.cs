@@ -67,11 +67,13 @@ namespace CheonJiWoon
 
     public partial class WorldMapCanvas
     {
+        public static WorldMapCanvas instance;
         public WorldMapMenu[] MenuList;
         Dictionary<State, WorldMapMenu> LinkStateMenu;
 
         void Awake()
         {
+            instance = this;
             LinkStateMenu = new Dictionary<State, WorldMapMenu>();
             foreach (WorldMapMenu menu in MenuList)
             {

@@ -116,6 +116,7 @@ namespace CheonJiWoon
                     }
                     break;
                 case Node.Type.TREASURE:
+                    CrashTreasureBox();
                     break;
                 case Node.Type.REST:
                     {
@@ -137,6 +138,11 @@ namespace CheonJiWoon
             {
                 Destroy(objectQueue.Dequeue());
             }
+        }
+
+        void CrashTreasureBox()
+        {
+            Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"), WorldMapCanvas.instance.transform);
         }
     }
 }
