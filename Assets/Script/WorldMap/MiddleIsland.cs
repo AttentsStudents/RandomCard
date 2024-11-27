@@ -109,12 +109,12 @@ namespace CheonJiWoon
             {
                 case Node.Type.MONSTER:
                     GameData.enemies = myNode.monsterInfo;
-                    //Loading.LoadScene(3);
-                    {
-                        IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
-                        if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
-                        GameData.SaveData();
-                    }
+                    Loading.LoadScene(3);
+                    //{
+                    //    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
+                    //    if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
+                    //    GameData.SaveData();
+                    //}
                     break;
                 case Node.Type.TREASURE:
                     CrashTreasureBox();
