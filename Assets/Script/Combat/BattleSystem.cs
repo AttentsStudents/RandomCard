@@ -110,6 +110,9 @@ public class BattleSystem : AnimProperty
 
         Target.GetComponent<IDamage>().OnDamage(battleStat.Attak);
     }
-
+    public void TriggerAnimation(int animationHash)
+    {
+        myAnim.SetTrigger(animationHash);
+    }
 
 }
