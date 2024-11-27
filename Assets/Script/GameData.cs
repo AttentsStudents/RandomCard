@@ -6,6 +6,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+public enum Scene
+{
+    LOADING,
+    STARTMENU,
+    WORLDMAP,
+    BATTLE
+}
+
 [Serializable]
 class SaveDataField
 {

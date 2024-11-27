@@ -52,7 +52,6 @@ namespace CheonJiWoon
                         myNode.monsterInfo = new List<(int, int)>();
 
                         int count = Random.Range(1, 4);
-
                         while (count-- > 0)
                         {
                             RandomMonster();
@@ -88,14 +87,15 @@ namespace CheonJiWoon
             CrashAction = CrashActionMyType;
         }
 
-        void RandomMonster()
+        void RandomMonster() => RandomMonster(1, 15);
+        protected void RandomMonster(int min, int max)
         {
             int idx = Random.Range(0, MonsterGen.instance.list.Length);
-            int level = Random.Range(1, 15);
+            int level = Random.Range(min, max + 1);
             myNode.monsterInfo.Add((idx, level));
         }
 
-        void CreateMonster(int idx, Transform tr)
+        protected void CreateMonster(int idx, Transform tr)
         {
             GameObject monster = Instantiate<GameObject>(MonsterGen.instance.list[idx], tr);
             monster.GetComponentInChildren<Animator>().enabled = false;
@@ -109,7 +109,7 @@ namespace CheonJiWoon
             {
                 case Node.Type.MONSTER:
                     GameData.enemies = myNode.monsterInfo;
-                    Loading.LoadScene(3);
+                    Loading.LoadScene(Scene.BATTLE);
                     //{
                     //    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
                     //    if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
