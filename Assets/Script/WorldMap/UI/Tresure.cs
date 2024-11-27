@@ -30,7 +30,11 @@ namespace CheonJiWoon
                 if(card != null )
                 {
                     card.data = CardManager.instance.cards[cardIdx];
-                    card.ClickAction = () => Destroy(gameObject);
+                    card.ClickAction = () =>
+                    {
+                        Destroy(gameObject);
+                        GameData.SaveData();
+                    };
                 }
             }
         }

@@ -6,11 +6,11 @@ using UnityEngine.EventSystems;
 
 namespace CheonJiWoon
 {
-    public class TresureCard : ImageProperty, IPointerClickHandler, IClickAction, IPointerEnterHandler, IPointerExitHandler
+    public class TresureCard : Card, IPointerClickHandler, IClickAction, IPointerEnterHandler, IPointerExitHandler
     {
-        public ItemCard data { get; set; }
+        
         public UnityAction ClickAction { get; set; }
-        float defaultAlpha = 0.75f;
+        float defaultAlpha = 0.85f;
         float enterAlpha = 1.0f;
 
         void Start()
@@ -31,7 +31,7 @@ namespace CheonJiWoon
         }
 
 
-        void GetCard() => GameData.cards.Add(data.type);
+        void GetCard() => GameData.AddCard(data.type);
 
         void ChangeImageAlpha(float alpha)
         {

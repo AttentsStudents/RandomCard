@@ -14,12 +14,12 @@ public class MenuButton : MonoBehaviour
 
         GameData.playerStat = new BattleStat(60, 0, 10);
         GameData.playerStat.curHP = GameData.playerStat.maxHP;
-        SceneManager.LoadSceneAsync(1);
+        Loading.LoadScene(2);
     }
     public void OnClickLoad()
     {
         GameData.LoadData();
-        SceneManager.LoadSceneAsync(1);
+        Loading.LoadScene(2);
     }
 
     public void OnExit()

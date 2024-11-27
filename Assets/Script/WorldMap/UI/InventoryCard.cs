@@ -5,21 +5,28 @@ using UnityEngine.UI;
 
 namespace CheonJiWoon
 {
-    public class CardInvenItem : MonoBehaviour
+    public class InventoryCard : Card
     {
-        public ItemCard data { get; set; }
-        public int count { get; set; }
-        public Image image;
+        int _count;
+        public int count { 
+            get => _count; 
+            set 
+            {
+                cardCount.text = $"Count: {value}";
+                _count = value;
+            }
+        }
 
         public TMPro.TMP_Text cardName;
         public TMPro.TMP_Text description;
+        public TMPro.TMP_Text cardCount;
 
         void Start()
         {
-            InitCard();
+            LoadData();
         }
 
-        void InitCard()
+        void LoadData()
         {
             image.sprite = data.sprite;
             cardName.text = data.card;

@@ -60,6 +60,8 @@ public static class GameData
     public static BattleStat playerStat { get; set; }
     public static Node playerNode { get; set; }
 
+    public static Action<byte> AddCardAction { get; set; }
+
     static BinaryFormatter bf = new BinaryFormatter();
 
     public static void SaveData()
@@ -84,5 +86,11 @@ public static class GameData
         enemies = null;
         playerStat = null;
         playerNode = null;
+    }
+
+    public static void AddCard(byte cardType)
+    {
+        cards.Add(cardType);
+        AddCardAction?.Invoke(cardType);
     }
 }

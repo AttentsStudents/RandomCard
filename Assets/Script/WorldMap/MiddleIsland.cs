@@ -109,10 +109,11 @@ namespace CheonJiWoon
             {
                 case Node.Type.MONSTER:
                     GameData.enemies = myNode.monsterInfo;
-                    //SceneManager.LoadSceneAsync(0);
+                    //Loading.LoadScene(3);
                     {
                         IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
                         if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
+                        GameData.SaveData();
                     }
                     break;
                 case Node.Type.TREASURE:
@@ -122,12 +123,12 @@ namespace CheonJiWoon
                     {
                         IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
                         if (targetHp != null) targetHp.HpObserve?.Invoke(5);
+                        GameData.SaveData();
                     }
                     break;
             }
             colorAlpha = 0.4f;
             UpdateMapIcon.Invoke();
-            GameData.SaveData();
             DestroyObjects();
         }
 
@@ -140,9 +141,6 @@ namespace CheonJiWoon
             }
         }
 
-        void CrashTreasureBox()
-        {
-            Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"), WorldMapCanvas.instance.transform);
-        }
+        void CrashTreasureBox() => Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"), WorldMapCanvas.instance.transform);
     }
 }
