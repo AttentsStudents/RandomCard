@@ -104,7 +104,6 @@ namespace CheonJiWoon
 
         void CrashActionMyType()
         {
-            myNode.clear = true;
             GameData.targetNode = myNode;
             switch (myNode.type)
             {
@@ -113,16 +112,20 @@ namespace CheonJiWoon
                     {
                         IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
                         if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
+                        myNode.clear = true;
                         GameData.SaveData();
                     }
                     break;
                 case Node.Type.TREASURE:
-                    CrashTreasureBox();
+                    Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"),
+                        WorldMapCanvas.instance.transform);
+                    myNode.clear = true;
                     break;
                 case Node.Type.REST:
                     {
                         IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
                         if (targetHp != null) targetHp.HpObserve?.Invoke(5);
+                        myNode.clear = true;
                         GameData.SaveData();
                     }
                     break;
@@ -135,12 +138,7 @@ namespace CheonJiWoon
         void DestroyObjects()
         {
             Instantiate(ObjectManager.instance.effect.Boom, center);
-            while (objectQueue.Count > 0)
-            {
-                Destroy(objectQueue.Dequeue());
-            }
+            while (objectQueue.Count > 0) { Destroy(objectQueue.Dequeue()); }
         }
-
-        void CrashTreasureBox() => Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"), WorldMapCanvas.instance.transform);
     }
 }

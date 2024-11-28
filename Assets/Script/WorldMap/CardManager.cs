@@ -10,9 +10,6 @@ public class CardManager : SingleTon<CardManager>
     {
         Init();
         cardTypeToData = new Dictionary<int, ItemCard>();
-        foreach (ItemCard data in cards)
-        {
-            cardTypeToData.Add(data.type, data);
-        }
+        foreach (ItemCard data in cards) { cardTypeToData.Add(data.type, data); }
     }
 }
