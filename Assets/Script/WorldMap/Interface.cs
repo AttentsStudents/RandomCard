@@ -23,4 +23,8 @@ namespace CheonJiWoon
     {
         UnityAction<float> HpObserve { get; set; }
     }
+    public interface IBattleStat
+    {
+        BattleStat battleStat { get; }
+    }
 }

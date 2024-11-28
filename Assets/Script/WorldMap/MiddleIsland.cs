@@ -109,12 +109,12 @@ namespace CheonJiWoon
             switch (myNode.type)
             {
                 case Node.Type.MONSTER:
-                    Loading.LoadScene(Scene.BATTLE);
-                    //{
-                    //    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
-                    //    if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
-                    //    GameData.SaveData();
-                    //}
+                    //Loading.LoadScene(Scene.BATTLE);
+                    {
+                        IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
+                        if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
+                        GameData.SaveData();
+                    }
                     break;
                 case Node.Type.TREASURE:
                     CrashTreasureBox();
