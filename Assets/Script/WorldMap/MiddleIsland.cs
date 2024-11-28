@@ -105,10 +105,10 @@ namespace CheonJiWoon
         void CrashActionMyType()
         {
             myNode.clear = true;
+            GameData.targetNode = myNode;
             switch (myNode.type)
             {
                 case Node.Type.MONSTER:
-                    GameData.enemies = myNode.monsterInfo;
                     Loading.LoadScene(Scene.BATTLE);
                     //{
                     //    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
