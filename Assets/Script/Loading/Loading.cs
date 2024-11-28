@@ -13,6 +13,6 @@ public class Loading : MonoBehaviour
     public static void LoadScene(Scene scene)
     {
         nScene = (int)scene;
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);
     }
 }

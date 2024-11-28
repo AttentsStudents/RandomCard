@@ -18,7 +18,7 @@ namespace CheonJiWoon
 
             CrashAction = () =>
             {
-                GameData.enemies = myNode.monsterInfo;
+                GameData.targetNode = myNode;
                 Loading.LoadScene(Scene.BATTLE);
             };
         }
