@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class DeckManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class DeckManager : MonoBehaviour
     public List<Card> deck = new List<Card>(); // 현재 덱
     public List<Card> hand = new List<Card>(); // 현재 손패 리스트
     public int drawCount = 3; // 한 번에 뽑는 카드 수
+    static public int Atp, Dep, Sp = 0;
 
     private void Start()
     {
@@ -31,6 +33,9 @@ public class DeckManager : MonoBehaviour
         }
         hand.Clear();
         ShuffleDeck();
+        Atp = 0;
+        Dep = 0;
+        Sp = 0;
         DrawCards(drawCount);
         Debug.Log("카드를 리롤했습니다.");
     }
@@ -51,6 +56,19 @@ public class DeckManager : MonoBehaviour
     {
         for (int i = 0; i < count && deck.Count > 0; i++)
         {
+            // 카드 타입에 따라 핸드에 들어가는 카드 카운팅
+            if (deck[0].cardType == CardType.Attack)
+            {
+                Atp++;
+            }
+            if (deck[0].cardType == CardType.Defense)
+            {
+                Dep++;
+            }
+            if (deck[0].cardType == CardType.Skill)
+            {
+                Sp++;
+            }
             hand.Add(deck[0]);
             deck.RemoveAt(0);
         }
@@ -77,16 +95,14 @@ public class DeckManager : MonoBehaviour
             Card newCard = new Card(
                 itemCard.card,
                 cardType,
-                0, // 에너지 비용 (ItemCard에 정의되지 않음, 필요하다면 ScriptableObject에 추가)
                 itemCard.description,
                 null // 현재 효과는 정의되지 않음
             )
             {
                 sprite = itemCard.sprite // ScriptableObject에서 스프라이트 설정
             };
-
+            //덱의 카드 갯수 종류별로 카운팅
             deck.Add(newCard);
-            //Debug.Log($"덱에 추가된 카드: {newCard.cardName}");
         }
 
         Debug.Log($"총 {deck.Count}장의 카드가 덱에 추가되었습니다.");
@@ -122,16 +138,14 @@ public class Card
 {
     public string cardName; // 카드 이름
     public CardType cardType; // 카드 타입
-    public int energyCost; // 에너지 비용
     public string description; // 카드 설명
     public Sprite sprite; // 카드 이미지
     public System.Action<BattleSystem, BattleSystem> effect; // 카드 효과 (추후 구현 가능)
 
-    public Card(string name, CardType type, int cost, string desc, System.Action<BattleSystem, BattleSystem> cardEffect)
+    public Card(string name, CardType type, string desc, System.Action<BattleSystem, BattleSystem> cardEffect)
     {
         cardName = name;
         cardType = type;
-        energyCost = cost;
         description = desc;
         effect = cardEffect;
     }

@@ -20,6 +20,7 @@ public class Uicontroll : MonoBehaviour
     public void ClosedDeck()
     {
         deckPanel.gameObject.SetActive(false);
+        handPanel.gameObject.SetActive(true);
     }
     public void ClosedHand()
     {

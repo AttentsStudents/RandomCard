@@ -7,7 +7,7 @@ public class Monster : BattleSystem
     public int monsterId;
     public int level;
 
-    public void Initialize(int id, int lv, MonsterData data)
+    public void Initialize(int id, int lv, MonsterData data,GameObject target)
     {
         monsterId = id;
         level = lv;
@@ -17,6 +17,8 @@ public class Monster : BattleSystem
 
         battleStat = new BattleStat(maxHP, armor, attack);
         curHp = battleStat.maxHP;
+
+        Target = target;
     }
 
     public void DisplayStats()

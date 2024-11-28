@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BattleManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class BattleManager : MonoBehaviour
     public List<MonsterData> monsterDatas; // 몬스터 데이터 리스트
     public MonsterGen monsterGen; // 몬스터 프리팹 관리
     public List<Monster> monsters = new List<Monster>(); // 현재 스테이지의 몬스터 리스트
+   
 
     private bool isPlayerTurn = true; // 플레이어 턴 플래그
 
@@ -41,25 +43,30 @@ public class BattleManager : MonoBehaviour
         {
             if (card == null) continue;
 
-            switch (card.cardType)
+            bool effectApplied = false;
+
+            playerBattleSystem.GetComponent<Player>().PlayAnimationAndApplyEffect(card, () =>
             {
-                case CardType.Attack:
-                    playerBattleSystem.TriggerAnimation(playerBattleSystem.animData.OnAttack);
-                    yield return new WaitForSeconds(1.0f); // 애니메이션 대기
-                    ApplyCardEffectToMonsters(card);
-                    break;
+                // 애니메이션이 끝난 후 카드 효과 적용
+                switch (card.cardType)
+                {
+                    case CardType.Attack:
+                        ApplyCardEffectToMonsters(card);
+                        break;
 
-                case CardType.Defense:
-                    playerBattleSystem.TriggerAnimation(playerBattleSystem.animData.OnDamage);
-                    yield return new WaitForSeconds(1.0f); // 애니메이션 대기
-                    ApplyCardEffectToPlayer(card);
-                    break;
+                    case CardType.Defense:
+                    case CardType.Skill:
+                        ApplyCardEffectToPlayer(card);
+                        break;
+                }
 
-                case CardType.Skill:
-                    playerBattleSystem.TriggerAnimation(playerBattleSystem.animData.OnSkill);
-                    yield return new WaitForSeconds(1.0f); // 애니메이션 대기
-                    ApplyCardEffectToPlayer(card);
-                    break;
+                effectApplied = true;
+            });
+
+            // 카드 효과가 적용될 때까지 대기
+            while (!effectApplied)
+            {
+                yield return null;
             }
         }
 
@@ -71,9 +78,10 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(MonsterTurn());
     }
 
+
     private IEnumerator MonsterTurn()
     {
-        Loading.LoadScene(Scene.WORLDMAP);
+        //Loading.LoadScene(Scene.WORLDMAP);
         Debug.Log("몬스터 턴 시작");
         isPlayerTurn = false;
 
@@ -100,8 +108,8 @@ public class BattleManager : MonoBehaviour
                 switch (card.cardType)
                 {
                     case CardType.Attack:
-                        monster.OnDamage(card.energyCost * 10); // 카드 데미지 적용
-                        Debug.Log($"{monster.name}이(가) {card.energyCost * 10}의 피해를 입었습니다.");
+                        monster.OnDamage(DeckManager.Atp * 10); // 카드 데미지 적용
+                        Debug.Log($"{monster.name}이(가) {DeckManager.Atp * 10}의 피해를 입었습니다.");
                         break;
                 }
             }
@@ -113,13 +121,20 @@ public class BattleManager : MonoBehaviour
         switch (card.cardType)
         {
             case CardType.Defense:
-                playerBattleSystem.Armor += card.energyCost * 5; // 방어력 증가
-                Debug.Log($"플레이어 방어력이 {card.energyCost * 5}만큼 증가했습니다.");
+                playerBattleSystem.Armor += DeckManager.Dep * 5; // 방어력 증가
+                Debug.Log($"플레이어 방어력이 {DeckManager.Dep * 5}만큼 증가했습니다.");
                 break;
 
             case CardType.Skill:
-                playerBattleSystem.curHp += card.energyCost * 10; // 체력 회복
-                Debug.Log($"플레이어 체력이 {card.energyCost * 10}만큼 회복되었습니다.");
+                if ((playerBattleSystem.curHp += DeckManager.Sp *10)<= playerBattleSystem.maxHp) {
+                    playerBattleSystem.curHp += DeckManager.Sp * 10; // 체력 회복
+                    Debug.Log($"플레이어 체력이 {DeckManager.Sp * 10}만큼 회복되었습니다.");
+                }
+                else
+                {
+                    playerBattleSystem.curHp = playerBattleSystem.maxHp;
+                    Debug.Log($"플레이어의 체력이 가득 찼습니다.");
+                }
                 break;
         }
     }
@@ -150,9 +165,24 @@ public class BattleManager : MonoBehaviour
             if (monster != null)
             {
                 MonsterData data = monsterDatas[monsterInfo.Item1];
-                monster.Initialize(monsterInfo.Item1, monsterInfo.Item2, data);
+                monster.Initialize(monsterInfo.Item1, monsterInfo.Item2, data, playerBattleSystem.gameObject);
                 monsters.Add(monster);
                 Debug.Log($"몬스터 생성: {data.monsterName} (Lv {monsterInfo.Item2})");
+                monsterObject.transform.LookAt(playerBattleSystem.transform.position);
+            }
+                if (GameData.targetNode.type == CheonJiWoon.Node.Type.END)
+            {
+                monster.gameObject.transform.localScale = new Vector3(1, 1, 1) * 3.0f;
+            }
+                if (GameData.targetNode.type == CheonJiWoon.Node.Type.END&&
+                monsterInfo.Item1 == 3)
+            {
+                monster.gameObject.transform.localScale = new Vector3(1, 1, 1) * 1.5f;
+            }
+                if (GameData.targetNode.type == CheonJiWoon.Node.Type.END &&
+                monsterInfo.Item1 == 5)
+            {
+                monster.gameObject.transform.localScale = new Vector3(1, 1, 1) * 2.0f;
             }
         }
     }

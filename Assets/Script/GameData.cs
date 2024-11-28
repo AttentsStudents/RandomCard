@@ -68,7 +68,7 @@ public static class GameData
     public static Node playerNode { get; set; }
     public static Node targetNode { get; set; }
     public static List<(int, int)> enemies { get => targetNode.monsterInfo; }
-
+    
     public static Action<byte> AddCardAction { get; set; }
 
     static BinaryFormatter bf = new BinaryFormatter();

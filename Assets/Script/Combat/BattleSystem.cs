@@ -50,6 +50,10 @@ public class BattleSystem : AnimProperty
     {
         get => battleStat.curHP > 0.0f;
     }
+    public float maxHp
+    {
+        get => battleStat.maxHP;
+    }
 
     public float curHp
     {

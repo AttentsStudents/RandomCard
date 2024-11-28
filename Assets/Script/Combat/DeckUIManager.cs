@@ -6,6 +6,7 @@ using System.Collections;
 public class DeckUIManager : MonoBehaviour
 {
     public GameObject cardPrefab; // 카드 UI 프리팹
+    public Transform deckWindow;
     public Transform deckPanel;  // 덱 표시 패널
     public Transform handPanel;  // 손패 표시 패널
     public DeckManager deckManager;
@@ -38,17 +39,18 @@ public class DeckUIManager : MonoBehaviour
         {
             if (deckPanel.gameObject != null && deckPanel.gameObject.activeSelf)
             {
-                // 패널 비활성화
-                deckPanel.gameObject.SetActive(false);
+                // 패널 활성화 비활성화
                 handPanel.gameObject.SetActive(true);
+                deckWindow.gameObject.SetActive(false);
             }
+
         }
     }
 
     public void ShowDeck()
     {
         handPanel.gameObject.SetActive(false);
-        deckPanel.gameObject.SetActive(true);
+        deckWindow.gameObject.SetActive(true);
         if (deckManager == null || deckManager.deck == null || deckManager.deck.Count == 0)
         {
             Debug.LogError("덱이 비어 있거나 초기화되지 않았습니다.");
@@ -67,7 +69,7 @@ public class DeckUIManager : MonoBehaviour
             Text cardText = cardObject.GetComponentInChildren<Text>();
             if (cardText != null)
             {
-                cardText.text = $"{card.cardName}\n{card.cardType}\nCost: {card.energyCost}\n{card.description}";
+                cardText.text = $"{card.cardName}\n{card.cardType}\n{card.description}";
             }
 
             Image cardImage = cardObject.transform.Find("CardImage").GetComponent<Image>();
@@ -83,7 +85,6 @@ public class DeckUIManager : MonoBehaviour
 
 
         Debug.Log($"총 {deckManager.deck.Count}장의 카드를 UI로 표시했습니다.");
-        //UpdateUI(deckManager.deck, deckPanel);
     }
 
     private Sprite LoadCardImage(string imageName)
@@ -137,7 +138,7 @@ public class DeckUIManager : MonoBehaviour
             Text cardText = cardObject.GetComponentInChildren<Text>();
             if (cardText != null)
             {
-                cardText.text = $"{card.cardName}\n{card.cardType}\nCost: {card.energyCost}\n{card.description}";
+                cardText.text = $"{card.cardName}\n{card.cardType}\n{card.description}";
             }
 
             // 3. 이미지 컴포넌트에 카드 스프라이트 할당
@@ -165,7 +166,7 @@ public class DeckUIManager : MonoBehaviour
     public void RerollCards()
     {
         deckManager.RerollCards();
-        ShowDeck(); // 덱 UI 갱신
+       // ShowDeck(); // 덱 UI 갱신
         ShowHand(); // 손패 UI 갱신
     }
 
