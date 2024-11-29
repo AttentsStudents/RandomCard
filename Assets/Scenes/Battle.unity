@@ -1301,13 +1301,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDataScriptableObjects:
   - {fileID: 11400000, guid: 48b4e5eba2a4e1d4cac7e6c87afd8a2f, type: 2}
-  - {fileID: 11400000, guid: 9179d7bb32218d2429632882f0d61be0, type: 2}
+  - {fileID: 11400000, guid: 3abd27fe47f12464290d0e7ffc0db8af, type: 2}
   - {fileID: 11400000, guid: 3abd27fe47f12464290d0e7ffc0db8af, type: 2}
   - {fileID: 11400000, guid: 48b4e5eba2a4e1d4cac7e6c87afd8a2f, type: 2}
-  - {fileID: 11400000, guid: 9179d7bb32218d2429632882f0d61be0, type: 2}
-  - {fileID: 11400000, guid: 9179d7bb32218d2429632882f0d61be0, type: 2}
+  - {fileID: 11400000, guid: 0dc4150479f35d0439d287b56cb8dd82, type: 2}
+  - {fileID: 11400000, guid: 3d753bd31147632458c8e7f469ae786e, type: 2}
   - {fileID: 11400000, guid: 48b4e5eba2a4e1d4cac7e6c87afd8a2f, type: 2}
-  - {fileID: 11400000, guid: 48b4e5eba2a4e1d4cac7e6c87afd8a2f, type: 2}
+  - {fileID: 11400000, guid: c64ee15ae340c6543bbe90b9448dcb65, type: 2}
+  - {fileID: 11400000, guid: 3d753bd31147632458c8e7f469ae786e, type: 2}
+  - {fileID: 11400000, guid: 7b6d006cc20759345a739dc8200cd083, type: 2}
+  - {fileID: 11400000, guid: 1ed0c209497098c4b9d04a7180e38ab2, type: 2}
+  - {fileID: 11400000, guid: 6a45b0ae403dae047a463dcc6f6af95d, type: 2}
+  - {fileID: 11400000, guid: e7c814d450a52494d9ebd9322334ebe2, type: 2}
+  - {fileID: 11400000, guid: 0dc4150479f35d0439d287b56cb8dd82, type: 2}
+  - {fileID: 11400000, guid: 0dc4150479f35d0439d287b56cb8dd82, type: 2}
+  - {fileID: 11400000, guid: 5f5229480d70a654d9c7840e5c5454e3, type: 2}
+  - {fileID: 11400000, guid: 5f5229480d70a654d9c7840e5c5454e3, type: 2}
   deck: []
   hand: []
   drawCount: 3
@@ -1887,8 +1896,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 250, y: 125}
-  m_SizeDelta: {x: 500, y: 250}
+  m_AnchoredPosition: {x: 650, y: 250}
+  m_SizeDelta: {x: 1300, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &948959541
 MonoBehaviour:

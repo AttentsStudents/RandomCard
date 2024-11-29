@@ -8,6 +8,8 @@ public class ItemCard : ScriptableObject
 {
     public string card;
     public byte type;
+    public byte dmg;
+    public byte figure;
     public string description;
     public Sprite sprite;
 }

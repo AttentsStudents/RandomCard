@@ -34,6 +34,11 @@ public class BattleManager : MonoBehaviour
         SpawnMonsters(); // 몬스터 생성
     }
 
+    private void Win()
+    {
+        GameData.ClearTargetNode();
+    }
+
     public void EndTurn()
     {
         if (!isPlayerTurn) return;
