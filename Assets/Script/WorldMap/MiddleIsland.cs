@@ -114,25 +114,22 @@ namespace CheonJiWoon
             switch (myNode.type)
             {
                 case Node.Type.MONSTER:
-                    //Loading.LoadScene(Scene.BATTLE);
-                    {
-                        IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
-                        if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
-                        myNode.clear = true;
-                        GameData.SaveData();
-                    }
+                    Loading.LoadScene(Scene.BATTLE);
+                    //{
+                    //    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
+                    //    if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
+                    //    GameData.ClearTargetNode();
+                    //}
                     break;
                 case Node.Type.TREASURE:
                     Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"),
                         WorldMapCanvas.instance.transform);
-                    myNode.clear = true;
                     break;
                 case Node.Type.REST:
                     {
                         IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
                         if (targetHp != null) targetHp.HpObserve?.Invoke(5);
-                        myNode.clear = true;
-                        GameData.SaveData();
+                        GameData.ClearTargetNode();
                     }
                     break;
             }

@@ -40,7 +40,7 @@ namespace CheonJiWoon
                 card.ClickAction = () =>
                 {
                     Destroy(gameObject);
-                    GameData.SaveData();
+                    GameData.ClearTargetNode();
                 };
             }
         }

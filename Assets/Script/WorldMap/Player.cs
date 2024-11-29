@@ -84,7 +84,6 @@ namespace CheonJiWoon
             if ((crashMask.value >> other.gameObject.layer & 1) != 0)
             {
                 Island home = other.GetComponent<Island>();
-                if (home != null) { GameData.playerNode = home.myNode; }
                 ICrashAction action = other.GetComponent<ICrashAction>();
                 if (action != null)
                 {
