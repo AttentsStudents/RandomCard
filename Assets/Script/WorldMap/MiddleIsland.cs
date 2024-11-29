@@ -15,6 +15,7 @@ namespace CheonJiWoon
         public Transform center;
         public Transform left;
         public Transform right;
+        public AudioSource audioSrc;
         Queue<GameObject> objectQueue = new Queue<GameObject>();
 
 
@@ -105,6 +106,11 @@ namespace CheonJiWoon
         void CrashActionMyType()
         {
             GameData.targetNode = myNode;
+            if(audioSrc != null)
+            {
+                audioSrc.time = 0.2f;
+                audioSrc.Play();
+            }
             switch (myNode.type)
             {
                 case Node.Type.MONSTER:

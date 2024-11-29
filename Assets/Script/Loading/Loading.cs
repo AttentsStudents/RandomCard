@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class Loading : MonoBehaviour
 {
     public static int nScene;
-    
 
     void Start() => SceneManager.LoadSceneAsync(nScene);
 
