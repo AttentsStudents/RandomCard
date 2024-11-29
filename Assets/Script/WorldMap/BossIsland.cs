@@ -12,8 +12,11 @@ namespace CheonJiWoon
             sprite = SpriteManager.instance.icon.boss;
             ViewOnTheMap();
 
-            myNode.monsterInfo = new List<(int, int)>();
-            RandomMonster(100, 100);
+            if (myNode.monsterInfo == null || myNode.monsterInfo.Count == 0)
+            {
+                myNode.monsterInfo = new List<(int, int)>();
+                RandomMonster(100, 100);
+            }
             CreateMonster(myNode.monsterInfo[0].Item1, center);
 
             CrashAction = () =>
