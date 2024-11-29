@@ -102,4 +102,13 @@ public static class GameData
         cards.Add(cardType);
         AddCardAction?.Invoke(cardType);
     }
+
+    public static void ClearTargetNode()
+    {
+        targetNode.clear = true;
+        playerNode = targetNode;
+        targetNode.monsterInfo = null;
+        targetNode = null;
+        SaveData();
+    }
 }
