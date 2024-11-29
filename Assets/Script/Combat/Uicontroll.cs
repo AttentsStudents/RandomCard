@@ -26,4 +26,12 @@ public class Uicontroll : MonoBehaviour
     {
         handPanel.gameObject.SetActive(false);
     }
+    public void ReturnMap()
+    {
+        Loading.LoadScene(Scene.WORLDMAP);
+    }
+    public void GameMenu()
+    {
+
+    }
 }
