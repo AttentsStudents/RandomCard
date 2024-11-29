@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class BattleManager : MonoBehaviour
@@ -11,7 +12,11 @@ public class BattleManager : MonoBehaviour
     public List<MonsterData> monsterDatas; // 몬스터 데이터 리스트
     public MonsterGen monsterGen; // 몬스터 프리팹 관리
     public List<Monster> monsters = new List<Monster>(); // 현재 스테이지의 몬스터 리스트
-   
+    public GameObject Buff_Effect;
+    public Sprite Def_Effect;
+    public Sprite Heal_Effect;
+
+
 
     private bool isPlayerTurn = true; // 플레이어 턴 플래그
 
@@ -37,6 +42,44 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(ExecutePlayerTurn());
     }
 
+    private void ApplyBuffImage(Transform targetTransform, Sprite buffSprite)
+    {
+        GameObject buffImage = Instantiate(Buff_Effect, Vector3.zero, Quaternion.identity);
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogError("UI 캔버스를 찾을 수 없습니다.");
+            return;
+        }
+        buffImage.transform.SetParent(canvas.transform, false);
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(targetTransform.position + Vector3.up * 2);
+
+        RectTransform buffRect = buffImage.GetComponent<RectTransform>();
+        if (buffRect != null)
+        {
+            buffRect.position = screenPosition;
+        }
+        Image buffImageComponent = buffImage.GetComponent<Image>();
+        if (buffImageComponent != null)
+        {
+            buffImageComponent.sprite = buffSprite;
+        }
+        Destroy(buffImage, 2.0f);
+    }
+    private void ApplyBuffImage(Vector3 position, Sprite buffSprite)
+    {
+        GameObject buffImage = Instantiate(Buff_Effect, position, Quaternion.identity);
+        Image buffImageComponent = buffImage.GetComponent<Image>();
+
+        if (buffImageComponent != null)
+        {
+            buffImageComponent.sprite = buffSprite;
+        }
+
+        Destroy(buffImage, 2.0f);
+    }
+
+
     private IEnumerator ExecutePlayerTurn()
     {
         foreach (var card in deckManager.hand)
@@ -55,6 +98,7 @@ public class BattleManager : MonoBehaviour
                         break;
 
                     case CardType.Defense:
+
                     case CardType.Skill:
                         ApplyCardEffectToPlayer(card);
                         break;
@@ -75,7 +119,7 @@ public class BattleManager : MonoBehaviour
         deckManager.RerollCards();
 
         // 몬스터 턴으로 전환
-        StartCoroutine(MonsterTurn());
+       // StartCoroutine(MonsterTurn());
     }
 
 
@@ -123,17 +167,20 @@ public class BattleManager : MonoBehaviour
             case CardType.Defense:
                 playerBattleSystem.Armor += DeckManager.Dep * 5; // 방어력 증가
                 Debug.Log($"플레이어 방어력이 {DeckManager.Dep * 5}만큼 증가했습니다.");
+                ApplyBuffImage(playerBattleSystem.transform, Def_Effect);
                 break;
 
             case CardType.Skill:
                 if ((playerBattleSystem.curHp += DeckManager.Sp *10)<= playerBattleSystem.maxHp) {
                     playerBattleSystem.curHp += DeckManager.Sp * 10; // 체력 회복
                     Debug.Log($"플레이어 체력이 {DeckManager.Sp * 10}만큼 회복되었습니다.");
+                    ApplyBuffImage(playerBattleSystem.transform,Heal_Effect);
                 }
                 else
                 {
                     playerBattleSystem.curHp = playerBattleSystem.maxHp;
                     Debug.Log($"플레이어의 체력이 가득 찼습니다.");
+                    ApplyBuffImage(playerBattleSystem.transform, Heal_Effect);
                 }
                 break;
         }
