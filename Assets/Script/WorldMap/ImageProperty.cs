@@ -12,7 +12,7 @@ namespace CheonJiWoon
         {
             get
             {
-                if (_img == null) _img = GetComponent<Image>();
+                if (_img == null) _img = GetComponentInChildren<Image>();
                 return _img;
             }
         }

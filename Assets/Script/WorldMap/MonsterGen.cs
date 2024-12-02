@@ -2,15 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterGen : MonoBehaviour
+public class MonsterGen : SingleTon<MonsterGen>
 {
-    public static MonsterGen instance;
-
     public GameObject[] list;
-    void Awake() => instance = this;
+    void Awake() => Init();
 
-    public GameObject RandomMonster()
-    {
-        return instance.list[Random.Range(0, instance.list.Length)];
-    }
+    public GameObject RandomMonster() => instance.list[Random.Range(0, instance.list.Length)];
 }

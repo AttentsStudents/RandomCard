@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +6,7 @@ public class Player : BattleSystem
 {
     public Transform targetMonster;
     private NavMeshAgent navMeshAgent;
+    public Animator anim;
     public float attackRange = 2.0f;
     private bool isTriggered = false;
 
@@ -37,7 +37,7 @@ public class Player : BattleSystem
         isTriggered = true;
     }
 
-    private void MoveToTargetAndAttack() //공격하러 갈때
+    private void MoveToTargetAndAttack() // 공격하러 갈 때
     {
         navMeshAgent.SetDestination(targetMonster.position);
 
@@ -54,7 +54,7 @@ public class Player : BattleSystem
         }
     }
 
-    public override void OnAttack() //공격할때
+    public override void OnAttack() // 공격할 때
     {
         base.OnAttack();
         myAnim.SetTrigger(animData.OnAttack);
@@ -65,7 +65,7 @@ public class Player : BattleSystem
         }
     }
 
-    public new void OnDamage(float dmg) // 데미지 입을때
+    public new void OnDamage(float dmg) // 데미지 입을 때
     {
         float effectiveDmg = dmg;
 
@@ -88,18 +88,33 @@ public class Player : BattleSystem
         }
     }
 
-    public void MyTurn()
+    public void PlayAnimationAndApplyEffect(Card card, System.Action onEffectComplete)
     {
-        myAnim.SetBool(animData.MyTurn, true);
-        myAnim.SetTrigger(animData.OnAttack);
-
-        // 애니메이션 종료 후 상태를 비활성화
-        StartCoroutine(ResetMyTurnAfterAnimation());
+        StartCoroutine(PlayAnimationAndEffectCoroutine(card, onEffectComplete));
     }
 
-    private IEnumerator ResetMyTurnAfterAnimation()
+    private IEnumerator PlayAnimationAndEffectCoroutine(Card card, System.Action onEffectComplete)
     {
-        yield return new WaitForSeconds(myAnim.GetCurrentAnimatorStateInfo(0).length); // 현재 상태의 애니메이션 길이만큼 대기
-        myAnim.SetBool(animData.MyTurn, false);
+        // 카드 타입에 따른 애니메이션 실행
+        switch (card.cardType)
+        {
+            case CardType.Attack:
+                myAnim.SetTrigger(animData.OnAttack);
+                break;
+
+            case CardType.Defense:
+                myAnim.SetTrigger(animData.OnDamage);
+                break;
+
+            case CardType.Skill:
+                myAnim.SetTrigger(animData.MyTurn);
+                break;
+        }
+
+        // 애니메이션이 끝날 때까지 대기
+        yield return new WaitForSeconds(myAnim.GetCurrentAnimatorStateInfo(0).length);
+
+        // 카드 효과 적용 후 콜백 실행
+        onEffectComplete?.Invoke();
     }
 }

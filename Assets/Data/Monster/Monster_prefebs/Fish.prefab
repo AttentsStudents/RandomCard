@@ -456,6 +456,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd20f432c69c5e5479b37ee721137267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleStat:
+    maxHP: 0
+    curHP: 0
+    Cost: 0
+    Armor: 0
+    Attak: 0
   Target: {fileID: 0}
   hpObserbs:
     m_PersistentCalls:
