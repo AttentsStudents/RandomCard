@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: Slash
   type: 0
+  figure: 7
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 686296b102e1f0c4c8365704fe6b88bd, type: 3}
+  effectclassName: 
+  effectParameters: []

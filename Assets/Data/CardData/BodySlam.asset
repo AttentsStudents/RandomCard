@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: BodySlam
   m_EditorClassIdentifier: 
   card: BodySlam
-  type: 0
-  dmg: 10
+  type: 2
   figure: 0
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 104d91253b506644cbcc803ff2d90086, type: 3}
+  effectclassName: 
+  effectParameters: []

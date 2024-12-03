@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: Clash
   type: 0
-  dmg: 20
-  figure: 0
+  figure: 15
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 18fa588acc3e33f42b9949bf16ff6fee, type: 3}
+  effectclassName: 
+  effectParameters: []

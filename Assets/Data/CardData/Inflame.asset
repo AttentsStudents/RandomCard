@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Inflame
   m_EditorClassIdentifier: 
   card: Inflame
-  type: 0
+  type: 2
+  figure: 0
+  remainingTurn: 3
   description: 
   sprite: {fileID: 21300000, guid: 61a5d3ca6e949334a981baa6a3d13a1c, type: 3}
+  effectclassName: 
+  effectParameters: []

@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Limitbreak
   m_EditorClassIdentifier: 
   card: LimitBreak
-  type: 0
+  type: 2
+  figure: 0
+  remainingTurn: 3
   description: 
   sprite: {fileID: 21300000, guid: c3ee0fb3a30e51f44ad1dba5a25cb0b2, type: 3}
+  effectclassName: 
+  effectParameters: []

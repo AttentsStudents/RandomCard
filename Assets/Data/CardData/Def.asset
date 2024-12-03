@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: Shield
   type: 1
+  figure: 10
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 3e7b24445e203384b86bfcbeb1561a01, type: 3}
+  effectclassName: 
+  effectParameters: []

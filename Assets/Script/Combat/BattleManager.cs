@@ -102,45 +102,33 @@ public class BattleManager : MonoBehaviour
     {
         foreach (var card in deckManager.hand)
         {
-            if (card == null || card.effect == null) continue;
+            if (card == null) continue;
+
+            // 랜덤 타겟 몬스터 선택
+            Monster targetMonster = monsters[UnityEngine.Random.Range(0, monsters.Count)];
 
             bool effectApplied = false;
 
-            playerBattleSystem.GetComponent<Player>().PlayAnimationAndApplyEffect(card, () =>
+            playerBattleSystem.GetComponent<Player>().PlayCardEffectOnTarget(card, targetMonster, () =>
             {
-                // 애니메이션이 끝난 후 카드 효과 적용
-                switch (card.cardType)
-                {
-                    case CardType.Attack:
-                        ApplyCardEffectToMonsters(card);
-                        break;
-
-                    case CardType.Defense:
-
-                    case CardType.Skill:
-                        ApplyCardEffectToPlayer(card);
-                        break;
-                }
-
-                effectApplied = true;
+                effectApplied = true; // 효과 적용 완료
             });
 
-            // 카드 효과가 적용될 때까지 대기
+            // 효과가 적용될 때까지 대기
             while (!effectApplied)
             {
                 yield return null;
             }
-
-            card.effect.ApplyEffect(playerBattleSystem, monsters);
         }
 
         // 턴 종료 후 카드 초기화
         deckManager.hand.Clear();
         deckManager.RerollCards();
 
-        // 몬스터 턴으로 전환
+        // 몬스터 턴 시작
         StartCoroutine(MonsterTurn());
     }
+
 
 
     private IEnumerator MonsterTurn()

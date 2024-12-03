@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Metallicize
   m_EditorClassIdentifier: 
   card: Metallicize
-  type: 0
-  dmg: 0
+  type: 2
   figure: 0
+  remainingTurn: 5
   description: 
   sprite: {fileID: 21300000, guid: 92d0667736e7a294c9b7f6eb601801fa, type: 3}
+  effectclassName: 
+  effectParameters: []
