@@ -55,15 +55,27 @@ public class BattleSystem : AnimProperty
         get => battleStat.maxHP;
     }
 
+    private bool isUpdatingHp = false;
     public float curHp
     {
         get => battleStat.curHP;
         set
         {
-            battleStat.curHP = value;
-            hpObserbs?.Invoke(battleStat.curHP / battleStat.maxHP);
+            if (isUpdatingHp) return;
+
+            isUpdatingHp = true;
+            float newHp = Mathf.Clamp(value, 0, battleStat.maxHP);
+
+            if (!Mathf.Approximately(battleStat.curHP, newHp)) // 변경이 있을 때만 호출
+            {
+                battleStat.curHP = newHp;
+                hpObserbs?.Invoke(battleStat.curHP / battleStat.maxHP);
+            }
+
+            isUpdatingHp = false;
         }
     }
+
 
     public float Armor
     {
@@ -111,12 +123,21 @@ public class BattleSystem : AnimProperty
 
     public virtual void OnAttack()
     {
+        if (Target == null)
+        {
+            Debug.LogError("OnAttack 호출 시 Target이 null입니다!");
+            return;
+        }
 
-        Target.GetComponent<IDamage>().OnDamage(battleStat.Attak);
+        if (Target.TryGetComponent<IDamage>(out IDamage damageable))
+        {
+            damageable.OnDamage(battleStat.Attak);
+        }
+        else
+        {
+            Debug.LogError($"{Target.name}에는 IDamage 컴포넌트가 없습니다!");
+        }
     }
-    public void TriggerAnimation(int animationHash)
-    {
-        myAnim.SetTrigger(animationHash);
-    }
+
 
 }

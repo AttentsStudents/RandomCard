@@ -1126,7 +1126,7 @@ MonoBehaviour:
     Cost: 0
     Armor: 0
     Attak: 0
-  Target: {fileID: 0}
+  Target: {fileID: 400495416}
   hpObserbs:
     m_PersistentCalls:
       m_Calls:
@@ -3263,6 +3263,7 @@ MonoBehaviour:
   targetMonster: {fileID: 400495417}
   anim: {fileID: 1938671319}
   attackRange: 2
+  playerData: {fileID: 11400000, guid: fdaae22b1c14126488f350376c249ff8, type: 2}
 --- !u!54 &1938671317
 Rigidbody:
   m_ObjectHideFlags: 0
