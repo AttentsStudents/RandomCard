@@ -17,7 +17,6 @@ public class BattleManager : MonoBehaviour
     public Sprite Heal_Effect;
 
 
-
     private bool isPlayerTurn = true; // 플레이어 턴 플래그
 
     private void Start()
@@ -32,6 +31,20 @@ public class BattleManager : MonoBehaviour
             Debug.LogError("MonsterGen이 연결되지 않았습니다.");
 
         SpawnMonsters(); // 몬스터 생성
+
+        if (monsters.Count > 0)
+        {
+            playerBattleSystem.Target = monsters[0].gameObject; // 첫 번째 몬스터를 타겟으로 설정
+        }
+
+        foreach (var monster in monsters)
+        {
+            if (monster.Target == null)
+            {
+                monster.Target = playerBattleSystem.gameObject; // 몬스터의 타겟 설정
+                Debug.Log($"몬스터 {monster.name}의 Target이 {monster.Target.name}으로 설정되었습니다.");
+            }
+        }
     }
 
     private void Win()
@@ -89,7 +102,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach (var card in deckManager.hand)
         {
-            if (card == null) continue;
+            if (card == null || card.effect == null) continue;
 
             bool effectApplied = false;
 
@@ -117,6 +130,8 @@ public class BattleManager : MonoBehaviour
             {
                 yield return null;
             }
+
+            card.effect.ApplyEffect(playerBattleSystem, monsters);
         }
 
         // 턴 종료 후 카드 초기화
@@ -124,13 +139,12 @@ public class BattleManager : MonoBehaviour
         deckManager.RerollCards();
 
         // 몬스터 턴으로 전환
-       // StartCoroutine(MonsterTurn());
+        StartCoroutine(MonsterTurn());
     }
 
 
     private IEnumerator MonsterTurn()
     {
-        //Loading.LoadScene(Scene.WORLDMAP);
         Debug.Log("몬스터 턴 시작");
         isPlayerTurn = false;
 
@@ -139,14 +153,32 @@ public class BattleManager : MonoBehaviour
             if (monster.IsLive)
             {
                 Debug.Log($"{monster.name}이(가) 플레이어를 공격합니다.");
-                monster.OnAttack(); // 몬스터 공격
-                yield return new WaitForSeconds(1.0f); // 공격 대기
+
+                if (monster.Target == null)
+                {
+                    Debug.LogError($"몬스터 {monster.name}의 Target이 null입니다!");
+                    monster.Target = playerBattleSystem.gameObject; // 플레이어를 타겟으로 설정
+                }
+
+                if (monster.Target.TryGetComponent<IDamage>(out IDamage damageable))
+                {
+                    Debug.Log($"{monster.Target.name}에 IDamage가 연결되어 있습니다.");
+                    monster.OnAttack(); // 공격 실행
+                }
+                else
+                {
+                    Debug.LogError($"{monster.Target.name}에는 IDamage 컴포넌트가 없습니다!");
+                }
+
+                yield return new WaitForSeconds(1.0f);
             }
         }
 
         Debug.Log("몬스터 턴 종료: 플레이어 턴 시작");
         isPlayerTurn = true;
     }
+
+
 
     private void ApplyCardEffectToMonsters(Card card)
     {

@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
+using static CardEffects;
 
 public class DeckManager : MonoBehaviour
 {
-    public List<ItemCard> cardDataScriptableObjects; // 여러 ScriptableObject를 참조할 리스트
+    public List<ItemCard> cardDataScriptableObjects; // ScriptableObject 리스트
     public List<Card> deck = new List<Card>(); // 현재 덱
     public List<Card> hand = new List<Card>(); // 현재 손패 리스트
-    public int drawCount = 3; // 한 번에 뽑는 카드 수
-    static public int Atp, Dep, Sp = 0;
+    public int drawCount = 3; // 드로우 카드 수
+    public static int Atp, Dep, Sp = 0; // 카드 카운트
 
     private void Start()
     {
@@ -56,25 +56,15 @@ public class DeckManager : MonoBehaviour
     {
         for (int i = 0; i < count && deck.Count > 0; i++)
         {
-            // 카드 타입에 따라 핸드에 들어가는 카드 카운팅
-            if (deck[0].cardType == CardType.Attack)
-            {
-                Atp++;
-            }
-            if (deck[0].cardType == CardType.Defense)
-            {
-                Dep++;
-            }
-            if (deck[0].cardType == CardType.Skill)
-            {
-                Sp++;
-            }
+            if (deck[0].cardType == CardType.Attack) Atp++;
+            if (deck[0].cardType == CardType.Defense) Dep++;
+            if (deck[0].cardType == CardType.Skill) Sp++;
+
             hand.Add(deck[0]);
             deck.RemoveAt(0);
         }
-        Debug.Log("카드를 뽑았습니다.");
+        Debug.Log($"손패에 {count}장의 카드를 추가했습니다.");
     }
-
 
     private void LoadCardsFromScriptableObjects()
     {
@@ -91,17 +81,24 @@ public class DeckManager : MonoBehaviour
             // 카드 타입 매핑
             CardType cardType = GetCardTypeFromByte(itemCard.type);
 
+            // 카드 효과 생성
+            ICardEffect effect = null;
+            if (!string.IsNullOrEmpty(itemCard.effectclassName))
+            {
+                effect = CardEffectFactory.CreateEffect(itemCard.effectclassName, itemCard.effectParameters);
+            }
+
             // 카드 생성 및 추가
             Card newCard = new Card(
                 itemCard.card,
                 cardType,
                 itemCard.description,
-                null // 현재 효과는 정의되지 않음
+                effect
             )
             {
-                sprite = itemCard.sprite // ScriptableObject에서 스프라이트 설정
+                sprite = itemCard.sprite // 카드 이미지
             };
-            //덱의 카드 갯수 종류별로 카운팅
+
             deck.Add(newCard);
         }
 
@@ -110,21 +107,16 @@ public class DeckManager : MonoBehaviour
 
     private CardType GetCardTypeFromByte(byte type)
     {
-        // byte 값을 CardType enum으로 매핑
-        switch (type)
+        return type switch
         {
-            case 0:
-                return CardType.Attack;
-            case 1:
-                return CardType.Defense;
-            case 2:
-                return CardType.Skill;
-            default:
-                Debug.LogError($"알 수 없는 카드 타입: {type}");
-                return CardType.Attack; // 기본값 설정
-        }
+            0 => CardType.Attack,
+            1 => CardType.Defense,
+            2 => CardType.Skill,
+            _ => throw new System.Exception($"알 수 없는 카드 타입: {type}")
+        };
     }
 }
+
 
 public enum CardType
 {
@@ -139,10 +131,10 @@ public class Card
     public string cardName; // 카드 이름
     public CardType cardType; // 카드 타입
     public string description; // 카드 설명
+    public ICardEffect effect;
     public Sprite sprite; // 카드 이미지
-    public System.Action<BattleSystem, BattleSystem> effect; // 카드 효과 (추후 구현 가능)
 
-    public Card(string name, CardType type, string desc, System.Action<BattleSystem, BattleSystem> cardEffect)
+    public Card(string name, CardType type, string desc, ICardEffect cardEffect)
     {
         cardName = name;
         cardType = type;

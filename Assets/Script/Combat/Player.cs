@@ -2,13 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Player : BattleSystem
+public class Player : BattleSystem, IDamage
 {
     public Transform targetMonster;
     private NavMeshAgent navMeshAgent;
     public Animator anim;
     public float attackRange = 2.0f;
     private bool isTriggered = false;
+    public PlayerData playerData;
 
     void Start()
     {
@@ -18,6 +19,18 @@ public class Player : BattleSystem
         {
             Debug.LogError("NavMeshAgent가 필요합니다.");
         }
+        InitializePlayerStats();
+    }
+
+    private void InitializePlayerStats()
+    {
+        if (playerData == null)
+        {
+            Debug.LogError("PlayerData가 연결되지 않았습니다.");
+            return;
+        }
+        battleStat = new BattleStat(playerData.maxHP, playerData.armor, playerData.attack);
+        curHp = battleStat.maxHP; // 현재 체력을 최대 체력으로 설정
     }
 
     void Update()
@@ -65,7 +78,7 @@ public class Player : BattleSystem
         }
     }
 
-    public new void OnDamage(float dmg) // 데미지 입을 때
+    public void OnDamage(float dmg)
     {
         float effectiveDmg = dmg;
 
@@ -80,11 +93,13 @@ public class Player : BattleSystem
         if (curHp <= 0.0f)
         {
             myAnim.SetTrigger(animData.OnDead);
+            Debug.Log("플레이어가 사망했습니다!");
             OnDead();
         }
         else
         {
             myAnim.SetTrigger(animData.OnDamage);
+            Debug.Log($"플레이어가 {effectiveDmg}의 데미지를 받았습니다. 현재 체력: {curHp}");
         }
     }
 
@@ -111,10 +126,12 @@ public class Player : BattleSystem
                 break;
         }
 
-        // 애니메이션이 끝날 때까지 대기
-        yield return new WaitForSeconds(myAnim.GetCurrentAnimatorStateInfo(0).length);
+        // 애니메이션 상태 확인 및 대기
+        AnimatorStateInfo stateInfo = myAnim.GetCurrentAnimatorStateInfo(0);
+        yield return new WaitForSeconds(stateInfo.length);
 
         // 카드 효과 적용 후 콜백 실행
         onEffectComplete?.Invoke();
     }
+
 }
