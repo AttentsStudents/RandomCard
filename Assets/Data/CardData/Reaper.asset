@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: Reaper
   type: 0
+  figure: 10
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 52afcd829606e854481bd9681fd084df, type: 3}
+  effectclassName: 
+  effectParameters: []

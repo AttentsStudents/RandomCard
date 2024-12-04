@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: HeavyBlade
   type: 0
+  figure: 25
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: ac4b2559c7b9d5a4e8d019086923872a, type: 3}
+  effectclassName: 
+  effectParameters: []

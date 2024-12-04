@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: BloodAtk
   type: 0
-  dmg: 10
-  figure: 2
+  figure: 0
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 475dd4ebe9560d64e99316dc40aef1f3, type: 3}
+  effectclassName: HealthSacrificeAttack
+  effectParameters:
+  - 5
+  - 30

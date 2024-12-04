@@ -100,47 +100,36 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ExecutePlayerTurn()
     {
-        foreach (var card in deckManager.hand)
+        Card[] handCards = deckManager.hand.ToArray(); // 핸드의 카드 배열
+        Monster[] availableMonsters = monsters.ToArray(); // 타겟 가능한 몬스터 배열
+
+        if (handCards.Length == 0 || availableMonsters.Length == 0)
         {
-            if (card == null || card.effect == null) continue;
+            Debug.LogWarning("플레이어 핸드가 비어 있거나 몬스터가 없습니다.");
+            yield break;
+        }
 
-            bool effectApplied = false;
+        bool allEffectsApplied = false;
 
-            playerBattleSystem.GetComponent<Player>().PlayAnimationAndApplyEffect(card, () =>
-            {
-                // 애니메이션이 끝난 후 카드 효과 적용
-                switch (card.cardType)
-                {
-                    case CardType.Attack:
-                        ApplyCardEffectToMonsters(card);
-                        break;
+        playerBattleSystem.GetComponent<Player>().PlayCardsSequentially(handCards, availableMonsters, () =>
+        {
+            allEffectsApplied = true; // 모든 카드 효과 적용 완료 신호
+        });
 
-                    case CardType.Defense:
-
-                    case CardType.Skill:
-                        ApplyCardEffectToPlayer(card);
-                        break;
-                }
-
-                effectApplied = true;
-            });
-
-            // 카드 효과가 적용될 때까지 대기
-            while (!effectApplied)
-            {
-                yield return null;
-            }
-
-            card.effect.ApplyEffect(playerBattleSystem, monsters);
+        // 모든 카드 효과가 끝날 때까지 대기
+        while (!allEffectsApplied)
+        {
+            yield return null;
         }
 
         // 턴 종료 후 카드 초기화
         deckManager.hand.Clear();
         deckManager.RerollCards();
 
-        // 몬스터 턴으로 전환
+        // 몬스터 턴 시작
         StartCoroutine(MonsterTurn());
     }
+
 
 
     private IEnumerator MonsterTurn()

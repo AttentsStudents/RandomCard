@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: DemonForm
   m_EditorClassIdentifier: 
   card: DemonForm
-  type: 0
+  type: 2
+  figure: 0
+  remainingTurn: 0
   description: 
   sprite: {fileID: 21300000, guid: 4ab6ef9c4c087ae45a6f6aa1a85c1a87, type: 3}
+  effectclassName: 
+  effectParameters: []
