@@ -76,3 +76,4 @@ crashlytics-build.properties
 /Assets/Proxy Games/Stylized Nature Kit Lite/[Mm]isc*
 /ProjectSettings/SceneTemplateSettings.json
 *.gsvdata
+*.gsvdata.meta
