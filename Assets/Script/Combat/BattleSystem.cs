@@ -24,9 +24,8 @@ public class BattleStat
 {
     public float maxHP;
     public float curHP;
-    public float Cost;
     public float Armor;
-    public float Attak;
+    public float Attack;
 
     public BattleStat(float maxHP, float armor, float attack) // 몬스터 배틀 스텟
     {
@@ -34,8 +33,6 @@ public class BattleStat
         Armor = armor;
         Attack = attack;
     }
-
-    public float Attack { get; }
 }
 
 public class BattleSystem : AnimProperty
@@ -131,7 +128,7 @@ public class BattleSystem : AnimProperty
 
         if (Target.TryGetComponent<IDamage>(out IDamage damageable))
         {
-            damageable.OnDamage(battleStat.Attak);
+            damageable.OnDamage(battleStat.Attack);
         }
         else
         {

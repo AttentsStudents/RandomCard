@@ -17,7 +17,7 @@ public class CardEffects : MonoBehaviour
             if (monsters.Count > 0)
             {
                 Monster target = monsters[UnityEngine.Random.Range(0, monsters.Count)];
-                float damage = player.battleStat.Attak;
+                float damage = player.battleStat.Attack;
                 target.OnDamage(damage);
                 Debug.Log($"{player.gameObject.name}이(가) {target.gameObject.name}에게 {damage}의 피해를 입혔습니다!");
             }

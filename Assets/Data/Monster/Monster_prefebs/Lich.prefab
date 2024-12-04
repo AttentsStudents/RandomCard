@@ -521,7 +521,7 @@ Animator:
   m_GameObject: {fileID: 6899864347757145430}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6e771cc839352964bbeed6d2f491914f, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0a15c11dbbde189499421a0ca9e248fa, type: 2}
+  m_Controller: {fileID: 22100000, guid: e8a983fd2341d754fb56e32560878dc2, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -547,9 +547,8 @@ MonoBehaviour:
   battleStat:
     maxHP: 0
     curHP: 0
-    Cost: 0
     Armor: 0
-    Attak: 0
+    Attack: 0
   Target: {fileID: 0}
   hpObserbs:
     m_PersistentCalls:

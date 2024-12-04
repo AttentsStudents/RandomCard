@@ -7,16 +7,75 @@ public class Monster : BattleSystem, IDamage
 {
     public int monsterId;
     public int level;
+    private Animator animator;
 
-    public void OnDamage(float dmg)
+    private void Start()
     {
-        curHp -= dmg;
-        Debug.Log($"{name}이(가) {dmg}의 데미지를 입었습니다.");
+        animator = GetComponent<Animator>();
+    }
+
+    public void PlayIdleAnimation()
+    {
+        animator.SetBool("IsMoving", false);
+    }
+
+    public void PlayMoveAnimation()
+    {
+        animator.SetBool("IsMoving", true);
+    }
+
+    public void PlayAttackAnimation()
+    {
+        animator.SetTrigger("OnAttack");
+    }
+
+    public void PlayDamageAnimation()
+    {
+        animator.SetTrigger("OnDamage");
+    }
+
+    public void PlayDeathAnimation()
+    {
+        animator.SetTrigger("OnDead");
+    }
+
+    public void OnDamage(float damage)
+    {
+        curHp -= damage;
+
         if (curHp <= 0)
         {
+            PlayDeathAnimation();
+            Debug.Log($"{name}이(가) 사망했습니다.");
             OnDead();
         }
+        else
+        {
+            PlayDamageAnimation();
+            Debug.Log($"{name}이(가) {damage}의 데미지를 받았습니다.");
+        }
     }
+
+
+    public override void OnAttack()
+    {
+        base.OnAttack();
+        PlayAttackAnimation();
+        Debug.Log($"[OnAttack] {name}이(가) 공격을 실행합니다.");
+
+        if (Target.TryGetComponent<IDamage>(out IDamage damageable))
+        {
+            float attackDamage = battleStat.Attack;
+            Debug.Log($"[OnAttack] {Target.name}에게 {attackDamage}의 피해를 입힙니다.");
+            damageable.OnDamage(attackDamage); // 타겟에 데미지 적용
+        }
+        else
+        {
+            Debug.LogError($"[OnAttack] {Target.name}에는 IDamage 인터페이스가 구현되지 않았습니다!");
+        }
+    }
+
+
 
     public void Initialize(int id, int lv, MonsterData data, GameObject target)
     {
@@ -36,7 +95,7 @@ public class Monster : BattleSystem, IDamage
 
     public void DisplayStats()
     {
-        Debug.Log($"Monster ID: {monsterId}, Level: {level}, HP: {battleStat.curHP}, Armor: {battleStat.Armor}, Attack: {battleStat.Attak}");
+        Debug.Log($"Monster ID: {monsterId}, Level: {level}, HP: {battleStat.curHP}, Armor: {battleStat.Armor}, Attack: {battleStat.Attack}");
     }
         private Dictionary<string, float> statusEffects = new Dictionary<string, float>();
 

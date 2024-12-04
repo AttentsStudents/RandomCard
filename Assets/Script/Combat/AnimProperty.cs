@@ -14,7 +14,7 @@ public struct AnimParameterData
 
     public void Initialize()
     {
-        IsMove = Animator.StringToHash("IsMoving");
+        IsMove = Animator.StringToHash("IsMove");
         OnAttack = Animator.StringToHash("OnAttack");
         IsAttack = Animator.StringToHash("IsAttack");
         OnDamage = Animator.StringToHash("OnDamage");

@@ -63,7 +63,6 @@ public class DeckManager : MonoBehaviour
             hand.Add(deck[0]);
             deck.RemoveAt(0);
         }
-        Debug.Log($"손패에 {count}장의 카드를 추가했습니다.");
     }
 
     private void LoadCardsFromScriptableObjects()
@@ -76,34 +75,27 @@ public class DeckManager : MonoBehaviour
 
         foreach (var itemCard in cardDataScriptableObjects)
         {
-            Debug.Log($"카드 데이터 로드: 이름={itemCard.card}, 타입={itemCard.type}, 설명={itemCard.description}");
 
             // 카드 타입 매핑
             CardType cardType = GetCardTypeFromByte(itemCard.type);
 
-            // 카드 효과 생성
-            ICardEffect effect = null;
-            if (!string.IsNullOrEmpty(itemCard.effectclassName))
-            {
-                effect = CardEffectFactory.CreateEffect(itemCard.effectclassName, itemCard.effectParameters);
-            }
-
-            // 카드 생성 및 추가
+            // 카드 생성
             Card newCard = new Card(
                 itemCard.card,
                 cardType,
                 itemCard.description,
-                effect
+                null // 현재 효과는 정의되지 않음
             )
             {
-                sprite = itemCard.sprite // 카드 이미지
+                effectValue = itemCard.figure, // ScriptableObject의 `figure` 값으로 초기화
+                sprite = itemCard.sprite       // ScriptableObject의 스프라이트 설정
             };
 
+            // 덱에 추가
             deck.Add(newCard);
         }
-
-        Debug.Log($"총 {deck.Count}장의 카드가 덱에 추가되었습니다.");
     }
+
 
     private CardType GetCardTypeFromByte(byte type)
     {
@@ -128,11 +120,12 @@ public enum CardType
 [System.Serializable]
 public class Card
 {
-    public string cardName; // 카드 이름
-    public CardType cardType; // 카드 타입
-    public string description; // 카드 설명
-    public ICardEffect effect;
-    public Sprite sprite; // 카드 이미지
+    public string cardName;       // 카드 이름
+    public CardType cardType;     // 카드 타입
+    public string description;    // 카드 설명
+    public ICardEffect effect;    // 카드 효과 클래스
+    public Sprite sprite;         // 카드 이미지
+    public float effectValue;     // 카드 효과 값 (예: 공격력, 방어력 등)
 
     public Card(string name, CardType type, string desc, ICardEffect cardEffect)
     {
