@@ -16,7 +16,7 @@ public class BattleManager : MonoBehaviour
     public bool isBattleOver = false; // 전투 종료 여부 확인
     public Sprite Def_Effect;
     public Sprite Heal_Effect;
-
+    public GameObject handPanel; // 핸드 패널 오브젝트
 
     private bool isPlayerTurn = true; // 플레이어 턴 플래그
 
@@ -91,6 +91,10 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ExecutePlayerTurn()
     {
+        if (handPanel != null)
+        {
+            handPanel.SetActive(false);
+        }
         Card[] handCards = deckManager.hand.ToArray();
         Monster targetMonster = monsters[Random.Range(0, monsters.Count)];
 
@@ -149,7 +153,10 @@ public class BattleManager : MonoBehaviour
                 yield return new WaitForSeconds(1.0f); // 공격 간 대기 시간
             }
         }
-
+        if (handPanel != null)
+        {
+            handPanel.SetActive(true);
+        }
         Debug.Log("[MonsterTurn] 몬스터 턴 종료: 플레이어 턴 시작");
         isPlayerTurn = true;
     }

@@ -1123,9 +1123,8 @@ MonoBehaviour:
   battleStat:
     maxHP: 0
     curHP: 0
-    Cost: 0
     Armor: 0
-    Attak: 0
+    Attack: 0
   Target: {fileID: 400495416}
   hpObserbs:
     m_PersistentCalls:
@@ -1843,9 +1842,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b7d0004614b77c40a36d15b6f5a234e, type: 2}
   monsterGen: {fileID: 1714366651}
   monsters: []
-  Buff_Effect: {fileID: 1397602170613528682, guid: 44f2e07afdc56764c9b7d55329242379, type: 3}
+  isBattleOver: 0
   Def_Effect: {fileID: 21300000, guid: 2f1eaeeaad36ee5469eff7ff158f37ba, type: 3}
   Heal_Effect: {fileID: 21300000, guid: 62c750b58f15bed419a10faa398d2078, type: 3}
+  handPanel: {fileID: 948959539}
 --- !u!4 &943381964
 Transform:
   m_ObjectHideFlags: 0
@@ -1952,12 +1952,12 @@ MonoBehaviour:
   m_Padding:
     m_Left: 15
     m_Right: 0
-    m_Top: 13
+    m_Top: 100
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 150, y: 225}
+  m_CellSize: {x: 420, y: 250}
   m_Spacing: {x: 10, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -2388,9 +2388,8 @@ MonoBehaviour:
   battleStat:
     maxHP: 0
     curHP: 0
-    Cost: 0
     Armor: 0
-    Attak: 0
+    Attack: 0
   Target: {fileID: 1312494950}
   hpObserbs:
     m_PersistentCalls:
@@ -3241,9 +3240,8 @@ MonoBehaviour:
   battleStat:
     maxHP: 0
     curHP: 0
-    Cost: 0
     Armor: 0
-    Attak: 0
+    Attack: 0
   Target: {fileID: 1938671314}
   hpObserbs:
     m_PersistentCalls:
@@ -3392,7 +3390,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 150, y: 225}
+  m_CellSize: {x: 420, y: 250}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -3938,9 +3936,8 @@ MonoBehaviour:
   battleStat:
     maxHP: 0
     curHP: 0
-    Cost: 0
     Armor: 0
-    Attak: 0
+    Attack: 0
   Target: {fileID: 2028048018}
   hpObserbs:
     m_PersistentCalls:
