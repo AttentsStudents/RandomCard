@@ -1,8 +1,15 @@
 # RandomCardUnityTeamProject
 
 팀장: 조정우 => 기획
-팀원: 이동민 => 기획, 디자인
+
+
+팀원: 
+
+이동민 => 기획, 디자인
+
 천지운 => 프로그래밍, 디자인
+
+
 
 작업 스케줄 (Atlassian - Jira): https://randomcardattents.atlassian.net/jira/software/projects/SCRUM/boards/1
 
