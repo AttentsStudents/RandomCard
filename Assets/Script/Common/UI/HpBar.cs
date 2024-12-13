@@ -24,6 +24,7 @@ public class HpBar : MonoBehaviour
     public GameObject target;
     public Image bgImg;
     public Image fillImg;
+    public bool targetFollow;
     BattleStat targetStat { get => target.GetComponent<IBattleStat>()?.battleStat; }
     Slider _slider;
     Slider slider
@@ -43,6 +44,15 @@ public class HpBar : MonoBehaviour
     void Start()
     {
         Init();
+        if (targetFollow) FollowTarget();
+    }
+
+    void FollowTarget()
+    {
+        RectTransform myRect = GetComponent<RectTransform>();
+        Vector3 targetScreenPos = Camera.main.WorldToScreenPoint(target.transform.position);
+        targetScreenPos.y -= 50;
+        myRect.anchoredPosition = targetScreenPos;
     }
 
     void Init()

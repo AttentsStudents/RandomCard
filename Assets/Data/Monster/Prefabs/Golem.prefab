@@ -172,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6302678870859915729}
   - component: {fileID: 144405362551430150}
-  - component: {fileID: 7637645994636608471}
+  - component: {fileID: -6450155063898813424}
   m_Layer: 0
   m_Name: Golem
   m_TagString: Untagged
@@ -218,7 +218,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7637645994636608471
+--- !u!114 &-6450155063898813424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,20 +227,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2941557602633312447}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd20f432c69c5e5479b37ee721137267, type: 3}
+  m_Script: {fileID: 11500000, guid: 30538be4973167946bf6fb8ca3c94c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleStat:
-    maxHP: 0
-    curHP: 0
-    Armor: 0
-    Attack: 0
-  Target: {fileID: 0}
-  hpObserbs:
-    m_PersistentCalls:
-      m_Calls: []
-  monsterId: 0
-  level: 0
+  data: {fileID: 11400000, guid: 854bd7fe3f220be4ab56eb4e463aa8eb, type: 2}
 --- !u!1 &3018592072047199161
 GameObject:
   m_ObjectHideFlags: 0

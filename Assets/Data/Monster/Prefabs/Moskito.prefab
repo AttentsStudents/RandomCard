@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7554434853636343892}
   - component: {fileID: 5211440538955495612}
-  - component: {fileID: 5871403238302632432}
+  - component: {fileID: 8251625989070372399}
   m_Layer: 0
   m_Name: Moskito
   m_TagString: Untagged
@@ -56,7 +56,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5871403238302632432
+--- !u!114 &8251625989070372399
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,20 +65,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 271426014762992988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd20f432c69c5e5479b37ee721137267, type: 3}
+  m_Script: {fileID: 11500000, guid: 30538be4973167946bf6fb8ca3c94c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleStat:
-    maxHP: 0
-    curHP: 0
-    Armor: 0
-    Attack: 0
-  Target: {fileID: 0}
-  hpObserbs:
-    m_PersistentCalls:
-      m_Calls: []
-  monsterId: 0
-  level: 0
+  data: {fileID: 11400000, guid: bca406e7dc4cd514f8fe5f6f44c9cab3, type: 2}
 --- !u!1 &828932002170117862
 GameObject:
   m_ObjectHideFlags: 0

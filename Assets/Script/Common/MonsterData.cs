@@ -9,5 +9,5 @@ public class MonsterData : ScriptableObject
     public float maxHP;
     public float armor;
     public float attack;
-
+    public float levelStatAdd;
 }

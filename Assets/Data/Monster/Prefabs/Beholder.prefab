@@ -76,7 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6760647369713479443}
   - component: {fileID: 8166480741906575201}
-  - component: {fileID: 5644451029649910624}
+  - component: {fileID: 4444972735784498313}
   m_Layer: 0
   m_Name: Beholder
   m_TagString: Untagged
@@ -122,7 +122,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5644451029649910624
+--- !u!114 &4444972735784498313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,20 +131,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 728485899113327037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd20f432c69c5e5479b37ee721137267, type: 3}
+  m_Script: {fileID: 11500000, guid: 30538be4973167946bf6fb8ca3c94c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleStat:
-    maxHP: 0
-    curHP: 0
-    Armor: 0
-    Attack: 0
-  Target: {fileID: 0}
-  hpObserbs:
-    m_PersistentCalls:
-      m_Calls: []
-  monsterId: 0
-  level: 0
+  data: {fileID: 11400000, guid: 24f795cd5699f8b42bb0a3787e5a87e6, type: 2}
 --- !u!1 &750654722507187326
 GameObject:
   m_ObjectHideFlags: 0

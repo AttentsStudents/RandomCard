@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e76ea7a228af294b9ba88d5b1351ba6, type: 3}
   m_Name: Moskito
   m_EditorClassIdentifier: 
-  monsterName: 
-  maxHP: 0
+  monsterName: Moskito
+  maxHP: 15
   armor: 0
-  attack: 0
-  monsterSprite: {fileID: 0}
+  attack: 5

@@ -30,6 +30,7 @@ public class BattleStat
     public BattleStat(float maxHP, float armor, float attack) // 몬스터 배틀 스텟
     {
         this.maxHP = maxHP;
+        this.curHP = maxHP;
         Armor = armor;
         Attack = attack;
     }
