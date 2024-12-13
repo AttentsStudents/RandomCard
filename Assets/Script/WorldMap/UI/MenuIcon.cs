@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 
 namespace CheonJiWoon
 {
-    public class MenuIcon : ImageProperty, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class MenuIcon : ImageProperty, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IClickAction
     {
         public GameObject target;
-        public UnityEvent ClickEvent;
+        public UnityAction ClickAction { get; set; }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -32,7 +32,7 @@ namespace CheonJiWoon
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            ClickEvent?.Invoke();
+            ClickAction?.Invoke();
         }
     }
 }

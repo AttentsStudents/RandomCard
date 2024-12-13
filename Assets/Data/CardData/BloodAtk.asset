@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8059d2eec6ce6d49b4d98cb829635af, type: 3}
+  m_Name: BloodAtk
+  m_EditorClassIdentifier: 
+  card: BloodAtk
+  type: 0
+  figure: 0
+  remainingTurn: 0
+  description: 
+  sprite: {fileID: 21300000, guid: 475dd4ebe9560d64e99316dc40aef1f3, type: 3}
+  effectclassName: HealthSacrificeAttack
+  effectParameters:
+  - 5
+  - 30

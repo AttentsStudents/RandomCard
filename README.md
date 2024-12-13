@@ -1,7 +1,13 @@
 # RandomCardUnityTeamProject
 
-팀장: 조정우(전투, 캐릭터, 몬스터, 카드 등)
-팀원: 이동민(시작, 환경설정, 세이브&로드, 기타 등), 천지운(월드맵, 상점, 카드 인벤토리 등)
+팀장: 조정우 => 기획 (도중 팀 탈주)
+
+
+팀원: 이동민 => 기획, 블렌더 모델 구현
+
+천지운 => 프로그래밍, 디자인
+
+
 
 작업 스케줄 (Atlassian - Jira): https://randomcardattents.atlassian.net/jira/software/projects/SCRUM/boards/1
 

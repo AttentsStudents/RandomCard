@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,7 @@ namespace CheonJiWoon
     public partial class WorldMapCanvas : MonoBehaviour
     {
         State myState = State.NORMAL;
-        public enum State { NORMAL, INVENTORY, MAP }
-
-
+        public enum State { NORMAL, INVENTORY, MAP, CONFIG }
 
         GameObject activeObject;
         Image activeIcon;
@@ -20,7 +19,11 @@ namespace CheonJiWoon
         {
             if (Input.GetKeyDown(KeyCode.M)) ChangeState(State.MAP);
             if (Input.GetKeyDown(KeyCode.I)) ChangeState(State.INVENTORY);
-            if (Input.GetKeyDown(KeyCode.Escape)) ChangeState(State.NORMAL);
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (myState == State.NORMAL) ChangeState(State.CONFIG);
+                else ChangeState(State.NORMAL);
+            }
         }
 
 
@@ -37,21 +40,18 @@ namespace CheonJiWoon
             if (myState == s) s = State.NORMAL;
 
             myState = s;
-            switch (myState)
+            if (myState == State.NORMAL)
             {
-                case State.NORMAL:
-                    activeObject = null;
-                    activeIcon = null;
-                    break;
-                case State.INVENTORY:
-                    activeObject = inventory;
-                    activeIcon = inventoryIcon;
-                    break;
-                case State.MAP:
-                    activeObject = map;
-                    activeIcon = mapIcon;
-                    break;
+                activeObject = null;
+                activeIcon = null;
             }
+            else
+            {
+                WorldMapMenu selectMenu = LinkStateMenu.GetValueOrDefault(myState);
+                activeObject = selectMenu.core;
+                activeIcon = selectMenu.icon.image;
+            }
+
 
             if (myState != State.NORMAL)
             {
@@ -67,14 +67,29 @@ namespace CheonJiWoon
 
     public partial class WorldMapCanvas
     {
-        public GameObject inventory;
-        public Image inventoryIcon;
+        public static WorldMapCanvas instance;
+        public WorldMapMenu[] MenuList;
+        Dictionary<State, WorldMapMenu> LinkStateMenu;
 
-        public GameObject map;
-        public Image mapIcon;
+        void Awake()
+        {
+            instance = this;
+            LinkStateMenu = new Dictionary<State, WorldMapMenu>();
+            foreach (WorldMapMenu menu in MenuList)
+            {
+                LinkStateMenu.Add(menu.state, menu);
+                menu.icon.ClickAction = () => ChangeState(menu.state);
+            }
+        }
 
-        public void OnOpenInventory() => ChangeState(State.INVENTORY);
-        public void OnOpenMap() => ChangeState(State.MAP);
         public void OnClose() => ChangeState(State.NORMAL);
+    }
+
+    [Serializable]
+    public class WorldMapMenu
+    {
+        public GameObject core;
+        public MenuIcon icon;
+        [SerializeField] public WorldMapCanvas.State state;
     }
 }

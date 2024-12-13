@@ -1,60 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace CheonJiWoon
 {
-    public class Player : VisibleOnTheMap
+    public class Player : VisibleOnTheMap, IHpObserve, IBattleStat
     {
         public LayerMask moveLayer;
         public LayerMask crashMask;
         public Transform model;
-        Node nowNode;
         float moveSpeed = 15.0f;
         bool isMoving = false;
 
-        // Start is called before the first frame update
+        public UnityAction<float> HpObserve { get; set; }
+        public BattleStat battleStat { get => GameData.playerStat; }
+
+        void Awake()
+        {
+            if (GameData.playerNode == null) GameData.playerNode = Node.firstNode;
+        }
+
         void Start()
         {
-            if (nowNode == null) nowNode = World.instance.firstNode;
-            transform.position = nowNode.gameobject.transform.position;
+            
+            transform.position = GameData.playerNode.GetPos();
             ViewOnTheMap();
         }
 
-        // Update is called once per frame
         void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, moveLayer))
                 {
-                    hit.transform.GetComponent<IClickAction>().ClickAction.Invoke();
+                    hit.transform.GetComponent<IClickAction>()?.ClickAction?.Invoke();
                 }
             }
         }
 
         public void OnMove(Node targetNode)
         {
-            if (nowNode == null || isMoving) return;
-            bool connect = false;
-
-            foreach (Line line in nowNode.paths)
-            {
-                if (line.node == targetNode)
-                {
-                    connect = true;
-                    break;
-                }
-            }
-
-            if (connect) StartCoroutine(Moving(targetNode));
+            if (GameData.playerNode == null || isMoving) return;
+            if (GameData.playerNode.children.Contains(targetNode.GetKey())) StartCoroutine(Moving(targetNode));
         }
 
         IEnumerator Moving(Node targetNode)
         {
             isMoving = true;
-            Vector3 dir = targetNode.gameobject.transform.position - transform.position;
+            Vector3 dir = targetNode.GetPos() - transform.position;
             float dist = dir.magnitude;
             dir.Normalize();
 
@@ -81,8 +76,6 @@ namespace CheonJiWoon
 
                 yield return null;
             }
-
-            nowNode = targetNode;
             isMoving = false;
         }
 
@@ -90,9 +83,11 @@ namespace CheonJiWoon
         {
             if ((crashMask.value >> other.gameObject.layer & 1) != 0)
             {
-                ICrashAction action  = other.GetComponent<ICrashAction>();
+                Island home = other.GetComponent<Island>();
+                ICrashAction action = other.GetComponent<ICrashAction>();
                 if (action != null)
                 {
+                    action.crashTarget = gameObject;
                     action.CrashAction?.Invoke();
                 }
             }

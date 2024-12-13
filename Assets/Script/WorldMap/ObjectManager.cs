@@ -25,18 +25,23 @@ namespace CheonJiWoon
             public GameObject normal;
             public GameObject boss;
         }
+
+        [Serializable]
+        public struct Effect
+        {
+            public GameObject Boom;
+        }
     }
 
 
 
-    public partial class ObjectManager : MonoBehaviour
+    public partial class ObjectManager : SingleTon<ObjectManager>
     {
-        public static ObjectManager instance;
         public Monster monster;
         public Island island;
         public GameObject tresure;
         public GameObject rest;
-
-        void Awake() => instance = this;
+        public Effect effect;
+        void Awake() => Init();
     }
 }

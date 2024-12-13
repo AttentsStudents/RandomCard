@@ -9,24 +9,25 @@ public struct AnimParameterData
     public int IsAttack;
     public int OnDamage;
     public int OnDead;
-    public int OnJump;
     public int MyTurn;
+    public int OnSkill;
 
     public void Initialize()
     {
-        IsMove = Animator.StringToHash("IsMoving");
+        IsMove = Animator.StringToHash("IsMove");
         OnAttack = Animator.StringToHash("OnAttack");
         IsAttack = Animator.StringToHash("IsAttack");
         OnDamage = Animator.StringToHash("OnDamage");
         OnDead = Animator.StringToHash("OnDead");
         MyTurn = Animator.StringToHash("MyTurn");
+        OnSkill = Animator.StringToHash("OnSkill");
     }
 }
 
 public class AnimProperty : MonoBehaviour
 {
     Animator _anim = null;
-    protected AnimParameterData animData = new AnimParameterData();
+    protected internal AnimParameterData animData = new AnimParameterData();
     protected Animator myAnim
     {
         get
