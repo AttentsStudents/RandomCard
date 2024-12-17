@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CheonJiWoon {
+namespace WorldMap {
     public class Map : MonoBehaviour
     {
         public static Map instance { get; private set; }

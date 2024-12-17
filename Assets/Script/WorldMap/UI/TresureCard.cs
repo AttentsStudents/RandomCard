@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     public class TresureCard : Card, IPointerClickHandler, IClickAction, IPointerEnterHandler, IPointerExitHandler
     {

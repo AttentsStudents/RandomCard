@@ -23,6 +23,7 @@ namespace Combat
                 if(obj.TryGetComponent<EnemyCollider>(out EnemyCollider enemyCollider))
                 {
                     enemyCollider.target = gameObject;
+                    DeathAlarm += () => Destroy(obj);
                 }
             }
         }

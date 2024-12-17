@@ -1,4 +1,3 @@
-using CheonJiWoon;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -25,6 +24,7 @@ public class HpBar : MonoBehaviour
     public Image bgImg;
     public Image fillImg;
     public bool targetFollow;
+    public float changeSpeed = 0.1f;
     BattleStat targetStat { get => target.GetComponent<IBattleStat>()?.battleStat; }
     Slider _slider;
     Slider slider
@@ -67,15 +67,14 @@ public class HpBar : MonoBehaviour
         fillImg.color = HpBarColors.fillIdle;
     }
 
-    public void OnChange(float v)
+    public void OnChange()
     {
         if (change != null) StopCoroutine(change);
-        change = StartCoroutine(Change(v));
+        change = StartCoroutine(Change());
     }
 
-    IEnumerator Change(float v)
+    IEnumerator Change()
     {
-        targetStat.curHP = Mathf.Clamp(targetStat.curHP + v, 0.0f, targetStat.maxHP);
         text.text = $"{targetStat.curHP} / {targetStat.maxHP}";
         float dist = targetStat.curHP / targetStat.maxHP - slider.value;
         float dir = 1.0f;
@@ -94,7 +93,7 @@ public class HpBar : MonoBehaviour
 
         while (dist > 0.0f)
         {
-            float delta = 0.1f * Time.deltaTime;
+            float delta = changeSpeed * Time.deltaTime;
             if (delta > dist) delta = dist;
             slider.value += delta * dir;
             dist -= delta;

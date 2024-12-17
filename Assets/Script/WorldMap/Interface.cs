@@ -4,27 +4,26 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace CheonJiWoon
+public interface IClickAction
 {
-    public interface IClickAction
-    {
-        UnityAction ClickAction { get; set; }
-    }
-    public interface ICloseAction
-    {
-        UnityAction CloseAction { get; set; }
-    }
-    public interface ICrashAction
-    {
-        UnityAction CrashAction { get; set; }
-        GameObject crashTarget { get; set; }
-    }
-    public interface IHpObserve
-    {
-        UnityAction<float> HpObserve { get; set; }
-    }
-    public interface IBattleStat
-    {
-        BattleStat battleStat { get; }
-    }
+    UnityAction ClickAction { get; set; }
 }
+public interface ICrashAction
+{
+    UnityAction CrashAction { get; set; }
+    GameObject crashTarget { get; set; }
+}
+public interface IHpObserve
+{
+    UnityAction HpObserve { get; set; }
+}
+public interface IBattleStat
+{
+    BattleStat battleStat { get; }
+}
+public interface IDeathAlarm
+{
+    UnityAction DeathAlarm { get; set; }
+}
+
+public interface IBattleObserve : IBattleStat, IHpObserve { }

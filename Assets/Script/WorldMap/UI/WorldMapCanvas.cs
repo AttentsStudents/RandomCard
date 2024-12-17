@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
 
     public partial class WorldMapCanvas : MonoBehaviour

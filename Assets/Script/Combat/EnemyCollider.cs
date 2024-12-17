@@ -1,22 +1,16 @@
-using CheonJiWoon;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-
-interface IDropObserb<T> : IDropHandler
-{
-    public UnityAction<T> DropObserb { get; set; }
-}
+using UnityEngine.UI;
 
 namespace Combat
 {
-    public class EnemyCollider : MonoBehaviour, IDropObserb<IBattleStat>, IPointerEnterHandler, IPointerExitHandler
+    public class EnemyCollider : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
     {
         public GameObject target { get; set; }
         public GameObject Arrow;
-        public UnityAction<IBattleStat> DropObserb { get; set; }
 
         void Start()
         {
@@ -27,16 +21,16 @@ namespace Combat
 
         public void OnDrop(PointerEventData eventData)
         {
-            Debug.Log("드롭");
-            if(eventData.pointerDrag.TryGetComponent<Card>(out Card card)){
-                card.Active();
-                Debug.Log("발동!!");
+            if (eventData.pointerDrag.TryGetComponent<Card>(out Card card) && target.TryGetComponent(out BattleSystem battle))
+            {
+                card.Active(new List<BattleSystem>() { battle });
+                CardPool.inst.Push(card.gameObject);
             }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if(DragCard.draggingCard != null)
+            if (DragCard.draggingCard != null)
             {
                 Arrow.SetActive(true);
             }

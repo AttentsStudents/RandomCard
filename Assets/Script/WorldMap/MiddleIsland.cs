@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     public class MiddleIsland : Island, IClickAction, ICrashAction
     {
@@ -127,8 +127,11 @@ namespace CheonJiWoon
                     break;
                 case Node.Type.REST:
                     {
-                        IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
-                        if (targetHp != null) targetHp.HpObserve?.Invoke(5);
+                        if(crashTarget.TryGetComponent<IBattleObserve>(out IBattleObserve battleObserve))
+                        {
+                            battleObserve.battleStat.curHP = Mathf.Clamp(battleObserve.battleStat.curHP + 5, 0, battleObserve.battleStat.maxHP);
+                            battleObserve.HpObserve.Invoke();
+                        }
                         GameData.ClearTargetNode();
                     }
                     break;

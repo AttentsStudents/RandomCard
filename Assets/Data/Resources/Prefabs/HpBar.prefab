@@ -182,6 +182,7 @@ MonoBehaviour:
   bgImg: {fileID: 5613630152162106072}
   fillImg: {fileID: 5001315898666620864}
   targetFollow: 1
+  changeSpeed: 0.5
   text: {fileID: 7909749266030289839}
 --- !u!1 &2977255171443557120
 GameObject:
