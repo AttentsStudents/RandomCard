@@ -4,137 +4,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-interface IDeathAlarm
-{
-    UnityAction deathAlarm { get; set; }
-}
-interface ILive
-{
-    bool IsLive { get; }
-}
-
-interface IDamage
-{
-    void OnDamage(float dmg);
-}
-
-
 [Serializable]
 public class BattleStat
 {
-    public float maxHP;
-    public float curHP;
-    public float Armor;
-    public float Attack;
+    public float maxHP { get; set; }
+    public float curHP { get; set; }
+    public float attack { get; set; }
+    public float armor { get; set; }
+    public uint maxCost { get; set; }
+    public uint cost { get; set; }
 
-    public BattleStat(float maxHP, float armor, float attack) // 몬스터 배틀 스텟
+    public BattleStat(float maxHP, float armor, float attack, uint cost = 0)
     {
         this.maxHP = maxHP;
-        Armor = armor;
-        Attack = attack;
+        this.curHP = maxHP;
+        this.armor = armor;
+        this.attack = attack;
+        this.maxCost = cost;
+        this.cost = cost;
     }
 }
 
-public class BattleSystem : AnimProperty
+public abstract class BattleSystem : MonoBehaviour, IBattleObserve, IDeathAlarm
 {
-    public BattleStat battleStat;
-    protected float playTime = 0.0f;
-    public GameObject Target;
-    public UnityAction deathAlarm { get; set; }
-    public UnityEvent<float> hpObserbs;
+    public UnityAction HpObserve { get; set; }
+    public BattleStat battleStat { get; set; }
+    public UnityAction DeathAlarm { get; set; }
 
-    public bool IsLive
+    public void OnDamage(float damage)
     {
-        get => battleStat.curHP > 0.0f;
-    }
-    public float maxHp
-    {
-        get => battleStat.maxHP;
-    }
-
-    private bool isUpdatingHp = false;
-    public float curHp
-    {
-        get => battleStat.curHP;
-        set
+        HpChange(-damage);
+        if (Mathf.Approximately(battleStat.curHP, 0.0f))
         {
-            if (isUpdatingHp) return;
-
-            isUpdatingHp = true;
-            float newHp = Mathf.Clamp(value, 0, battleStat.maxHP);
-
-            if (!Mathf.Approximately(battleStat.curHP, newHp)) // 변경이 있을 때만 호출
-            {
-                battleStat.curHP = newHp;
-                hpObserbs?.Invoke(battleStat.curHP / battleStat.maxHP);
-            }
-
-            isUpdatingHp = false;
+            DeathAlarm?.Invoke();
+            Destroy(gameObject);
         }
     }
-
-
-    public float Armor
+    public void OnRecovery(float recovery)
     {
-        get => battleStat.Armor;
-        set => battleStat.Armor = value;
-
+        HpChange(recovery);
     }
 
-    protected void OnReset()
+    void HpChange(float value)
     {
-        battleStat.Armor = 0.0f;
-        battleStat.curHP = battleStat.maxHP;
+        battleStat.curHP = Mathf.Clamp(battleStat.curHP + value, 0.0f, battleStat.maxHP);
+        HpObserve?.Invoke();
     }
-
-    protected virtual void OnDead()
-    {
-        deathAlarm?.Invoke();
-    }
-
-    public void OnDamage(float dmg)
-    {
-        curHp -= dmg;
-        if (Armor > 0)
-        {
-            Armor -= dmg;
-        }
-        else if (dmg > Armor)
-        {
-            Armor = 0.0f;
-            curHp -= dmg - Armor;
-        }
-        else
-        {
-            if (curHp <= 0.0f)
-            {
-                myAnim.SetTrigger(animData.OnDead);
-                OnDead();
-            }
-            else
-            {
-                myAnim.SetTrigger(animData.OnDamage);
-            }
-        }
-    }
-
-    public virtual void OnAttack()
-    {
-        if (Target == null)
-        {
-            Debug.LogError("OnAttack 호출 시 Target이 null입니다!");
-            return;
-        }
-
-        if (Target.TryGetComponent<IDamage>(out IDamage damageable))
-        {
-            damageable.OnDamage(battleStat.Attack);
-        }
-        else
-        {
-            Debug.LogError($"{Target.name}에는 IDamage 컴포넌트가 없습니다!");
-        }
-    }
-
-
 }

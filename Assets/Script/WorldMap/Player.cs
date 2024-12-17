@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
-    public class Player : VisibleOnTheMap, IHpObserve, IBattleStat
+    public class Player : VisibleOnTheMap, IBattleObserve
     {
         public LayerMask moveLayer;
         public LayerMask crashMask;
@@ -14,7 +14,7 @@ namespace CheonJiWoon
         float moveSpeed = 15.0f;
         bool isMoving = false;
 
-        public UnityAction<float> HpObserve { get; set; }
+        public UnityAction HpObserve { get; set; }
         public BattleStat battleStat { get => GameData.playerStat; }
 
         void Awake()

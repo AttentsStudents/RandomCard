@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static CheonJiWoon.ObjectManager;
+using static WorldMap.ObjectManager;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     public class BossIsland : MiddleIsland
     {
