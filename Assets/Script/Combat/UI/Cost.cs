@@ -11,10 +11,10 @@ public class Cost : MonoBehaviour
 
     void Start()
     {
-        DataUpdate();
+        OnCostUpdate();
     }
 
-    void DataUpdate()
+    public void OnCostUpdate()
     {
         text.text = GameData.playerStat.cost.ToString();
         fill.fillAmount = GameData.playerStat.cost / GameData.playerStat.maxCost;

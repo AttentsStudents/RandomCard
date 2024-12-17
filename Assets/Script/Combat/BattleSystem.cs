@@ -25,7 +25,7 @@ public class BattleStat
     }
 }
 
-public abstract class BattleSystem : MonoBehaviour, IBattleObserve, IDeathAlarm
+public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
 {
     public UnityAction HpObserve { get; set; }
     public BattleStat battleStat { get; set; }
@@ -34,10 +34,14 @@ public abstract class BattleSystem : MonoBehaviour, IBattleObserve, IDeathAlarm
     public void OnDamage(float damage)
     {
         HpChange(-damage);
+        GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Hit"), transform);
+        obj.transform.Translate(Vector3.forward * 1.0f);
         if (Mathf.Approximately(battleStat.curHP, 0.0f))
         {
+
             DeathAlarm?.Invoke();
-            Destroy(gameObject);
+            anim.SetTrigger(AnimParams.OnDead);
+            //Destroy(gameObject);
         }
     }
     public void OnRecovery(float recovery)
