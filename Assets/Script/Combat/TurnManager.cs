@@ -17,12 +17,16 @@ namespace Combat
         }
         public Turn turn { get; set; }
         public uint recoveryCost = 3;
-        public UnityEvent CostObserb;
+        public UnityEvent UpdateEvent;
         public UnityAction MonsterAction { get; set; }
+
+        void Awake()
+        {
+            inst = this;
+        }
 
         void Start()
         {
-            inst = this;
             turn = Turn.PLAYER;
             GameData.playerStat.cost = GameData.playerStat.maxCost;
         }
@@ -44,7 +48,7 @@ namespace Combat
             turn = Turn.PLAYER;
             GameData.playerStat.cost += recoveryCost;
             if (GameData.playerStat.cost > GameData.playerStat.maxCost) GameData.playerStat.cost = GameData.playerStat.maxCost;
-            CostObserb?.Invoke();
+            UpdateEvent?.Invoke();
         }
 
         void MonsterTurn()

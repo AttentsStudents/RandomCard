@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
 {
-    public static T instance { get; protected set; }
+    public static T inst { get; protected set; }
     protected void Init()
     {
-        if (instance == null)
+        if (inst == null)
         {
-            instance = GetComponent<T>();
+            inst = GetComponent<T>();
             DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);

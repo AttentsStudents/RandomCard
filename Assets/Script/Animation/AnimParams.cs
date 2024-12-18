@@ -6,5 +6,5 @@ public static class AnimParams
 {
     public static string OnDead = "OnDead";
     public static string OnAttack = "OnAttack";
-    public static string OnHit = "OnHit";
+    public static string OnDamage = "OnDamage";
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,16 +12,24 @@ public class BattleStat
     public float curHP { get; set; }
     public float attack { get; set; }
     public float armor { get; set; }
-    public uint maxCost { get; set; }
-    public uint cost { get; set; }
 
-    public BattleStat(float maxHP, float armor, float attack, uint cost = 0)
+    public BattleStat(float hp, float armor, float attack)
     {
-        this.maxHP = maxHP;
-        this.curHP = maxHP;
+        maxHP = hp;
+        curHP = hp;
         this.armor = armor;
         this.attack = attack;
-        this.maxCost = cost;
+    }
+}
+
+[Serializable]
+public class PlayerStat : BattleStat
+{
+    public uint maxCost { get; set; }
+    public uint cost { get; set; }
+    public PlayerStat(float hp, float armor, float attack, uint cost) : base(hp,armor,attack)
+    {
+        maxCost = cost;
         this.cost = cost;
     }
 }
@@ -34,18 +43,21 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
     public void OnDamage(float damage)
     {
         HpChange(-damage);
-        GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Hit"), transform);
-        obj.transform.Translate(Vector3.forward * 1.0f);
+        Instantiate(ObjectManager.inst.effect.hit, transform);
+
         if (Mathf.Approximately(battleStat.curHP, 0.0f))
         {
-
             DeathAlarm?.Invoke();
             anim.SetTrigger(AnimParams.OnDead);
-            //Destroy(gameObject);
+        }
+        else
+        {
+            anim.SetTrigger(AnimParams.OnDamage);
         }
     }
     public void OnRecovery(float recovery)
     {
+        Instantiate(ObjectManager.inst.effect.heal, transform);
         HpChange(recovery);
     }
 

@@ -18,7 +18,7 @@ public enum Scene
 class SaveDataField
 {
     List<int> cards;
-    BattleStat playerStat;
+    PlayerStat playerStat;
     (int, int) playerPlace;
     List<(int, int)> mapKey;
     List<Node> mapNode;
@@ -64,7 +64,7 @@ class SaveDataField
 public static class GameData
 {
     public static List<int> cards { get; set; }
-    public static BattleStat playerStat { get; set; }
+    public static PlayerStat playerStat { get; set; }
     public static Node playerNode { get; set; }
     public static Node targetNode { get; set; }
     public static List<(int, int)> enemies { get => targetNode.monsterInfo; }

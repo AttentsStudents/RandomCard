@@ -21,10 +21,14 @@ namespace Combat
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (eventData.pointerDrag.TryGetComponent<Card>(out Card card) && target.TryGetComponent(out BattleSystem battle))
+            if (eventData.pointerDrag.TryGetComponent<Card>(out Card card) 
+                && target.TryGetComponent(out BattleSystem battle))
             {
-                card.Active(new List<BattleSystem>() { battle });
-                CardPool.inst.Push(card.gameObject);
+                if(card.Active(new List<BattleSystem>() { battle }))
+                {
+                    card.gameObject.transform.localPosition = Vector3.zero;
+                    CardPool.inst?.Push(card.gameObject);
+                }
             }
         }
 
