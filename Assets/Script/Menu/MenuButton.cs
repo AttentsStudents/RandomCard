@@ -12,7 +12,7 @@ public class MenuButton : MonoBehaviour
         GameData.InitData();
         Node.InitNode();
 
-        GameData.playerStat = new BattleStat(60, 0, 10);
+        GameData.playerStat = new PlayerStat(60, 0, 10, 6);
         GameData.playerStat.curHP = GameData.playerStat.maxHP;
         Loading.LoadScene(Scene.WORLDMAP);
     }

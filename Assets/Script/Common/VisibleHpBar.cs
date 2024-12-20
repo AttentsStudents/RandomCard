@@ -8,7 +8,7 @@ public abstract class VisibleHpBar : BattleSystem
 {
     protected void AddHpBar()
     {
-        GameObject obj = Instantiate(Resources.Load<GameObject>($"Prefabs/HpBar"), GameObject.FindWithTag("Canvas").transform);
+        GameObject obj = Instantiate(Resources.Load<GameObject>($"Prefabs/HpBar"), Canvas.main.hpBars);
         if (obj.TryGetComponent(out HpBar hpBar))
         {
             hpBar.target = gameObject;

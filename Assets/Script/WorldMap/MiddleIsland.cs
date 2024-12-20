@@ -79,10 +79,10 @@ namespace WorldMap
 
                     break;
                 case Node.Type.TREASURE:
-                    objectQueue.Enqueue(Instantiate<GameObject>(ObjectManager.instance.tresure, center));
+                    objectQueue.Enqueue(Instantiate<GameObject>(ObjectManager.inst.tresure, center));
                     break;
                 case Node.Type.REST:
-                    objectQueue.Enqueue(Instantiate<GameObject>(ObjectManager.instance.rest, center));
+                    objectQueue.Enqueue(Instantiate<GameObject>(ObjectManager.inst.rest, center));
                     break;
             }
             CrashAction = CrashActionMyType;
@@ -91,14 +91,14 @@ namespace WorldMap
         void RandomMonster() => RandomMonster(1, 15);
         protected void RandomMonster(int min, int max)
         {
-            int idx = Random.Range(0, MonsterGen.instance.list.Length);
+            int idx = Random.Range(0, MonsterGen.inst.list.Length);
             int level = Random.Range(min, max + 1);
             myNode.monsterInfo.Add((idx, level));
         }
 
         protected void CreateMonster(int idx, Transform tr)
         {
-            GameObject monster = Instantiate<GameObject>(MonsterGen.instance.list[idx], tr);
+            GameObject monster = Instantiate<GameObject>(MonsterGen.inst.list[idx], tr);
             monster.GetComponentInChildren<Animator>().enabled = false;
             objectQueue.Enqueue(monster);
         }
@@ -123,7 +123,7 @@ namespace WorldMap
                     break;
                 case Node.Type.TREASURE:
                     Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"),
-                        WorldMapCanvas.instance.transform);
+                        WorldMapCanvas.inst.transform);
                     break;
                 case Node.Type.REST:
                     {
@@ -143,7 +143,7 @@ namespace WorldMap
 
         void DestroyObjects()
         {
-            Instantiate(ObjectManager.instance.effect.Boom, center);
+            Instantiate(ObjectManager.inst.effect.boom, center);
             while (objectQueue.Count > 0) { Destroy(objectQueue.Dequeue()); }
         }
     }

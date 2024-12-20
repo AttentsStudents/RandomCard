@@ -9,8 +9,6 @@ AnimatorOverrideController:
   m_Name: Moskito
   m_Controller: {fileID: 9100000, guid: e973813b10153e645863eb658eb7fef2, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: a5aa3ce397c24155845dba13bc634b36, type: 3}
-    m_OverrideClip: {fileID: 1827226128182048838, guid: 162c982447ff467a81c63f0c731aed7a, type: 3}
   - m_OriginalClip: {fileID: 7400000, guid: 97c47bfed40c4af58abfab0182f75594, type: 3}
     m_OverrideClip: {fileID: 1827226128182048838, guid: c78e4349565c42a8bc257e2133792c35, type: 3}
   - m_OriginalClip: {fileID: 7400000, guid: 13049e370384471a857e55bf2ab6c1aa, type: 3}
@@ -19,3 +17,5 @@ AnimatorOverrideController:
     m_OverrideClip: {fileID: 1827226128182048838, guid: f9ac037bacb2422eb183ed814e3a6d1d, type: 3}
   - m_OriginalClip: {fileID: 7400000, guid: cabb129121944e2dbd3866b6deba6b9d, type: 3}
     m_OverrideClip: {fileID: 1827226128182048838, guid: 32eabf87c5874ae2b4a1a0cc8b55b52b, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 89f2a013b26bb9a4399a0a2623a56d54, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e5174b4d75eb0544a9daf554e3244d05, type: 2}

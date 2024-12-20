@@ -28,14 +28,14 @@ namespace WorldMap
             HashSet<int> randomCards = new HashSet<int>();
             while (randomCards.Count < 3)
             {
-                int randomCardId = Random.Range(0, CardManager.instance.cards.Length);
+                int randomCardId = Random.Range(0, CardManager.inst.cards.Length);
                 if (!randomCards.Contains(randomCardId)) randomCards.Add(randomCardId);
             }
             foreach (int cardIdx in randomCards)
             {
                 GameObject obj = Instantiate(Resources.Load<GameObject>($"{SceneData.prefabPath}/TresureCard"), content);
                 TresureCard card = obj.GetComponent<TresureCard>();
-                card.data = CardManager.instance.cards[cardIdx];
+                card.data = CardManager.inst.cards[cardIdx];
                 card.count = myCardsTypeCount.ContainsKey(card.data.type) ? myCardsTypeCount[card.data.type] : 0;
                 card.ClickAction = () =>
                 {

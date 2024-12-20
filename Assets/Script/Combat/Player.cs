@@ -8,8 +8,10 @@ namespace Combat
 {
     public class Player : VisibleHpBar
     {
+        public static Player inst { get; private set; }
         void Awake()
         {
+            inst = this;
             battleStat = GameData.playerStat;
             AddHpBar();
         }

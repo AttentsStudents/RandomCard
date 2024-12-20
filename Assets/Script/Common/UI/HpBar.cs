@@ -44,6 +44,10 @@ public class HpBar : MonoBehaviour
     void Start()
     {
         Init();
+    }
+
+    void Update()
+    {
         if (targetFollow) FollowTarget();
     }
 

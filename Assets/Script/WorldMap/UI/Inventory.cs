@@ -25,7 +25,7 @@ namespace WorldMap
                 if (card != null)
                 {
                     card.count = item.Value;
-                    card.data = CardManager.instance.cardTypeToData[item.Key];
+                    card.data = CardManager.inst.cardTypeToData[item.Key];
                 }
             }
             GameData.AddCardAction = (byte cardType) => OnAddCard(cardType);
@@ -51,7 +51,7 @@ namespace WorldMap
                 inventory.Add(cardType, 1);
                 GameObject obj = Instantiate(Resources.Load<GameObject>($"{SceneData.prefabPath}/InventoryCard"), content);
                 InventoryCard card = obj.GetComponent<InventoryCard>();
-                card.data = CardManager.instance.cardTypeToData[cardType];
+                card.data = CardManager.inst.cardTypeToData[cardType];
                 card.count = inventory[cardType];
             }
         }

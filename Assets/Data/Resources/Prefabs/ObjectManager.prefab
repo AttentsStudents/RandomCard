@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8704727744855961189
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8322753735079355696}
+  - component: {fileID: 1086891442547191491}
+  m_Layer: 0
+  m_Name: ObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8322753735079355696
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8704727744855961189}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1086891442547191491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8704727744855961189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ecc743064eb6247a8fc450e2b47369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monster:
+    beholder: {fileID: 728485899113327037, guid: 1f4e3f86403ce3c499e59550b82119c9, type: 3}
+    chest: {fileID: 4434330208823037568, guid: a9cdb0cac511e2e4f97835ce152a5a8d, type: 3}
+    fish: {fileID: 4953934804921788888, guid: dbf76ffd3c159164f87d90e0792241cd, type: 3}
+    golem: {fileID: 2941557602633312447, guid: bb52a5f2d4034f84ab1210a6791ff2d2, type: 3}
+    lich: {fileID: 6899864347757145430, guid: 47bef4989e63764478cf71d38a79e70a, type: 3}
+    moskito: {fileID: 271426014762992988, guid: fe24e1022e3cd574ab4d02f2487fb1ca, type: 3}
+    orc: {fileID: 6664479981795774496, guid: 0cd170ec999fcf3478382ff9bc9dd78d, type: 3}
+  island:
+    home: {fileID: 8614866457420037861, guid: fd726b4f9a06ae54bbae3688f4effb19, type: 3}
+    normal: {fileID: 8614866457420037861, guid: 9dde46b982f96a24e91d3a081f3fe408, type: 3}
+    boss: {fileID: 8614866457420037861, guid: c4120a35a57ac1e48a0592ad6be0f20a, type: 3}
+  tresure: {fileID: 6604398403984369772, guid: ff1d51fe3dabb284094700f6bf9a27a8, type: 3}
+  rest: {fileID: 163617556293284183, guid: 4d621c9c6391dc54eb7582af398213c4, type: 3}
+  effect:
+    boom: {fileID: 104829970813648393, guid: c9a9ee8e1965c754e96379bede0bd8b2, type: 3}
+    hit: {fileID: 2955623459812423943, guid: 9056ad8ff45118c4aaafec1ae6c0d0c4, type: 3}
+    heal: {fileID: 8593464584776411535, guid: 064f67f85705fd049b2be023ec93193b, type: 3}
