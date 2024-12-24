@@ -65,6 +65,11 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         HpChange(recovery);
     }
 
+    public void OnBuff()
+    {
+        Instantiate(ObjectManager.inst.effect.buff, transform);
+    }
+
     void HpChange(float value)
     {
         battleStat.curHP = Mathf.Clamp(battleStat.curHP + value, 0.0f, battleStat.maxHP);

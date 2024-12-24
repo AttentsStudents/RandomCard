@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Canvas : MonoBehaviour
+public class CanvasCustom : MonoBehaviour
 {
-    public static Canvas main;
-    public Transform hpBars;
+    public static CanvasCustom main;
+    public Transform priortyLoad;
+    public Transform lastLoad;
     void Awake() => InitCanvas();
 
     protected void InitCanvas() => main = this;

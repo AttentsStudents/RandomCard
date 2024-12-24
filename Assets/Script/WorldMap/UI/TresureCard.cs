@@ -17,7 +17,7 @@ namespace WorldMap
         int _count;
         public int count
         {
-            get => _count; 
+            get => _count;
             set
             {
                 countText.text = $"Count: {value}";
@@ -44,7 +44,10 @@ namespace WorldMap
         }
 
 
-        void GetCard() => GameData.AddCard(data.type);
+        void GetCard()
+        {
+            GameData.AddCard(CardManager.inst.dataToIdx[data]);
+        }
 
         void ChangeImageAlpha(float alpha)
         {

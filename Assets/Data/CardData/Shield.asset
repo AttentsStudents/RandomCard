@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8059d2eec6ce6d49b4d98cb829635af, type: 3}
-  m_Name: Slash
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  card: Slash
-  type: 0
+  card: Shield
   description: asdwqwqgqwgw
-  sprite: {fileID: 21300000, guid: 686296b102e1f0c4c8365704fe6b88bd, type: 3}
+  sprite: {fileID: 21300000, guid: 3e7b24445e203384b86bfcbeb1561a01, type: 3}

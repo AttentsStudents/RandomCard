@@ -24,12 +24,7 @@ namespace Combat
             if (eventData.pointerDrag.TryGetComponent<Card>(out Card card) 
                 && target.TryGetComponent(out BattleSystem battle))
             {
-                if(card.Active(new List<BattleSystem>() { battle }))
-                {
-                    card.gameObject.transform.localPosition = Vector3.zero;
-                    CardPool.inst?.Push(card.gameObject);
-                    DragCard.draggingCard = null;
-                }
+                card.Active(new List<BattleSystem>() { battle });
             }
         }
 

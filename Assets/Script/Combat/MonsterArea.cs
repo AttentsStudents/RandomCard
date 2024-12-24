@@ -7,6 +7,7 @@ namespace Combat
 {
     public class MonsterArea : MonoBehaviour
     {
+        public static MonsterArea inst { get; private set; }
         public Transform[] areas;
         public UnityEvent MonsterWipeoutEvent;
         public UnityEvent MonsterActionEndEvent;
@@ -14,6 +15,7 @@ namespace Combat
         int monsterActionCount = 0;
         void Awake()
         {
+            inst = this;
             monsters = new HashSet<Monster>();
             for (int i = 0; i < GameData.targetNode.monsterInfo.Count; i++)
             {

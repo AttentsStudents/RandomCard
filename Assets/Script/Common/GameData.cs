@@ -17,7 +17,7 @@ public enum Scene
 [Serializable]
 class SaveDataField
 {
-    List<int> cards;
+    List<int> playerCards;
     PlayerStat playerStat;
     (int, int) playerPlace;
     List<(int, int)> mapKey;
@@ -27,14 +27,14 @@ class SaveDataField
 
     public SaveDataField()
     {
-        cards = GameData.cards;
+        playerCards = GameData.playerCards;
         playerStat = GameData.playerStat;
         playerPlace = GameData.playerNode.GetKey();
 
         mapKey = new List<(int, int)>();
         mapNode = new List<Node>();
 
-        foreach(var item in Node.map)
+        foreach (var item in Node.map)
         {
             mapKey.Add(item.Key);
             mapNode.Add(item.Value);
@@ -46,7 +46,7 @@ class SaveDataField
 
     public void Load()
     {
-        GameData.cards = cards;
+        GameData.playerCards = playerCards;
         GameData.playerStat = playerStat;
 
         Node.map = new Dictionary<(int, int), Node>();
@@ -63,12 +63,12 @@ class SaveDataField
 
 public static class GameData
 {
-    public static List<int> cards { get; set; }
+    public static List<int> playerCards { get; set; }
     public static PlayerStat playerStat { get; set; }
     public static Node playerNode { get; set; }
     public static Node targetNode { get; set; }
     public static List<(int, int)> enemies { get => targetNode.monsterInfo; }
-    
+
     public static Action<byte> AddCardAction { get; set; }
 
     static BinaryFormatter bf = new BinaryFormatter();
@@ -91,7 +91,7 @@ public static class GameData
 
     public static void InitData()
     {
-        cards = new List<int>();
+        playerCards = null;
         playerStat = null;
         playerNode = null;
         targetNode = null;
@@ -99,7 +99,7 @@ public static class GameData
 
     public static void AddCard(byte cardType)
     {
-        cards.Add(cardType);
+        playerCards.Add(cardType);
         AddCardAction?.Invoke(cardType);
     }
 
@@ -110,5 +110,11 @@ public static class GameData
         targetNode.monsterInfo = null;
         targetNode = null;
         SaveData();
+    }
+
+    public static void CreateNewPlayer()
+    {
+        playerStat = new PlayerStat(60, 0, 10, 6);
+        playerCards = new List<int> { 0, 0, 0, 0, 1, 1, 1, 2, 2 };
     }
 }

@@ -25,7 +25,7 @@ namespace Combat
             if (isBattle)
             {
                 AddHpBar();
-                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyCollider"), Canvas.main.transform);
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyCollider"), CanvasCustom.main.transform);
                 if (obj.TryGetComponent<EnemyCollider>(out EnemyCollider enemyCollider))
                 {
                     enemyCollider.target = gameObject;

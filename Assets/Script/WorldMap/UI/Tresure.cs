@@ -7,7 +7,7 @@ namespace WorldMap
     public class Tresure : MonoBehaviour
     {
         public Transform content;
-        Dictionary<int, int> myCardsTypeCount { get; set; }
+        Dictionary<int, int> myCardsCount { get; set; }
         void Start()
         {
             CheckMyCards();
@@ -16,11 +16,11 @@ namespace WorldMap
 
         void CheckMyCards()
         {
-            myCardsTypeCount = new Dictionary<int, int>();
-            foreach (int cardType in GameData.cards)
+            myCardsCount = new Dictionary<int, int>();
+            foreach (int cardIdx in GameData.playerCards)
             {
-                myCardsTypeCount[cardType] = myCardsTypeCount.ContainsKey(cardType) ?
-                    myCardsTypeCount[cardType] + 1 : 1;
+                myCardsCount[cardIdx] = myCardsCount.ContainsKey(cardIdx) ?
+                    myCardsCount[cardIdx] + 1 : 1;
             }
         }
         void GenerateCards()
@@ -28,15 +28,15 @@ namespace WorldMap
             HashSet<int> randomCards = new HashSet<int>();
             while (randomCards.Count < 3)
             {
-                int randomCardId = Random.Range(0, CardManager.inst.cards.Length);
+                int randomCardId = Random.Range(0, CardManager.inst.list.Count);
                 if (!randomCards.Contains(randomCardId)) randomCards.Add(randomCardId);
             }
             foreach (int cardIdx in randomCards)
             {
                 GameObject obj = Instantiate(Resources.Load<GameObject>($"{SceneData.prefabPath}/TresureCard"), content);
                 TresureCard card = obj.GetComponent<TresureCard>();
-                card.data = CardManager.inst.cards[cardIdx];
-                card.count = myCardsTypeCount.ContainsKey(card.data.type) ? myCardsTypeCount[card.data.type] : 0;
+                card.data = CardManager.inst.list[cardIdx].data;
+                card.count = myCardsCount.ContainsKey(cardIdx) ? myCardsCount[cardIdx] : 0;
                 card.ClickAction = () =>
                 {
                     Destroy(gameObject);

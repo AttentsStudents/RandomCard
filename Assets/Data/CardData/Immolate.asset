@@ -13,10 +13,6 @@ MonoBehaviour:
   m_Name: Immolate
   m_EditorClassIdentifier: 
   card: Immolate
-  type: 0
-  figure: 3
-  remainingTurn: 0
+  type: 3
   description: 
   sprite: {fileID: 21300000, guid: e15717e64df541f428aeabd6e854650f, type: 3}
-  effectclassName: 
-  effectParameters: []

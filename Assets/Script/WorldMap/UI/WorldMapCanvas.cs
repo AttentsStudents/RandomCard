@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace WorldMap
 {
 
-    public partial class WorldMapCanvas : Canvas
+    public partial class WorldMapCanvas : CanvasCustom
     {
         State myState = State.NORMAL;
         public enum State { NORMAL, INVENTORY, MAP, CONFIG }

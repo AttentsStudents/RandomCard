@@ -7,6 +7,7 @@ public class CardPool : MonoBehaviour
     public static CardPool inst { get; set; }
     public Transform pool;
     List<GameObject> objects = new List<GameObject>();
+    public int count { get => objects.Count; }
     void Awake()
     {
         inst = this;

@@ -7,14 +7,15 @@ using UnityEngine.UI;
 
 public class Cost : MonoBehaviour
 {
+    public static Cost inst;
     public TMP_Text text;
     public Image fill;
     public UnityEvent CostZeroEvent;
 
     private void Awake()
     {
+        inst = this;
     }
-
     void Start()
     {
         OnCostUpdate();

@@ -30,6 +30,7 @@ public partial class ObjectManager
         public GameObject boom;
         public GameObject hit;
         public GameObject heal;
+        public GameObject buff;
     }
 }
 

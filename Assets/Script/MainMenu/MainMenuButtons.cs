@@ -5,15 +5,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class MenuButton : MonoBehaviour
+public class MainMenuButtons : MonoBehaviour
 {
     public void OnClickStart()
     {
         GameData.InitData();
+        GameData.CreateNewPlayer();
         Node.InitNode();
 
-        GameData.playerStat = new PlayerStat(60, 0, 10, 6);
-        GameData.playerStat.curHP = GameData.playerStat.maxHP;
         Loading.LoadScene(Scene.WORLDMAP);
     }
     public void OnClickLoad()

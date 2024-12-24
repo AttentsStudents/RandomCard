@@ -9,6 +9,13 @@ namespace Combat
     {
         public static DragCard draggingCard {get; set;}
         Vector3 originPos;
+
+        public override bool Active(List<BattleSystem> battles)
+        {
+            bool result = base.Active(battles);
+            draggingCard = null;
+            return result;
+        }
         public void OnBeginDrag(PointerEventData eventData)
         {
             draggingCard = this;
