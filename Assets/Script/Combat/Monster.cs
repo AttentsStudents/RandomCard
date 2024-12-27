@@ -12,7 +12,7 @@ namespace Combat
         public int level { get; set; }
         public bool isBattle { get; set; }
         Vector3 originPos;
-        GameObject target { get => Player.inst?.gameObject; }
+        GameObject target { get => BattleManager.inst.player.gameObject; }
         public UnityAction ActionEndAlarm { get; set; }
         float moveSpeed = 15.0f;
 
@@ -29,7 +29,7 @@ namespace Combat
                 if (obj.TryGetComponent<EnemyCollider>(out EnemyCollider enemyCollider))
                 {
                     enemyCollider.target = gameObject;
-                    DeathAlarm += () => Destroy(obj);
+                    DeathAlarm += () => obj.SetActive(false);
                 }
             }
         }

@@ -8,12 +8,15 @@ namespace Combat
 {
     public class Player : VisibleHpBar
     {
-        public static Player inst { get; private set; }
+        public UnityEvent DeathEvent;
+
         void Awake()
         {
-            inst = this;
+            BattleManager.inst.player = this;
             battleStat = GameData.playerStat;
+            battleStat.armor = 0;
             AddHpBar();
+            DeathAlarm += () => DeathEvent?.Invoke();
         }
     }
 }

@@ -12,10 +12,10 @@ public class CardsFrame : MonoBehaviour
 
     void Awake()
     {
-        List<int> list = new List<int>(GameData.playerCards);
+        List<byte> list = new List<byte>(GameData.playerCards);
         for (int i = 0; i < list.Count; i++)
         {
-            int temp = list[i];
+            byte temp = list[i];
             int rIdx = Random.Range(0, list.Count);
             list[i] = list[rIdx];
             list[rIdx] = temp;
@@ -28,6 +28,7 @@ public class CardsFrame : MonoBehaviour
     {
         for (int i = 0; i < turnCardCount; i++)
         {
+            if (cards.childCount >= handCardCount) return;
             if (waitCards.childCount == 0)
             {
                 while(cardPool.count > 0)
@@ -39,7 +40,7 @@ public class CardsFrame : MonoBehaviour
         }
     }
 
-    public void GetCardFromList(List<int> list)
+    public void GetCardFromList(List<byte> list)
     {
         int count = 0;
         while (list.Count > 0)

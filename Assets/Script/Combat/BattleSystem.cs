@@ -29,7 +29,7 @@ public class PlayerStat : BattleStat
     public uint cost;
     public uint recoveryCost;
     public uint gold;
-    public PlayerStat(float hp, float armor, float attack, uint cost) : base(hp,armor,attack)
+    public PlayerStat(float hp, float armor, float attack, uint cost) : base(hp, armor, attack)
     {
         maxCost = cost;
         this.cost = cost;
@@ -46,8 +46,20 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
 
     public void OnDamage(float damage)
     {
-        HpChange(-damage);
-        Instantiate(ObjectManager.inst.effect.hit, transform);
+        float delta = damage - battleStat.armor;
+        if (delta < 0.0f)
+        {
+            delta = 0.0f;
+        }
+
+        if (Mathf.Approximately(delta, 0.0f))
+        {
+            InstantiateEffect(ObjectManager.inst.effect.shield, transform.forward * 0.3f + transform.up * 0.5f);
+            return;
+        }
+
+        HpChange(-delta);
+        InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
 
         if (Mathf.Approximately(battleStat.curHP, 0.0f))
         {
@@ -59,20 +71,38 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
             anim.SetTrigger(AnimParams.OnDamage);
         }
     }
+    public void OnDamageNoMotion(float damage)
+    {
+        HpChange(damage);
+        InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
+
+        if (Mathf.Approximately(battleStat.curHP, 0.0f))
+        {
+            DeathAlarm?.Invoke();
+            anim.SetTrigger(AnimParams.OnDead);
+        }
+    }
     public void OnRecovery(float recovery)
     {
-        Instantiate(ObjectManager.inst.effect.heal, transform);
+
+        InstantiateEffect(ObjectManager.inst.effect.heal, transform.up * 0.5f);
         HpChange(recovery);
     }
 
     public void OnBuff()
     {
-        Instantiate(ObjectManager.inst.effect.buff, transform);
+        InstantiateEffect(ObjectManager.inst.effect.buff, transform.up * 0.5f);
     }
 
     void HpChange(float value)
     {
         battleStat.curHP = Mathf.Clamp(battleStat.curHP + value, 0.0f, battleStat.maxHP);
         HpObserve?.Invoke();
+    }
+
+    void InstantiateEffect(GameObject effect, Vector3 pos)
+    {
+        GameObject obj = Instantiate(effect, transform);
+        obj.transform.Translate(pos);
     }
 }

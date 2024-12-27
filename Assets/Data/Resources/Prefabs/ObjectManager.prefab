@@ -63,3 +63,4 @@ MonoBehaviour:
     hit: {fileID: 2955623459812423943, guid: 9056ad8ff45118c4aaafec1ae6c0d0c4, type: 3}
     heal: {fileID: 8593464584776411535, guid: 064f67f85705fd049b2be023ec93193b, type: 3}
     buff: {fileID: 6441873369525384307, guid: 4a8c975a1d2f05443857e7bd3d8e97ee, type: 3}
+    shield: {fileID: 8460667080445658512, guid: 91619962990306c419255af7ade9bd57, type: 3}

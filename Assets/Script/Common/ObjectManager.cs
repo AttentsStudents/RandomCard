@@ -31,6 +31,7 @@ public partial class ObjectManager
         public GameObject hit;
         public GameObject heal;
         public GameObject buff;
+        public GameObject shield;
     }
 }
 

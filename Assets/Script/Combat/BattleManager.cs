@@ -1,15 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Combat
 {
-    public class TurnManager : MonoBehaviour
+    public class BattleManager : MonoBehaviour
     {
-        public static TurnManager inst { get; set; }
+        public static BattleManager inst { get; set; }
         public enum Turn
         {
             PLAYER,
@@ -18,6 +17,12 @@ namespace Combat
         public Turn turn { get; set; }
         public UnityEvent PlayerTurnEvent;
         public UnityEvent MonsterTurnEvent;
+        public Player player { get; set; }
+        public HashSet<Monster> monsters { get; set; }
+
+        public Armor armor;
+
+        public Cost cost;
 
         void Awake()
         {

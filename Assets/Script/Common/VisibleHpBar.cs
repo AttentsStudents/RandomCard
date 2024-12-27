@@ -12,7 +12,7 @@ public abstract class VisibleHpBar : BattleSystem
         if (obj.TryGetComponent(out HpBar hpBar))
         {
             hpBar.target = gameObject;
-            DeathAlarm += () => Destroy(obj);
+            DeathAlarm += () => obj.SetActive(false);
         }
     }
 }

@@ -12,11 +12,11 @@ namespace Combat
         public virtual bool Active(List<BattleSystem> battles)
         {
             if (useCost > GameData.playerStat.cost) return false;
-            Player.inst?.anim.SetTrigger(AnimParams.OnAttack);
+            BattleManager.inst.player.anim.SetTrigger(AnimParams.OnAttack);
             GameData.playerStat.cost -= useCost;
             Effect(battles);
 
-            if (Cost.inst != null) Cost.inst.OnCostUpdate();
+            BattleManager.inst.cost.OnUpdate();
             gameObject.transform.localPosition = Vector3.zero;
             CardPool.inst?.Push(gameObject);
             return true;

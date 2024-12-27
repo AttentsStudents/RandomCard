@@ -19,7 +19,8 @@ namespace Combat
 
         public override void OnPointerDown(PointerEventData eventData)
         {
-            if (Player.inst != null) Active(new List<BattleSystem>() { Player.inst });
+            Active(new List<BattleSystem>() { BattleManager.inst.player });
+            BattleManager.inst.armor.OnUpdate();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Combat
 
         public override void OnPointerDown(PointerEventData eventData)
         {
-            if (MonsterArea.inst?.monsters != null) Active(MonsterArea.inst.monsters.ToList<BattleSystem>());
+            Active(BattleManager.inst.monsters.ToList<BattleSystem>());
         }
     }
 }

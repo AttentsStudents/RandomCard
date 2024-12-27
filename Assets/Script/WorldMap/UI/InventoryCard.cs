@@ -12,7 +12,7 @@ namespace WorldMap
             get => _count; 
             set 
             {
-                cardCount.text = $"Count: {value}";
+                cardCount.text = $"°¹¼ö: {value}";
                 _count = value;
             }
         }

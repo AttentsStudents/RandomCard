@@ -6,6 +6,7 @@ using UnityEngine;
 public class CardManager : SingleTon<CardManager>
 {
     public List<Card> list;
+    public List<Card> startDeck;
     public Dictionary<byte, ItemCard> idxToData { get; private set; }
     public Dictionary<ItemCard, byte> dataToIdx { get; private set; }
     void Awake()
@@ -18,5 +19,15 @@ public class CardManager : SingleTon<CardManager>
             idxToData[i] = list[i].data;
             dataToIdx[list[i].data] = i;
         }
+    }
+
+    public List<byte> GetStartCards()
+    {
+        List<byte> deck = new List<byte>();
+        foreach(Card card in startDeck)
+        {
+            deck.Add(dataToIdx[card.data]);
+        }
+        return deck;
     }
 }

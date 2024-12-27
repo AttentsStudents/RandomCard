@@ -17,7 +17,7 @@ public enum Scene
 [Serializable]
 class SaveDataField
 {
-    List<int> playerCards;
+    List<byte> playerCards;
     PlayerStat playerStat;
     (int, int) playerPlace;
     List<(int, int)> mapKey;
@@ -63,7 +63,7 @@ class SaveDataField
 
 public static class GameData
 {
-    public static List<int> playerCards { get; set; }
+    public static List<byte> playerCards { get; set; }
     public static PlayerStat playerStat { get; set; }
     public static Node playerNode { get; set; }
     public static Node targetNode { get; set; }
@@ -115,6 +115,6 @@ public static class GameData
     public static void CreateNewPlayer()
     {
         playerStat = new PlayerStat(60, 0, 10, 6);
-        playerCards = new List<int> { 0, 0, 0, 0, 1, 1, 1, 2, 2 };
+        playerCards = CardManager.inst.GetStartCards();
     }
 }
