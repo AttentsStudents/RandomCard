@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
 
-    public partial class WorldMapCanvas : MonoBehaviour
+    public partial class WorldMapCanvas : CanvasCustom
     {
         State myState = State.NORMAL;
         public enum State { NORMAL, INVENTORY, MAP, CONFIG }
@@ -67,13 +67,14 @@ namespace CheonJiWoon
 
     public partial class WorldMapCanvas
     {
-        public static WorldMapCanvas instance;
+        public static WorldMapCanvas inst;
         public WorldMapMenu[] MenuList;
         Dictionary<State, WorldMapMenu> LinkStateMenu;
 
         void Awake()
         {
-            instance = this;
+            InitCanvas();
+            inst = this;
             LinkStateMenu = new Dictionary<State, WorldMapMenu>();
             foreach (WorldMapMenu menu in MenuList)
             {

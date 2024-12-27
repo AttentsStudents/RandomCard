@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Progress;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     public class Inventory : MonoBehaviour
     {
-        Dictionary<int, int> inventory;
+        Dictionary<byte, int> inventory;
         public Transform content;
         void Start()
         {
-            inventory = new Dictionary<int, int>();
+            inventory = new Dictionary<byte, int>();
 
-            foreach (int cardType in GameData.cards)
+            foreach (byte cardIdx in GameData.playerCards)
             {
-                if (inventory.ContainsKey(cardType)) inventory[cardType]++;
-                else inventory.Add(cardType, 1);
+                if (inventory.ContainsKey(cardIdx)) inventory[cardIdx]++;
+                else inventory.Add(cardIdx, 1);
             }
             foreach (var item in inventory)
             {
@@ -25,34 +25,34 @@ namespace CheonJiWoon
                 if (card != null)
                 {
                     card.count = item.Value;
-                    card.data = CardManager.instance.cardTypeToData[item.Key];
+                    card.data = CardManager.inst.idxToData[item.Key];
                 }
             }
-            GameData.AddCardAction = (byte cardType) => OnAddCard(cardType);
+            GameData.AddCardAction = (byte cardIdx) => OnAddCard(cardIdx);
         }
 
-        public void OnAddCard(byte cardType)
+        public void OnAddCard(byte cardIdx)
         {
-            if (inventory.ContainsKey(cardType))
+            if (inventory.ContainsKey(cardIdx))
             {
-                inventory[cardType]++;
+                inventory[cardIdx]++;
                 InventoryCard[] cardList = content.GetComponentsInChildren<InventoryCard>();
                 foreach (InventoryCard card in cardList)
                 {
-                    if (card.data.type == cardType)
+                    if (card.data == CardManager.inst.idxToData[cardIdx])
                     {
-                        card.count = inventory[cardType];
+                        card.count = inventory[cardIdx];
                         break;
                     }
                 }
             }
             else
             {
-                inventory.Add(cardType, 1);
+                inventory.Add(cardIdx, 1);
                 GameObject obj = Instantiate(Resources.Load<GameObject>($"{SceneData.prefabPath}/InventoryCard"), content);
                 InventoryCard card = obj.GetComponent<InventoryCard>();
-                card.data = CardManager.instance.cardTypeToData[cardType];
-                card.count = inventory[cardType];
+                card.data = CardManager.inst.list[cardIdx].data;
+                card.count = inventory[cardIdx];
             }
         }
     }

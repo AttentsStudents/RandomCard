@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     
     public class Close : MonoBehaviour, IPointerClickHandler

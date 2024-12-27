@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CheonJiWoon
+public class ImageProperty : MonoBehaviour
 {
-    public class ImageProperty : MonoBehaviour
+    Image _img;
+    public Image image
     {
-        Image _img;
-        public Image image
+        get
         {
-            get
-            {
-                if (_img == null) _img = GetComponentInChildren<Image>();
-                return _img;
-            }
+            if (_img == null) _img = GetComponentInChildren<Image>();
+            return _img;
         }
     }
 }

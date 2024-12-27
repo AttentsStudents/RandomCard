@@ -1,143 +1,99 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
-public class Monster : BattleSystem, IDamage
+namespace Combat
 {
-    public int monsterId;
-    public int level;
-    private Animator animator;
-
-    private void Start()
+    public class Monster : VisibleHpBar
     {
-        animator = GetComponent<Animator>();
-    }
+        public MonsterData data;
+        public int level { get; set; }
+        public bool isBattle { get; set; }
+        Vector3 originPos;
+        GameObject target { get => BattleManager.inst.player.gameObject; }
+        public UnityAction ActionEndAlarm { get; set; }
+        float moveSpeed = 15.0f;
 
-    public void PlayIdleAnimation()
-    {
-        animator.SetBool("IsMoving", false);
-    }
-
-    public void PlayMoveAnimation()
-    {
-        animator.SetBool("IsMoving", true);
-    }
-
-    public void PlayAttackAnimation()
-    {
-        animator.SetTrigger("OnAttack");
-    }
-
-    public void PlayDamageAnimation()
-    {
-        animator.SetTrigger("OnDamage");
-    }
-
-    public void PlayDeathAnimation()
-    {
-        animator.SetTrigger("OnDead");
-    }
-
-    public void OnDamage(float damage)
-    {
-        curHp -= damage;
-
-        if (curHp <= 0)
+        void Awake()
         {
-            PlayDeathAnimation();
-            Debug.Log($"{name}이(가) 사망했습니다.");
-            OnDead();
+            battleStat = new BattleStat(data.maxHP, data.armor, data.attack);
         }
-        else
+        void Start()
         {
-            PlayDamageAnimation();
-            Debug.Log($"{name}이(가) {damage}의 데미지를 받았습니다.");
-        }
-    }
-
-
-    public override void OnAttack()
-    {
-        base.OnAttack();
-        PlayAttackAnimation();
-        Debug.Log($"[OnAttack] {name}이(가) 공격을 실행합니다.");
-
-        if (Target.TryGetComponent<IDamage>(out IDamage damageable))
-        {
-            float attackDamage = battleStat.Attack;
-            Debug.Log($"[OnAttack] {Target.name}에게 {attackDamage}의 피해를 입힙니다.");
-            damageable.OnDamage(attackDamage); // 타겟에 데미지 적용
-        }
-        else
-        {
-            Debug.LogError($"[OnAttack] {Target.name}에는 IDamage 인터페이스가 구현되지 않았습니다!");
-        }
-    }
-
-
-
-    public void Initialize(int id, int lv, MonsterData data, GameObject target)
-    {
-        monsterId = id;
-        level = lv;
-        float maxHP = data.maxHP + (level * 5); // 레벨에 따른 체력 증가
-        float armor = data.armor;
-        float attack = data.attack + (level * 2); // 레벨에 따른 공격력 증가
-
-        battleStat = new BattleStat(maxHP, armor, attack);
-        curHp = battleStat.maxHP;
-
-        Target = target;
-        transform.LookAt(Target.transform); // 타겟 바라보기
-    }
-
-
-    public void DisplayStats()
-    {
-        Debug.Log($"Monster ID: {monsterId}, Level: {level}, HP: {battleStat.curHP}, Armor: {battleStat.Armor}, Attack: {battleStat.Attack}");
-    }
-        private Dictionary<string, float> statusEffects = new Dictionary<string, float>();
-
-        public void ApplyStatusEffect(string statusName, float duration)
-        {
-            if (statusEffects.ContainsKey(statusName))
+            if (isBattle)
             {
-                statusEffects[statusName] = duration; // 기존 상태 갱신
-            }
-            else
-            {
-                statusEffects.Add(statusName, duration);
-                StartCoroutine(HandleStatusEffect(statusName, duration));
+                AddHpBar();
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyCollider"), CanvasCustom.main.transform);
+                if (obj.TryGetComponent<EnemyCollider>(out EnemyCollider enemyCollider))
+                {
+                    enemyCollider.target = gameObject;
+                    DeathAlarm += () => obj.SetActive(false);
+                }
             }
         }
 
-    private IEnumerator HandleStatusEffect(string statusName, float duration)
-    {
-        Debug.Log($"{name}이(가) 상태 이상 '{statusName}'에 걸렸습니다.");
-        while (duration > 0)
+        public void OnMoveAttack()
         {
-            switch (statusName)
-            {
-                case "Poison":
-                    OnDamage(5); // 매초 5 데미지
-                    break;
-
-                case "Burn":
-                    OnDamage(10); // 매초 10 데미지
-                    break;
-
-                case "Freeze":
-                    Debug.Log($"{name}이(가) 얼어붙어 행동할 수 없습니다.");
-                    yield break; // 행동 제한
-            }
-
-            duration -= 1.0f;
-            yield return new WaitForSeconds(1.0f);
+            if (target == null) return;
+            StartCoroutine(MoveAttack());
         }
 
-        statusEffects.Remove(statusName);
-        Debug.Log($"{name}의 상태 이상 '{statusName}'이 종료되었습니다.");
-    }
+        IEnumerator MoveAttack()
+        {
+            originPos = transform.position;
+            Vector3 targetPos = target.transform.position - transform.forward;
 
+            yield return StartCoroutine(Move(targetPos));
+            anim.SetTrigger(AnimParams.OnAttack);
+        }
+
+        public void OnComeBack()
+        {
+            StartCoroutine(ComeBack());
+        }
+
+        public void OnAttack()
+        {
+            if (target.TryGetComponent<BattleSystem>(out BattleSystem battleSystem))
+            {
+                battleSystem.OnDamage(data.attack);
+            }
+        }
+
+        void Rotate(Vector3 dir)
+        {
+            float angle = Vector3.Angle(transform.forward, dir);
+            if (Vector3.Dot(transform.right, dir) < 0.0f) angle *= -1.0f;
+            transform.Rotate(Vector3.up * angle);
+        }
+
+        IEnumerator Move(Vector3 targetPos)
+        {
+            Vector3 dir = targetPos - transform.position;
+            float dist = dir.magnitude;
+            dir.Normalize();
+            Rotate(dir);
+            anim.SetBool(AnimParams.IsMoving, true);
+            while (dist > 0.0f)
+            {
+                float delta = Time.deltaTime * moveSpeed;
+                if (delta > dist) delta = dist;
+                transform.Translate(dir * delta, Space.World);
+                dist -= delta;
+                yield return null;
+            }
+            anim.SetBool(AnimParams.IsMoving, false);
+        }
+
+        IEnumerator ComeBack()
+        {
+            yield return StartCoroutine(Move(originPos));
+
+            Rotate(target.transform.position - transform.position);
+            ActionEndAlarm?.Invoke();
+        }
+    }
 }
+

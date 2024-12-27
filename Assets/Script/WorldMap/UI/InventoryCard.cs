@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     public class InventoryCard : Card
     {
@@ -12,7 +12,7 @@ namespace CheonJiWoon
             get => _count; 
             set 
             {
-                cardCount.text = $"Count: {value}";
+                cardCount.text = $"°¹¼ö: {value}";
                 _count = value;
             }
         }

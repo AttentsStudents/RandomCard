@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace CheonJiWoon
+namespace WorldMap
 {
     public class TresureCard : Card, IPointerClickHandler, IClickAction, IPointerEnterHandler, IPointerExitHandler
     {
@@ -17,7 +17,7 @@ namespace CheonJiWoon
         int _count;
         public int count
         {
-            get => _count; 
+            get => _count;
             set
             {
                 countText.text = $"Count: {value}";
@@ -44,7 +44,10 @@ namespace CheonJiWoon
         }
 
 
-        void GetCard() => GameData.AddCard(data.type);
+        void GetCard()
+        {
+            GameData.AddCard(CardManager.inst.dataToIdx[data]);
+        }
 
         void ChangeImageAlpha(float alpha)
         {

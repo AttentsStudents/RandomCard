@@ -1,140 +1,108 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
-
-interface IDeathAlarm
-{
-    UnityAction deathAlarm { get; set; }
-}
-interface ILive
-{
-    bool IsLive { get; }
-}
-
-interface IDamage
-{
-    void OnDamage(float dmg);
-}
-
 
 [Serializable]
 public class BattleStat
 {
     public float maxHP;
     public float curHP;
-    public float Armor;
-    public float Attack;
+    public float attack;
+    public float armor;
 
-    public BattleStat(float maxHP, float armor, float attack) // 몬스터 배틀 스텟
+    public BattleStat(float hp, float armor, float attack)
     {
-        this.maxHP = maxHP;
-        Armor = armor;
-        Attack = attack;
+        maxHP = hp;
+        curHP = hp;
+        this.armor = armor;
+        this.attack = attack;
     }
 }
 
-public class BattleSystem : AnimProperty
+[Serializable]
+public class PlayerStat : BattleStat
 {
-    public BattleStat battleStat;
-    protected float playTime = 0.0f;
-    public GameObject Target;
-    public UnityAction deathAlarm { get; set; }
-    public UnityEvent<float> hpObserbs;
-
-    public bool IsLive
+    public uint maxCost;
+    public uint cost;
+    public uint recoveryCost;
+    public uint gold;
+    public PlayerStat(float hp, float armor, float attack, uint cost) : base(hp, armor, attack)
     {
-        get => battleStat.curHP > 0.0f;
+        maxCost = cost;
+        this.cost = cost;
+        recoveryCost = 3;
+        gold = 0;
     }
-    public float maxHp
-    {
-        get => battleStat.maxHP;
-    }
+}
 
-    private bool isUpdatingHp = false;
-    public float curHp
+public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
+{
+    public UnityAction HpObserve { get; set; }
+    public BattleStat battleStat { get; set; }
+    public UnityAction DeathAlarm { get; set; }
+
+    public void OnDamage(float damage)
     {
-        get => battleStat.curHP;
-        set
+        float delta = damage - battleStat.armor;
+        if (delta < 0.0f)
         {
-            if (isUpdatingHp) return;
-
-            isUpdatingHp = true;
-            float newHp = Mathf.Clamp(value, 0, battleStat.maxHP);
-
-            if (!Mathf.Approximately(battleStat.curHP, newHp)) // 변경이 있을 때만 호출
-            {
-                battleStat.curHP = newHp;
-                hpObserbs?.Invoke(battleStat.curHP / battleStat.maxHP);
-            }
-
-            isUpdatingHp = false;
+            delta = 0.0f;
         }
-    }
 
-
-    public float Armor
-    {
-        get => battleStat.Armor;
-        set => battleStat.Armor = value;
-
-    }
-
-    protected void OnReset()
-    {
-        battleStat.Armor = 0.0f;
-        battleStat.curHP = battleStat.maxHP;
-    }
-
-    protected virtual void OnDead()
-    {
-        deathAlarm?.Invoke();
-    }
-
-    public void OnDamage(float dmg)
-    {
-        curHp -= dmg;
-        if (Armor > 0)
+        if (Mathf.Approximately(delta, 0.0f))
         {
-            Armor -= dmg;
-        }
-        else if (dmg > Armor)
-        {
-            Armor = 0.0f;
-            curHp -= dmg - Armor;
-        }
-        else
-        {
-            if (curHp <= 0.0f)
-            {
-                myAnim.SetTrigger(animData.OnDead);
-                OnDead();
-            }
-            else
-            {
-                myAnim.SetTrigger(animData.OnDamage);
-            }
-        }
-    }
-
-    public virtual void OnAttack()
-    {
-        if (Target == null)
-        {
-            Debug.LogError("OnAttack 호출 시 Target이 null입니다!");
+            InstantiateEffect(ObjectManager.inst.effect.shield, transform.forward * 0.3f + transform.up * 0.5f);
             return;
         }
 
-        if (Target.TryGetComponent<IDamage>(out IDamage damageable))
+        HpChange(-delta);
+        InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
+
+        if (Mathf.Approximately(battleStat.curHP, 0.0f))
         {
-            damageable.OnDamage(battleStat.Attack);
+            DeathAlarm?.Invoke();
+            anim.SetTrigger(AnimParams.OnDead);
         }
         else
         {
-            Debug.LogError($"{Target.name}에는 IDamage 컴포넌트가 없습니다!");
+            anim.SetTrigger(AnimParams.OnDamage);
         }
     }
+    public void OnDamageNoMotion(float damage)
+    {
+        HpChange(damage);
+        InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
 
+        if (Mathf.Approximately(battleStat.curHP, 0.0f))
+        {
+            DeathAlarm?.Invoke();
+            anim.SetTrigger(AnimParams.OnDead);
+        }
+    }
+    public void OnRecovery(float recovery)
+    {
 
+        InstantiateEffect(ObjectManager.inst.effect.heal, transform.up * 0.5f);
+        HpChange(recovery);
+    }
+
+    public void OnBuff()
+    {
+        InstantiateEffect(ObjectManager.inst.effect.buff, transform.up * 0.5f);
+    }
+
+    void HpChange(float value)
+    {
+        battleStat.curHP = Mathf.Clamp(battleStat.curHP + value, 0.0f, battleStat.maxHP);
+        HpObserve?.Invoke();
+    }
+
+    void InstantiateEffect(GameObject effect, Vector3 pos)
+    {
+        GameObject obj = Instantiate(effect, transform);
+        obj.transform.Translate(pos);
+    }
 }
