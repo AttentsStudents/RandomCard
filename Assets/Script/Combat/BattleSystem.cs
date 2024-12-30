@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -43,38 +42,67 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
     public UnityAction HpObserve { get; set; }
     public BattleStat battleStat { get; set; }
     public UnityAction DeathAlarm { get; set; }
+    Coroutine materialEffect;
+
+    Renderer _render;
+    Material orgMaterial;
+    public Renderer render
+    {
+        get
+        {
+            if (_render == null)
+            {
+                _render = GetComponentInChildren<Renderer>();
+                orgMaterial = _render.material;
+            }
+            return _render;
+        }
+        set
+        {
+            _render = value;
+        }
+    }
 
     public void OnDamage(float damage)
     {
         float delta = damage - battleStat.armor;
+        DamageText damageText = Instantiate(ObjectManager.inst.damageText, CanvasCustom.main.lastLoad).GetComponent<DamageText>();
         if (delta < 0.0f)
         {
             delta = 0.0f;
         }
+        damageText.transform.position = Camera.main.WorldToScreenPoint(transform.position);
 
-        if (Mathf.Approximately(delta, 0.0f))
+        if (delta > 0.0f)
         {
-            InstantiateEffect(ObjectManager.inst.effect.shield, transform.forward * 0.3f + transform.up * 0.5f);
-            return;
-        }
+            HpChange(-delta);
+            InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
+            MaterialEffect(ObjectManager.inst.material.damage);
 
-        HpChange(-delta);
-        InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
-
-        if (Mathf.Approximately(battleStat.curHP, 0.0f))
-        {
-            DeathAlarm?.Invoke();
-            anim.SetTrigger(AnimParams.OnDead);
+            if (Mathf.Approximately(battleStat.curHP, 0.0f))
+            {
+                DeathAlarm?.Invoke();
+                anim.SetTrigger(AnimParams.OnDead);
+            }
+            else
+            {
+                anim.SetTrigger(AnimParams.OnDamage);
+            }
+            damageText.text.text = delta.ToString();
         }
         else
         {
-            anim.SetTrigger(AnimParams.OnDamage);
+            InstantiateEffect(ObjectManager.inst.effect.shield, transform.forward * 0.3f + transform.up * 0.5f);
+            MaterialEffect(ObjectManager.inst.material.shield);
+            damageText.text.color = Color.white;
+            damageText.text.text = "방어 성공!!";
         }
+
     }
     public void OnDamageNoMotion(float damage)
     {
         HpChange(damage);
-        InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
+        MaterialEffect(ObjectManager.inst.material.damage);
 
         if (Mathf.Approximately(battleStat.curHP, 0.0f))
         {
@@ -86,12 +114,14 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
     {
 
         InstantiateEffect(ObjectManager.inst.effect.heal, transform.up * 0.5f);
+        MaterialEffect(ObjectManager.inst.material.heal);
         HpChange(recovery);
     }
 
     public void OnBuff()
     {
         InstantiateEffect(ObjectManager.inst.effect.buff, transform.up * 0.5f);
+        MaterialEffect(ObjectManager.inst.material.buff);
     }
 
     void HpChange(float value)
@@ -105,4 +135,18 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         GameObject obj = Instantiate(effect, transform);
         obj.transform.Translate(pos);
     }
+
+    void MaterialEffect(Material material)
+    {
+        if(materialEffect != null) StopCoroutine(materialEffect);
+        materialEffect = StartCoroutine(MaterialEffectCoroutine(material));
+    }
+
+    IEnumerator MaterialEffectCoroutine(Material material)
+    {
+        render.material = material;
+        yield return WaitForSecondsCustom.Get(0.75f);
+        render.material = orgMaterial;
+    }
 }
+

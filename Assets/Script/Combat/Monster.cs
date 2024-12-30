@@ -18,12 +18,14 @@ namespace Combat
 
         void Awake()
         {
-            battleStat = new BattleStat(data.maxHP, data.armor, data.attack);
+            
         }
         void Start()
         {
             if (isBattle)
             {
+                battleStat = GameData.targetNode.type == WorldMap.Node.Type.END ?
+                    new BattleStat(data.maxHP * 4, data.armor * 2, data.attack * 2) : new BattleStat(data.maxHP, data.armor, data.attack);
                 AddHpBar();
                 GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyCollider"), CanvasCustom.main.transform);
                 if (obj.TryGetComponent<EnemyCollider>(out EnemyCollider enemyCollider))

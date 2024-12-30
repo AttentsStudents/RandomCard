@@ -37,6 +37,7 @@ namespace Combat
             if (monsters.Count == 0)
             {
                 MonsterWipeoutEvent?.Invoke();
+                GameData.playerStat.gold += 100;
                 GameData.ClearTargetNode();
             }
         }

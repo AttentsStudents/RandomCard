@@ -55,7 +55,7 @@ namespace WorldMap
                         int count = Random.Range(1, 4);
                         while (count-- > 0)
                         {
-                            RandomMonster();
+                            AddRandomMonster();
                         }
                     }
 
@@ -88,8 +88,8 @@ namespace WorldMap
             CrashAction = CrashActionMyType;
         }
 
-        void RandomMonster() => RandomMonster(1, 15);
-        protected void RandomMonster(int min, int max)
+        void AddRandomMonster() => AddRandomMonster(1, 15);
+        protected void AddRandomMonster(int min, int max)
         {
             int idx = Random.Range(0, MonsterGen.inst.list.Length);
             int level = Random.Range(min, max + 1);
@@ -129,7 +129,7 @@ namespace WorldMap
                     {
                         if(crashTarget.TryGetComponent<IBattleObserve>(out IBattleObserve battleObserve))
                         {
-                            battleObserve.battleStat.curHP = Mathf.Clamp(battleObserve.battleStat.curHP + 5, 0, battleObserve.battleStat.maxHP);
+                            battleObserve.battleStat.curHP = Mathf.Clamp(battleObserve.battleStat.curHP + 10, 0, battleObserve.battleStat.maxHP);
                             battleObserve.HpObserve.Invoke();
                         }
                         GameData.ClearTargetNode();

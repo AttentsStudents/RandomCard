@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Orc
   m_EditorClassIdentifier: 
   monsterName: Orc
-  maxHP: 80
+  maxHP: 30
   armor: 0
   attack: 10
+  levelStatAdd: 0

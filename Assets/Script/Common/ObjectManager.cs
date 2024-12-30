@@ -33,6 +33,15 @@ public partial class ObjectManager
         public GameObject buff;
         public GameObject shield;
     }
+
+    [Serializable]
+    public struct Materials
+    {
+        public Material shield;
+        public Material buff;
+        public Material heal;
+        public Material damage;
+    }
 }
 
 
@@ -44,5 +53,7 @@ public partial class ObjectManager : SingleTon<ObjectManager>
     public GameObject tresure;
     public GameObject rest;
     public Effect effect;
+    public Materials material;
+    public GameObject damageText;
     void Awake() => Init();
 }

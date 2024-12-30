@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Golem
   m_EditorClassIdentifier: 
   monsterName: Golem
-  maxHP: 120
+  maxHP: 50
   armor: 0
   attack: 15
+  levelStatAdd: 0

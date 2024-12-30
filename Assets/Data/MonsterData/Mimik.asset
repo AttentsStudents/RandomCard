@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mimik
   m_EditorClassIdentifier: 
   monsterName: Mimik
-  maxHP: 30
+  maxHP: 15
   armor: 0
   attack: 10
+  levelStatAdd: 0

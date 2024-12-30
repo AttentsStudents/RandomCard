@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Moskito
   m_EditorClassIdentifier: 
   monsterName: Moskito
-  maxHP: 15
+  maxHP: 6
   armor: 0
-  attack: 5
+  attack: 15
+  levelStatAdd: 0

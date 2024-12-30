@@ -11,10 +11,12 @@ namespace WorldMap
             sprite = SpriteManager.instance.icon.boss;
             ViewOnTheMap();
 
+            if (myNode.clear) return;
+
             if (myNode.monsterInfo == null || myNode.monsterInfo.Count == 0)
             {
                 myNode.monsterInfo = new List<(int, int)>();
-                RandomMonster(100, 100);
+                AddRandomMonster(100, 100);
             }
             CreateMonster(myNode.monsterInfo[0].Item1, center);
 

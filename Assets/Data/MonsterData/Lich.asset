@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Lich
   m_EditorClassIdentifier: 
   monsterName: Lich
-  maxHP: 50
+  maxHP: 20
   armor: 0
   attack: 30
+  levelStatAdd: 0
