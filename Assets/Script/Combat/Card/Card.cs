@@ -11,7 +11,17 @@ namespace Combat
         public ItemCard data;
         public virtual bool Active(List<BattleSystem> battles)
         {
-            if (useCost > GameData.playerStat.cost) return false;
+            if(BattleManager.inst.turn != BattleManager.Turn.PLAYER)
+            {
+                AlertMessage.Alert("플레이어의 턴이 아닙니다");
+                return false;
+            }
+
+            if (useCost > GameData.playerStat.cost)
+            {
+                AlertMessage.Alert("코스트가 부족합니다");
+                return false;
+            }
             BattleManager.inst.player.anim.SetTrigger(AnimParams.OnAttack);
             GameData.playerStat.cost -= useCost;
             Effect(battles);
@@ -19,6 +29,7 @@ namespace Combat
             BattleManager.inst.cost.OnUpdate();
             gameObject.transform.localPosition = Vector3.zero;
             CardPool.inst?.Push(gameObject);
+            BattleManager.inst.OnCheckCardsInHand();
             return true;
         }
 

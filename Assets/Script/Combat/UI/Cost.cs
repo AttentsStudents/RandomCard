@@ -9,7 +9,6 @@ public class Cost : MonoBehaviour
 {
     public TMP_Text text;
     public Image fill;
-    public UnityEvent CostZeroEvent;
 
     void Start()
     {
@@ -20,6 +19,5 @@ public class Cost : MonoBehaviour
     {
         text.text = GameData.playerStat.cost.ToString();
         fill.fillAmount = ((float)GameData.playerStat.cost / (float)GameData.playerStat.maxCost);
-        if (GameData.playerStat.cost == 0) CostZeroEvent?.Invoke();
     }
 }

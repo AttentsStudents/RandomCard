@@ -12,6 +12,7 @@ namespace WorldMap
         {
             CheckMyCards();
             GenerateCards();
+            AlertMessage.Alert("원하는 카드를 클릭해서 획득할 수 있습니다");
         }
 
         void CheckMyCards()

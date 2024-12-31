@@ -55,5 +55,8 @@ public partial class ObjectManager : SingleTon<ObjectManager>
     public Effect effect;
     public Materials material;
     public GameObject damageText;
+    public GameObject alertMessage;
+    public GameObject hpBar;
+    public GameObject enemyCollider;
     void Awake() => Init();
 }

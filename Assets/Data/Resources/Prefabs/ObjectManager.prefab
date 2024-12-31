@@ -70,3 +70,6 @@ MonoBehaviour:
     heal: {fileID: 2100000, guid: 23e464eb70f02ef4bae237d8c6707536, type: 2}
     damage: {fileID: 2100000, guid: 567b716491510334ebfaa895f47509ab, type: 2}
   damageText: {fileID: 3836502780817947889, guid: 8a9ef55844d2b0247a80c3e72f99df75, type: 3}
+  alertMessage: {fileID: 4012861741223248025, guid: 0801229b32a02f2469c85afe88dcce65, type: 3}
+  hpBar: {fileID: 2471164329555679982, guid: 82b3c99f77633684bbd2f2209d4ba487, type: 3}
+  enemyCollider: {fileID: 1045308749876876002, guid: 3d0f974119c06924984b10e125fc3305, type: 3}

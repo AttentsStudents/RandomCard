@@ -31,6 +31,11 @@ namespace WorldMap
             CreateAllObject(Node.firstNode);
         }
 
+        void Start()
+        {
+            AlertMessage.Alert("연결된 노드를 클릭해서 앞으로 나아갈 수 있습니다");
+        }
+
         void MapGenerate()
         {
             Node.map = new Dictionary<(int, int), Node>();

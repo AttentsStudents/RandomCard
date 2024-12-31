@@ -42,6 +42,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
     public UnityAction HpObserve { get; set; }
     public BattleStat battleStat { get; set; }
     public UnityAction DeathAlarm { get; set; }
+    bool isDead = false;
     Coroutine materialEffect;
 
     Renderer _render;
@@ -65,6 +66,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
 
     public void OnDamage(float damage)
     {
+        if (isDead) return;
         float delta = damage - battleStat.armor;
         DamageText damageText = Instantiate(ObjectManager.inst.damageText, CanvasCustom.main.lastLoad).GetComponent<DamageText>();
         if (delta < 0.0f)
@@ -79,15 +81,9 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
             InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
             MaterialEffect(ObjectManager.inst.material.damage);
 
-            if (Mathf.Approximately(battleStat.curHP, 0.0f))
-            {
-                DeathAlarm?.Invoke();
-                anim.SetTrigger(AnimParams.OnDead);
-            }
-            else
-            {
-                anim.SetTrigger(AnimParams.OnDamage);
-            }
+            if (Mathf.Approximately(battleStat.curHP, 0.0f)) Dead();
+            else anim.SetTrigger(AnimParams.OnDamage);
+
             damageText.text.text = delta.ToString();
         }
         else
@@ -104,11 +100,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         HpChange(damage);
         MaterialEffect(ObjectManager.inst.material.damage);
 
-        if (Mathf.Approximately(battleStat.curHP, 0.0f))
-        {
-            DeathAlarm?.Invoke();
-            anim.SetTrigger(AnimParams.OnDead);
-        }
+        if (Mathf.Approximately(battleStat.curHP, 0.0f)) Dead();
     }
     public void OnRecovery(float recovery)
     {
@@ -117,6 +109,8 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         MaterialEffect(ObjectManager.inst.material.heal);
         HpChange(recovery);
     }
+
+
 
     public void OnBuff()
     {
@@ -138,7 +132,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
 
     void MaterialEffect(Material material)
     {
-        if(materialEffect != null) StopCoroutine(materialEffect);
+        if (materialEffect != null) StopCoroutine(materialEffect);
         materialEffect = StartCoroutine(MaterialEffectCoroutine(material));
     }
 
@@ -147,6 +141,12 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         render.material = material;
         yield return WaitForSecondsCustom.Get(0.75f);
         render.material = orgMaterial;
+    }
+    void Dead()
+    {
+        DeathAlarm?.Invoke();
+        anim.SetTrigger(AnimParams.OnDead);
+        isDead = true;
     }
 }
 

@@ -16,18 +16,22 @@ namespace Combat
         public UnityAction ActionEndAlarm { get; set; }
         float moveSpeed = 15.0f;
 
-        void Awake()
-        {
-            
-        }
         void Start()
         {
             if (isBattle)
             {
-                battleStat = GameData.targetNode.type == WorldMap.Node.Type.END ?
-                    new BattleStat(data.maxHP * 4, data.armor * 2, data.attack * 2) : new BattleStat(data.maxHP, data.armor, data.attack);
+                if (GameData.targetNode.type == WorldMap.Node.Type.END)
+                {
+                    transform.localScale = transform.localScale * 1.5f;
+                    battleStat = new BattleStat(data.maxHP * 3, data.armor * 2, data.attack * 2);
+                }
+                else
+                {
+                    battleStat = new BattleStat(data.maxHP, data.armor, data.attack);
+                }
+
                 AddHpBar();
-                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyCollider"), CanvasCustom.main.transform);
+                GameObject obj = Instantiate(ObjectManager.inst.enemyCollider, CanvasCustom.main.lastLoad);
                 if (obj.TryGetComponent<EnemyCollider>(out EnemyCollider enemyCollider))
                 {
                     enemyCollider.target = gameObject;
@@ -60,7 +64,7 @@ namespace Combat
         {
             if (target.TryGetComponent<BattleSystem>(out BattleSystem battleSystem))
             {
-                battleSystem.OnDamage(data.attack);
+                battleSystem.OnDamage(battleStat.attack);
             }
         }
 

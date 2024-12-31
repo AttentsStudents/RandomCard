@@ -1255,7 +1255,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 796678209}
         m_TargetAssemblyTypeName: Cost, Assembly-CSharp
-        m_MethodName: OnCostUpdate
+        m_MethodName: OnUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1294,6 +1294,7 @@ MonoBehaviour:
         m_CallState: 2
   armor: {fileID: 59474230}
   cost: {fileID: 796678209}
+  cards: {fileID: 76658229}
 --- !u!4 &439564218
 Transform:
   m_ObjectHideFlags: 0
@@ -4110,7 +4111,7 @@ GameObject:
   - component: {fileID: 2095871985}
   - component: {fileID: 2095871987}
   m_Layer: 5
-  m_Name: CardsFrame
+  m_Name: CardsInHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

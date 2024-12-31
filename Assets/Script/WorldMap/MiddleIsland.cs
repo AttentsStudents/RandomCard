@@ -106,7 +106,7 @@ namespace WorldMap
         void CrashActionMyType()
         {
             GameData.targetNode = myNode;
-            if(audioSrc != null)
+            if (audioSrc != null)
             {
                 audioSrc.time = 0.2f;
                 audioSrc.Play();
@@ -115,25 +115,20 @@ namespace WorldMap
             {
                 case Node.Type.MONSTER:
                     Loading.LoadScene(Scene.BATTLE);
-                    //{
-                    //    IHpObserve targetHp = crashTarget.GetComponent<IHpObserve>();
-                    //    if (targetHp != null) targetHp.HpObserve?.Invoke(-5);
-                    //    GameData.ClearTargetNode();
-                    //}
                     break;
                 case Node.Type.TREASURE:
                     Instantiate(Resources.Load($"{SceneData.prefabPath}/Tresure"),
                         WorldMapCanvas.inst.transform);
                     break;
                 case Node.Type.REST:
+                    if (crashTarget.TryGetComponent<IBattleObserve>(out IBattleObserve battleObserve))
                     {
-                        if(crashTarget.TryGetComponent<IBattleObserve>(out IBattleObserve battleObserve))
-                        {
-                            battleObserve.battleStat.curHP = Mathf.Clamp(battleObserve.battleStat.curHP + 10, 0, battleObserve.battleStat.maxHP);
-                            battleObserve.HpObserve.Invoke();
-                        }
-                        GameData.ClearTargetNode();
+                        battleObserve.battleStat.curHP = Mathf.Clamp(battleObserve.battleStat.curHP + 10, 0, battleObserve.battleStat.maxHP);
+                        battleObserve.HpObserve.Invoke();
                     }
+
+                    AlertMessage.Alert("체력을 회복합니다");
+                    GameData.ClearTargetNode();
                     break;
             }
             colorAlpha = 0.4f;
