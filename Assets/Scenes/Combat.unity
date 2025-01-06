@@ -1110,6 +1110,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 325775789}
   m_CullTransparentMesh: 1
+--- !u!1001 &356430056
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.49
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.73
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.43
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.8839456
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.46758977
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 304.244
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
+      propertyPath: m_Name
+      value: Standard Rock 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 650b26816a2483e4c972cd13717f309d, type: 3}
 --- !u!1 &359562971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,6 +1616,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 7508d8493e2a6bd408663743371a6888, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bdc7375c51f957e4eb8e98e327b560a1, type: 2}
     - target: {fileID: 919132149155446097, guid: 7508d8493e2a6bd408663743371a6888, type: 3}
       propertyPath: m_Name
       value: Island5
@@ -1762,6 +1839,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599287001}
   m_CullTransparentMesh: 1
+--- !u!1001 &685952929
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.001172
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.42
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9993949
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0347835
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 3.987
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
+      propertyPath: m_Name
+      value: Standard Rock 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 323a7477ca2ea464f86036cee8f21021, type: 3}
 --- !u!1 &696165614
 GameObject:
   m_ObjectHideFlags: 0
@@ -4281,3 +4415,5 @@ SceneRoots:
   - {fileID: 904571664}
   - {fileID: 753540406}
   - {fileID: 978979790}
+  - {fileID: 356430056}
+  - {fileID: 685952929}

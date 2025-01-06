@@ -1653,26 +1653,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1086891442547191491, guid: 9cd8fdc4cc524f04d89215042261e3e5, type: 3}
-      propertyPath: effect.hitSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 7e23cb852a3fd4e788aca72da6665245, type: 3}
-    - target: {fileID: 1086891442547191491, guid: 9cd8fdc4cc524f04d89215042261e3e5, type: 3}
-      propertyPath: effect.boomSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 831a206310216fa4786df4062604eaae, type: 3}
-    - target: {fileID: 1086891442547191491, guid: 9cd8fdc4cc524f04d89215042261e3e5, type: 3}
-      propertyPath: effect.buffSound
-      value: 
-      objectReference: {fileID: 8300000, guid: d6085df5e818d6b4ba62d1cb4f093927, type: 3}
-    - target: {fileID: 1086891442547191491, guid: 9cd8fdc4cc524f04d89215042261e3e5, type: 3}
-      propertyPath: effect.healSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 198e8593d0e6f994693f3858fd89a40e, type: 3}
-    - target: {fileID: 1086891442547191491, guid: 9cd8fdc4cc524f04d89215042261e3e5, type: 3}
-      propertyPath: effect.shieldSound
-      value: 
-      objectReference: {fileID: 8300000, guid: b7b5a6156961bac44a67504d42ce6fcf, type: 3}
     - target: {fileID: 8322753735079355696, guid: 9cd8fdc4cc524f04d89215042261e3e5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
