@@ -79,6 +79,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         {
             HpChange(-delta);
             InstantiateEffect(ObjectManager.inst.effect.hit, transform.up * 0.5f);
+            SoundBox.PlayOneShot(ObjectManager.inst.effect.hitSound);
             MaterialEffect(ObjectManager.inst.material.damage);
 
             if (Mathf.Approximately(battleStat.curHP, 0.0f)) Dead();
@@ -89,6 +90,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
         else
         {
             InstantiateEffect(ObjectManager.inst.effect.shield, transform.forward * 0.3f + transform.up * 0.5f);
+            SoundBox.PlayOneShot(ObjectManager.inst.effect.shieldSound);
             MaterialEffect(ObjectManager.inst.material.shield);
             damageText.text.color = Color.white;
             damageText.text.text = "방어 성공!!";
@@ -106,6 +108,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
     {
 
         InstantiateEffect(ObjectManager.inst.effect.heal, transform.up * 0.5f);
+        SoundBox.PlayOneShot(ObjectManager.inst.effect.healSound);
         MaterialEffect(ObjectManager.inst.material.heal);
         HpChange(recovery);
     }
@@ -115,6 +118,7 @@ public abstract class BattleSystem : AnimProperty, IBattleObserve, IDeathAlarm
     public void OnBuff()
     {
         InstantiateEffect(ObjectManager.inst.effect.buff, transform.up * 0.5f);
+        SoundBox.PlayOneShot(ObjectManager.inst.effect.buffSound);
         MaterialEffect(ObjectManager.inst.material.buff);
     }
 

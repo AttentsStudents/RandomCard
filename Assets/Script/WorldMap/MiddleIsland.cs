@@ -15,7 +15,6 @@ namespace WorldMap
         public Transform center;
         public Transform left;
         public Transform right;
-        public AudioSource audioSrc;
         Queue<GameObject> objectQueue = new Queue<GameObject>();
 
 
@@ -106,11 +105,6 @@ namespace WorldMap
         void CrashActionMyType()
         {
             GameData.targetNode = myNode;
-            if (audioSrc != null)
-            {
-                audioSrc.time = 0.2f;
-                audioSrc.Play();
-            }
             switch (myNode.type)
             {
                 case Node.Type.MONSTER:
@@ -139,6 +133,7 @@ namespace WorldMap
         void DestroyObjects()
         {
             Instantiate(ObjectManager.inst.effect.boom, center);
+            SoundBox.PlayOneShot(ObjectManager.inst.effect.boomSound);
             while (objectQueue.Count > 0) { Destroy(objectQueue.Dequeue()); }
         }
     }

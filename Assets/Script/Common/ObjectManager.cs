@@ -28,10 +28,15 @@ public partial class ObjectManager
     public struct Effect
     {
         public GameObject boom;
+        public AudioClip boomSound;
         public GameObject hit;
+        public AudioClip hitSound;
         public GameObject heal;
+        public AudioClip healSound;
         public GameObject buff;
+        public AudioClip buffSound;
         public GameObject shield;
+        public AudioClip shieldSound;
     }
 
     [Serializable]
